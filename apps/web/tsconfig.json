@@ -1,0 +1,28 @@
+{
+  "extends": "@marketingspa/config/tsconfig.nextjs.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "/tmp/aibeego-next/types/**/*.ts",
+    "next-env.d.ts",
+    "tmp/aibeego-next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

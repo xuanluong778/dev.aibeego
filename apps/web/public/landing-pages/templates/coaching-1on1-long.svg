@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1156" viewBox="0 0 720 1156" role="img" aria-label="Coaching 1:1">
+  <title>Coaching 1:1</title>
+  <rect width="720" height="1156" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="720" height="220" fill="#F97316" opacity="0.92"/>
+  <rect x="40" y="36" width="320" height="18" rx="4" fill="#FFFFFF" opacity="0.95"/>
+  <rect x="40" y="66" width="260" height="10" rx="3" fill="#FFFFFF" opacity="0.55"/>
+  <rect x="40" y="90" width="260" height="10" rx="3" fill="#FFFFFF" opacity="0.45"/>
+  <rect x="40" y="130" width="140" height="36" rx="8" fill="#FFFFFF"/>
+  <rect x="420" y="40" width="240" height="140" rx="12" fill="#FFFFFF" opacity="0.25"/>
+  <text x="12" y="14" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Hero</text>
+  <rect x="0" y="220" width="720" height="100" fill="#F1F5F9" opacity="0.92"/>
+  <rect x="48" y="242" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="268" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="284" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="234" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Benefits</text>
+  <rect x="0" y="320" width="720" height="100" fill="#E2E8F0" opacity="0.92"/>
+  <rect x="48" y="342" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="368" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="384" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="334" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Features</text>
+  <rect x="0" y="420" width="720" height="100" fill="#E0F2FE" opacity="0.92"/>
+  <rect x="48" y="442" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="468" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="484" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="434" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Process</text>
+  <rect x="0" y="520" width="720" height="100" fill="#EEF2FF" opacity="0.92"/>
+  <rect x="48" y="542" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="568" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="584" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="534" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Testimonials</text>
+  <rect x="0" y="620" width="720" height="100" fill="#DCFCE7" opacity="0.92"/>
+  <rect x="48" y="642" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="668" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="684" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="634" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Guarantee</text>
+  <rect x="0" y="720" width="720" height="120" fill="#F1F5F9" opacity="0.92"/>
+  <rect x="48" y="742" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="768" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="784" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="734" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">FAQ</text>
+  <rect x="0" y="840" width="720" height="160" fill="#FFFFFF" opacity="1"/>
+  <rect x="180" y="856" width="360" height="128" rx="12" fill="#FFFFFF" stroke="#F97316" stroke-width="3"/>
+  <rect x="48" y="862" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="888" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="904" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="854" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">LeadForm</text>
+  <rect x="0" y="1000" width="720" height="100" fill="#F97316" opacity="0.92"/>
+  <rect x="48" y="1022" width="200" height="12" rx="3" fill="#FFFFFF" opacity="0.85"/>
+  <rect x="48" y="1048" width="624" height="8" rx="2" fill="#FFFFFF" opacity="0.25"/>
+  <rect x="48" y="1064" width="560" height="8" rx="2" fill="#FFFFFF" opacity="0.18"/>
+  <text x="12" y="1014" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">CTA</text>
+  <rect x="0" y="1100" width="720" height="56" fill="#0F172A" opacity="0.92"/>
+  <text x="40" y="1133" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="14" font-weight="700">Coaching 1:1</text>
+  <text x="12" y="1114" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Footer</text>
+</svg>

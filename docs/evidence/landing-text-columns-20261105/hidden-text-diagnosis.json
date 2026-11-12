@@ -1,0 +1,45 @@
+{
+  "before": {
+    "content": "Đoạn văn đã có nội dung. Khung chọn và bảng Text vẫn tồn tại khi CSS của Hero ẩn nhầm đoạn văn con.",
+    "display": "none",
+    "color": "rgb(0, 0, 0)",
+    "visibility": "visible",
+    "opacity": "1",
+    "overflow": "visible",
+    "zIndex": "auto",
+    "textRect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "selectionRect": {
+      "x": 30,
+      "y": 129.59375,
+      "width": 410,
+      "height": 190
+    }
+  },
+  "after": {
+    "content": "Đoạn văn đã có nội dung. Khung chọn và bảng Text vẫn tồn tại khi CSS của Hero ẩn nhầm đoạn văn con.",
+    "display": "block",
+    "color": "rgb(0, 0, 0)",
+    "visibility": "visible",
+    "opacity": "1",
+    "overflow": "visible",
+    "zIndex": "auto",
+    "textRect": {
+      "x": 35,
+      "y": 134.59375,
+      "width": 400,
+      "height": 72
+    },
+    "selectionRect": {
+      "x": 30,
+      "y": 129.59375,
+      "width": 410,
+      "height": 190
+    }
+  },
+  "passed": true
+}

@@ -1,0 +1,1588 @@
+/* Approved Agency Portfolio pilot. Container queries follow the actual builder canvas width. */
+@font-face {
+  font-family: 'Agency Portfolio Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-1.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Agency Portfolio Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-2.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Agency Portfolio Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-3.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Agency Portfolio Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Agency Portfolio Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-5.ttf) format('truetype');
+}
+
+:where([data-lp-renderer='agency-portfolio-v2']) {
+  --navy: #0b1220;
+  --ink: #0f172a;
+  --muted: #475569;
+  --line: #dde2e7;
+  --cream: #faf7f0;
+  --orange: #ff6b00;
+  --soft-orange: #fff0e5;
+  --font: 'Agency Portfolio Be Vietnam Pro', sans-serif;
+  color-scheme: light;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) * {
+  box-sizing: border-box;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-canvas-root] {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) a {
+  color: inherit;
+  text-decoration: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) button,
+:where([data-lp-renderer='agency-portfolio-v2']) input,
+:where([data-lp-renderer='agency-portfolio-v2']) textarea,
+:where([data-lp-renderer='agency-portfolio-v2']) select {
+  font: inherit;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) button,
+:where([data-lp-renderer='agency-portfolio-v2']) a,
+:where([data-lp-renderer='agency-portfolio-v2']) input,
+:where([data-lp-renderer='agency-portfolio-v2']) textarea {
+  outline-offset: 5px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) a:focus-visible,
+:where([data-lp-renderer='agency-portfolio-v2']) button:focus-visible {
+  outline: 3px solid #a44705;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) button {
+  cursor: pointer;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) img,
+:where([data-lp-renderer='agency-portfolio-v2']) svg {
+  max-width: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .container {
+  width: min(1152px, calc(100% - 48px));
+  margin: auto;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .eyebrow {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a4308;
+  margin: 0 0 14px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head {
+  margin-bottom: 32px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head h2 {
+  font-size: 34px;
+  line-height: 1.3;
+  letter-spacing: -1.15px;
+  margin: 0;
+  font-weight: 700;
+  max-width: 760px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head p {
+  max-width: 660px;
+  color: var(--muted);
+  margin: 14px 0 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head.center {
+  text-align: center;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head.center h2,
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head.center p {
+  margin-left: auto;
+  margin-right: auto;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) p {
+  margin: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) h3 {
+  font-size: 19px;
+  line-height: 1.45;
+  letter-spacing: -0.4px;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) section {
+  padding: 56px 0;
+  scroll-margin-top: 16px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 13px 22px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+  text-align: center;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn .icon {
+  width: 19px;
+  height: 19px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-primary {
+  background: var(--orange);
+  color: var(--navy);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-primary:hover {
+  background: #ff822b;
+  transform: translateY(-1px);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-outline-light {
+  border-color: #738092;
+  color: #f8fafc;
+  background: transparent;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-outline-light:hover {
+  background: #1b2637;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-outline {
+  border-color: #b8c2cf;
+  background: #fff;
+  color: var(--ink);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn-outline:hover {
+  background: #f3f5f7;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.6px;
+  line-height: 1.3;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .brand-mark {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .brand span {
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .brand small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  margin-top: 3px;
+  color: #c1cbd8;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header {
+  background: var(--navy);
+  color: #f8fafc;
+  border-bottom: 1px solid #283244;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header-inner {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header nav {
+  display: flex;
+  gap: 25px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #d1d9e5;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header nav a:hover {
+  color: #fff;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header .btn {
+  min-height: 44px;
+  font-size: 13px;
+  padding: 11px 17px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid #667184;
+  color: #fff;
+  border-radius: 8px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header .mobile-nav {
+  display: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header .mobile-nav[hidden] {
+  display: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero {
+  background: var(--navy);
+  color: #fff;
+  padding: 64px 0 58px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-grid {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  gap: 52px;
+  align-items: center;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero .eyebrow {
+  color: #ffac70;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero h1 {
+  font-size: 49px;
+  line-height: 1.2;
+  letter-spacing: -2px;
+  font-weight: 700;
+  margin: 0 0 23px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero h1 em {
+  font-style: normal;
+  color: #ff9b52;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-description {
+  font-size: 16px;
+  color: #cfd8e5;
+  line-height: 1.85;
+  max-width: 565px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-points {
+  list-style: none;
+  margin: 23px 0 27px;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-points li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e4eaf2;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-points .icon {
+  width: 17px;
+  height: 17px;
+  color: #ffa464;
+  margin-top: 2px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-figure {
+  margin: 0;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .photo-frame {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #27313d;
+  border: 1px solid #425064;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .photo-frame img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+  object-position: 50% 48%;
+  filter: saturate(0.8);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .image-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff;
+  border-radius: 30px;
+  color: #263246;
+  padding: 6px 11px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .image-badge:before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  border-radius: 50%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-figure figcaption {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #bcc8d7;
+  font-size: 12px;
+  margin: 13px 2px 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-figure figcaption:before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: #ff9b52;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .benefits {
+  background: var(--cream);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .benefits-grid,
+:where([data-lp-renderer='agency-portfolio-v2']) .services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .benefit-card {
+  padding: 25px 25px 27px;
+  background: #fff;
+  border: 1px solid #e6e2d9;
+  border-radius: 12px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .icon-box {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e7d9c9;
+  border-radius: 10px;
+  color: #93410b;
+  background: #fff9f0;
+  margin-bottom: 23px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .benefit-card p,
+:where([data-lp-renderer='agency-portfolio-v2']) .service-card p,
+:where([data-lp-renderer='agency-portfolio-v2']) .step p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .services {
+  background: #fff;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .service-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .service-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .service-top > .icon {
+  width: 29px;
+  height: 29px;
+  color: #263c52;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .service-top > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .service-card h3 {
+  max-width: 260px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .gallery {
+  background: #f3f5f4;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .gallery .section-head p {
+  max-width: 650px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .gallery-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: flex-end;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .gallery-heading .demo-note {
+  flex-shrink: 0;
+  margin-bottom: 34px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #c8d2cd;
+  border-radius: 30px;
+  padding: 7px 11px;
+  color: #42534b;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .demo-note span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7a9482;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #dde3df;
+  align-self: start;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-media {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-media > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-copy {
+  padding: 22px 24px 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .media-label {
+  display: block;
+  color: #617063;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  margin-bottom: 8px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-copy h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-copy p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .process {
+  background: #fff;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+  position: relative;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .steps:before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 23px;
+  height: 1px;
+  background: #e6d8c6;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .step {
+  position: relative;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #edcdb4;
+  background: #fff5ea;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  position: relative;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .step h3 {
+  font-size: 17px;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .pricing {
+  background: var(--cream);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 960px;
+  margin: auto;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card {
+  padding: 30px;
+  border-radius: 14px;
+  border: 1px solid #d8dcd9;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card .overline {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card h3 {
+  font-size: 24px;
+  letter-spacing: -0.7px;
+  margin-bottom: 10px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card .price-intro {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card ul {
+  border-top: 1px solid #dfe4e9;
+  padding: 23px 0 0;
+  margin: 0 0 26px;
+  list-style: none;
+  display: grid;
+  gap: 13px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card li {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.7;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card li > .icon {
+  width: 17px;
+  height: 17px;
+  margin-top: 3px;
+  color: #8c4a1f;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card .btn {
+  margin-top: auto;
+  align-self: stretch;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #f8fafc;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark .overline {
+  color: #ffaf76;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark .price-intro,
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark li {
+  color: #cbd5e1;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark ul {
+  border-color: #3a4658;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card.dark li > .icon {
+  color: #ffac70;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .pricing .section-head {
+  margin-bottom: 34px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq {
+  background: #fff;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq-inner {
+  max-width: 832px;
+  margin: auto;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq details {
+  border-bottom: 1px solid #dde2e7;
+  padding: 22px 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.65;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq summary::-webkit-details-marker {
+  display: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq-plus {
+  border: 1px solid #d9e0e6;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq-plus .icon {
+  width: 16px;
+  height: 16px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq details[open] .faq-plus {
+  background: #fff1e5;
+  border-color: #f1c6a6;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq details[open] .faq-plus .icon {
+  transform: rotate(45deg);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .faq details p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+  margin-top: 14px;
+  padding-right: 52px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta {
+  background: var(--navy);
+  color: #fff;
+  padding: 43px 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta h2 {
+  font-size: 30px;
+  line-height: 1.4;
+  letter-spacing: -0.9px;
+  margin: 0 0 10px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta p {
+  font-size: 14px;
+  color: #cbd5e1;
+  max-width: 655px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta .btn {
+  flex-shrink: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-section {
+  background: var(--cream);
+  padding: 56px 0 64px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-section .section-head {
+  margin-bottom: 28px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-section .section-head h2 {
+  font-size: 32px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-section .section-head p {
+  font-size: 14px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-wrap {
+  max-width: 680px;
+  margin: auto;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-card {
+  background: #fff;
+  border: 1px solid #dde1df;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field.full {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field label {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .required {
+  color: #b43220;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .optional {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field input,
+:where([data-lp-renderer='agency-portfolio-v2']) .field textarea {
+  background: #fff;
+  border: 1px solid #b9c3cf;
+  border-radius: 7px;
+  padding: 13px 14px;
+  color: #0f172a;
+  width: 100%;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field textarea {
+  resize: vertical;
+  min-height: 122px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field input:focus,
+:where([data-lp-renderer='agency-portfolio-v2']) .field textarea:focus {
+  outline: 2px solid #a74808;
+  outline-offset: 2px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field input::placeholder,
+:where([data-lp-renderer='agency-portfolio-v2']) .field textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .submit {
+  width: 100%;
+  margin-top: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 7px;
+  color: #536172;
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+  margin-top: 16px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-footer .icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 3px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .selection-note {
+  display: none;
+  background: #fff4e9;
+  color: #6d350c;
+  padding: 11px 13px;
+  border-radius: 7px;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .selection-note.visible {
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .field-error {
+  display: none;
+  color: #a61b1b;
+  font-size: 13px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .invalid .field-error {
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .invalid input {
+  border-color: #b42318;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .state-panel {
+  display: none;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .state-panel.error {
+  background: #fff1ef;
+  border: 1px solid #e8b8b1;
+  color: #852424;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .state-panel.success {
+  background: #eff8f1;
+  border: 1px solid #bad8c2;
+  color: #215135;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .state-panel.visible {
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .state-panel strong {
+  display: block;
+  margin-bottom: 3px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .pending .submit {
+  background: #ffb17a;
+  cursor: wait;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-success {
+  display: none;
+  text-align: center;
+  padding: 22px 8px 12px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-success .success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  background: #edf6ef;
+  color: #266441;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-success h3 {
+  font-size: 23px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-success p {
+  font-size: 14px;
+  color: #475569;
+  margin: 10px auto 22px;
+  max-width: 390px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .is-success .form-body {
+  display: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .is-success .form-success {
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer {
+  background: #0b1220;
+  color: #d4deea;
+  padding: 33px 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer .brand {
+  font-size: 15px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer .brand-mark {
+  width: 30px;
+  height: 30px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer-demo {
+  font-size: 12px;
+  color: #bfccdc;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer-bottom {
+  border-top: 1px solid #344052;
+  margin-top: 24px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 12px;
+  color: #afbed0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer-bottom a {
+  color: #d6e0ec;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .footer-bottom a:hover {
+  text-decoration: underline;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where([data-lp-renderer='agency-portfolio-v2']) {
+    scroll-behavior: auto;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) * {
+    transition: none !important;
+  }
+}
+@container agency-page (max-width:1100px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) .header nav {
+    gap: 15px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-grid {
+    gap: 32px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero h1 {
+    font-size: 44px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .container {
+    width: calc(100% - 48px);
+  }
+}
+@container agency-page (max-width:1023px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) .header nav {
+    display: none;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .header-inner {
+    height: 76px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .header .header-cta {
+    margin-left: auto;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .menu-toggle {
+    display: flex;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero h1 {
+    max-width: 780px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-figure {
+    max-width: 650px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero {
+    padding-top: 44px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .services-grid,
+  :where([data-lp-renderer='agency-portfolio-v2']) .benefits-grid {
+    gap: 16px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .steps:before {
+    display: none;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .header .mobile-nav.open {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-top: 0;
+    padding-bottom: 16px;
+    font-size: 14px;
+    color: #d6e1ed;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .mobile-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 0;
+    border-top: 1px solid #283244;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta-inner {
+    gap: 28px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta h2 {
+    font-size: 27px;
+  }
+}
+@container agency-page (max-width:767px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) [data-lp-canvas-root] {
+    font-size: 16px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .container {
+    width: calc(100% - 32px);
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) section {
+    padding: 36px 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .header-inner {
+    height: 74px;
+    gap: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .brand {
+    font-size: 15px;
+    gap: 9px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .brand small {
+    font-size: 8px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .header .header-cta {
+    display: none;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .menu-toggle {
+    margin-left: auto;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero {
+    padding: 36px 0 34px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-grid {
+    gap: 30px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero h1 {
+    font-size: 34px;
+    line-height: 1.25;
+    letter-spacing: -1.1px;
+    margin-bottom: 20px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-description {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-points {
+    margin: 21px 0 25px;
+    gap: 10px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-points li {
+    font-size: 12px;
+    line-height: 1.75;
+    gap: 9px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-actions {
+    flex-direction: column;
+    gap: 11px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-actions .btn {
+    width: 100%;
+    min-height: 50px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-figure {
+    width: 100%;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .photo-frame {
+    border-radius: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .image-badge {
+    font-size: 9px;
+    top: 12px;
+    left: 12px;
+    padding: 5px 9px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-figure figcaption {
+    font-size: 11px;
+    line-height: 1.7;
+    align-items: flex-start;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .hero-figure figcaption:before {
+    margin-top: 9px;
+    width: 22px;
+    flex-shrink: 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .section-head {
+    margin-bottom: 24px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .section-head h2 {
+    font-size: 27px;
+    line-height: 1.4;
+    letter-spacing: -0.85px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .section-head p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .eyebrow {
+    font-size: 10px;
+    margin-bottom: 12px;
+    letter-spacing: 0.12em;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .benefits-grid,
+  :where([data-lp-renderer='agency-portfolio-v2']) .services-grid,
+  :where([data-lp-renderer='agency-portfolio-v2']) .work-grid,
+  :where([data-lp-renderer='agency-portfolio-v2']) .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .benefit-card,
+  :where([data-lp-renderer='agency-portfolio-v2']) .service-card {
+    padding: 22px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .benefit-card h3,
+  :where([data-lp-renderer='agency-portfolio-v2']) .service-card h3 {
+    font-size: 18px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .benefit-card p,
+  :where([data-lp-renderer='agency-portfolio-v2']) .service-card p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .icon-box {
+    margin-bottom: 18px;
+    width: 42px;
+    height: 42px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .service-top {
+    margin-bottom: 22px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .service-card h3 {
+    max-width: none;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .gallery-heading {
+    display: block;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .gallery-heading .demo-note {
+    display: none;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .work-grid {
+    gap: 20px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .work-copy {
+    padding: 19px 20px 21px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .work-copy h3 {
+    font-size: 18px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .work-copy p {
+    font-size: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .media-label {
+    font-size: 9px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .steps {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding-bottom: 26px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .steps > :last-child .step {
+    padding-bottom: 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .steps > :not(:last-child) .step:before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 44px;
+    bottom: 0;
+    width: 1px;
+    background: #e8d7c5;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .step-num {
+    width: 44px;
+    height: 44px;
+    font-size: 12px;
+    margin: 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .step h3 {
+    font-size: 16px;
+    margin: 6px 0 8px;
+    letter-spacing: -0.25px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .step p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .price-card {
+    padding: 24px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .price-card h3 {
+    font-size: 24px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .price-card .overline {
+    font-size: 10px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .price-card li {
+    font-size: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .pricing .section-head {
+    margin-bottom: 26px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .faq summary {
+    font-size: 15px;
+    line-height: 1.7;
+    gap: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .faq details {
+    padding: 19px 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .faq details p {
+    padding-right: 0;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .faq-plus {
+    width: 28px;
+    height: 28px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta {
+    padding: 34px 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta-inner {
+    display: block;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta h2 {
+    font-size: 27px;
+    line-height: 1.4;
+    letter-spacing: -0.8px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .cta .btn {
+    margin-top: 23px;
+    width: 100%;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-section {
+    padding: 36px 0 40px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-section .section-head h2 {
+    font-size: 27px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-section .section-head p {
+    font-size: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-card {
+    padding: 21px 19px;
+    border-radius: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .fields {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .field.full {
+    grid-column: auto;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .field input,
+  :where([data-lp-renderer='agency-portfolio-v2']) .field textarea {
+    font-size: 16px;
+    padding: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .field textarea {
+    min-height: 146px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .field label {
+    font-size: 13px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .optional {
+    font-size: 11px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .submit {
+    margin-top: 23px;
+    font-size: 14px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-footer {
+    font-size: 11px;
+    line-height: 1.8;
+    gap: 6px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .footer {
+    padding: 28px 0;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .footer-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .footer-demo {
+    font-size: 11px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 22px;
+    font-size: 11px;
+    padding-top: 17px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-success h3 {
+    font-size: 21px;
+  }
+}
+
+[data-lp-style-scope='agency-portfolio-v2'] {
+  container-type: inline-size;
+  container-name: agency-page;
+  width: 100%;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-canvas-root] {
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-inline-wrap] {
+  max-width: 100%;
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-element-id] {
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero h1,
+:where([data-lp-renderer='agency-portfolio-v2']) .section-head h2,
+:where([data-lp-renderer='agency-portfolio-v2']) h3 {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .photo-frame > [data-lp-element-id],
+:where([data-lp-renderer='agency-portfolio-v2']) .work-media > [data-lp-element-id] {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .work-media img,
+:where([data-lp-renderer='agency-portfolio-v2']) .work-media [data-lp-img-fallback] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero .photo-frame img,
+:where([data-lp-renderer='agency-portfolio-v2']) .hero .photo-frame [data-lp-img-fallback] {
+  height: 100%;
+  width: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .header-cta .btn {
+  min-height: 44px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn {
+  flex-shrink: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .btn span {
+  min-width: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .desktop-nav {
+  display: flex;
+  gap: 25px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card {
+  height: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .pricing-grid > [data-lp-element-id] {
+  height: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-wrap form {
+  max-width: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  max-width: 100%;
+  padding: 30px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+:where([data-lp-renderer='agency-portfolio-v2'])
+  form[data-lp-form-block]
+  > label:nth-of-type(n + 3),
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] > :not(label) {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] > label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] > label > span {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] input,
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] textarea {
+  min-height: 0;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 13px 14px;
+  width: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] textarea {
+  min-height: 122px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] button[type='submit'] {
+  min-height: 50px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 13px 22px;
+  margin-top: 4px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-optional {
+  font-size: 12px;
+  font-weight: 400;
+  color: #64748b;
+  margin-left: 5px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] .agency-form-footer {
+  margin: -4px 0 0;
+  font-size: 12px;
+  line-height: 1.8;
+  gap: 7px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-form-error],
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-field-error] {
+  color: #a61b1b;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  margin: 0;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-form-error] {
+  background: #fff1ef;
+  border: 1px solid #e8b8b1;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-form-success {
+  text-align: center;
+  padding: 22px 8px 12px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-form-success p {
+  color: #475569;
+  margin: 10px auto 22px;
+  font-size: 14px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-selection {
+  background: #fff4e9;
+  color: #6d350c;
+  font-size: 13px;
+  padding: 11px 13px;
+  border-radius: 7px;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-is-success > :not(.agency-form-success) {
+  display: none !important;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-is-success {
+  display: block !important;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-item-box-bg='clear'] {
+  background: transparent;
+}
+@container agency-page (max-width:1023px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) .desktop-nav {
+    display: none;
+  }
+}
+@container agency-page (max-width:767px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 21px 19px;
+    gap: 20px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] input,
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] textarea {
+    padding: 12px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] textarea {
+    min-height: 146px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] > label > span {
+    font-size: 13px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) .form-optional {
+    font-size: 11px;
+  }
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] .agency-form-footer {
+    font-size: 11px;
+  }
+}
+/* Editing wrappers keep their shared behavior; the card fills its assigned grid cell. */
+:where([data-lp-renderer='agency-portfolio-v2']) .work-card,
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card,
+:where([data-lp-renderer='agency-portfolio-v2']) .benefit-card,
+:where([data-lp-renderer='agency-portfolio-v2']) .service-card,
+:where([data-lp-renderer='agency-portfolio-v2']) .step {
+  width: 100%;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .form-wrap > [data-lp-element-id] {
+  width: 100%;
+  display: block;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .overline {
+  text-decoration: none;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .cta h2 {
+  font-weight: 700;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form input::placeholder,
+:where([data-lp-renderer='agency-portfolio-v2']) form textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) [data-lp-img-fallback] {
+  min-height: 100%;
+  padding: 16px;
+}
+:where([data-lp-renderer='agency-portfolio-v2'][data-lp-viewport='mobile'])
+  [data-lp-hide-mobile='1'],
+:where([data-lp-renderer='agency-portfolio-v2'][data-lp-viewport='tablet'])
+  [data-lp-hide-tablet='1'],
+:where([data-lp-renderer='agency-portfolio-v2'][data-lp-viewport='desktop'])
+  [data-lp-hide-desktop='1'] {
+  display: none !important;
+}
+@container agency-page (max-width:767px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] {
+    --agency-form-padding: 21px 19px;
+  }
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .hero-copy {
+  min-width: 0;
+}
+/* Only automatic editor text boxes are bounded. User-resized/live boxes retain their width. */
+:where([data-lp-renderer='agency-portfolio-v2'])
+  [data-lp-inline-wrap]:not([data-lp-heading-width-locked='1']):not([data-lp-heading-width-live]) {
+  max-width: 100% !important;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-form-footer [data-lp-inline-field],
+:where([data-lp-renderer='agency-portfolio-v2']) .agency-form-footer [data-lp-element-kind='text'] {
+  font-size: inherit;
+}
+:where([data-lp-renderer='agency-portfolio-v2']) form input:focus,
+:where([data-lp-renderer='agency-portfolio-v2']) form textarea:focus {
+  outline: 2px solid #a74808;
+  outline-offset: 2px;
+}
+
+@container agency-page (max-width:767px) {
+  :where([data-lp-renderer='agency-portfolio-v2']) form[data-lp-form-block] button[type='submit'] {
+    margin-top: 3px;
+  }
+}
+:where([data-lp-renderer="agency-portfolio-v2"]) .header .brand>[data-lp-element-id]{max-width:120px;flex-shrink:0}
+:where([data-lp-renderer="agency-portfolio-v2"]) .header .brand [data-lp-content-image]{width:auto;height:36px;max-width:120px}
+/* Bridge system palette defaults to the existing global design controls. Local styles win. */
+:where([data-lp-renderer="agency-portfolio-v2"]) [data-lp-canvas-root]{--orange:var(--lp-button,var(--lp-primary,#FF6B00));--navy:var(--lp-secondary,#0B1220);--ink:var(--lp-text,#0F172A);--muted:var(--lp-muted,#475569)}
+/* Existing text/item box visibility protocol, scoped to this renderer. */
+:where([data-lp-renderer="agency-portfolio-v2"][data-lp-viewport="desktop"]) [data-lp-text-hide-desktop="1"]:not([data-lp-element-primary="1"]),
+:where([data-lp-renderer="agency-portfolio-v2"][data-lp-viewport="tablet"]) [data-lp-text-hide-tablet="1"]:not([data-lp-element-primary="1"]),
+:where([data-lp-renderer="agency-portfolio-v2"][data-lp-viewport="mobile"]) [data-lp-text-hide-mobile="1"]:not([data-lp-element-primary="1"]){display:none!important}

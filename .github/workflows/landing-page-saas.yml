@@ -1,0 +1,52 @@
+name: landing-page-saas-gates
+on:
+  push:
+    paths:
+      - 'apps/web/src/app/p/**'
+      - 'apps/web/src/components/landing-pages/**'
+      - 'apps/api/src/landing-pages/**'
+      - 'packages/shared/src/**'
+      - 'packages/database/prisma/**'
+      - 'scripts/test-landing-page*.cjs'
+      - 'scripts/validate-landing-page-template-catalog.cjs'
+      - 'scripts/release-landing-page.cjs'
+  pull_request:
+    paths:
+      - 'apps/web/src/app/p/**'
+      - 'apps/web/src/components/landing-pages/**'
+      - 'apps/api/src/landing-pages/**'
+      - 'packages/shared/src/**'
+      - 'packages/database/prisma/**'
+      - 'scripts/test-landing-page*.cjs'
+      - 'scripts/validate-landing-page-template-catalog.cjs'
+      - 'scripts/release-landing-page.cjs'
+  workflow_dispatch:
+
+jobs:
+  landing-page-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Critical Landing Page gates
+        run: node scripts/test-landing-page-saas-ready.cjs
+      - name: Phase 2 engine gates
+        run: |
+          pnpm --filter @marketingspa/shared build
+          node scripts/test-landing-page-phase2-engine.cjs
+      - name: Phase 3 full catalog gates
+        run: node scripts/test-landing-page-phase3-catalog.cjs
+      - name: Template catalog validators
+        run: node scripts/validate-landing-page-template-catalog.cjs
+      - name: Shared build freshness
+        run: |
+          pnpm --filter @marketingspa/shared build
+          node -e "const fs=require('fs');const path=require('path');const root='packages/shared';function newest(d,re){let n=0; (function w(x){for(const f of fs.readdirSync(x)){const p=path.join(x,f);const s=fs.statSync(p);if(s.isDirectory()){if(f!=='node_modules')w(p);}else if(re.test(p))n=Math.max(n,s.mtimeMs);}})(d);return n;} const src=newest(path.join(root,'src'),/\.tsx?$/); const dist=newest(path.join(root,'dist'),/\.(js|d\.ts)$/); if(src>dist+2000){console.error('stale shared dist'); process.exit(1);} console.log('SHARED_DIST_FRESH');"

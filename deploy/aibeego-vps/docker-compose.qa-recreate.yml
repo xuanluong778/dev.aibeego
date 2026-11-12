@@ -1,0 +1,38 @@
+# QA only — recreate-equivalent web without touching marketingspa-web production.
+# Usage (from repo root):
+#   node scripts/aibeego-web-bundle-link-current.cjs --bundle <name>
+#   docker compose -p marketingaz-qa -f deploy/aibeego-vps/docker-compose.qa-recreate.yml up -d
+#   docker compose -p marketingaz-qa -f deploy/aibeego-vps/docker-compose.qa-recreate.yml run --rm web-qa-smoke
+services:
+  web-qa:
+    image: marketingaz-web
+    container_name: marketingaz-web-qa-recreate
+    restart: 'no'
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      HOSTNAME: 0.0.0.0
+      API_INTERNAL_URL: http://host.docker.internal:3999
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - ./docker/web-start.sh:/web-start.sh:ro
+      - ./docker/web-api-proxy.js:/web-api-proxy.js:ro
+      - ./bundles/current:/app/apps/web/tmp/aibeego-next:ro
+    entrypoint: ['/bin/sh', '/web-start.sh']
+    ports:
+      - '13999:3000'
+
+  web-qa-smoke:
+    image: marketingaz-web
+    profiles: ['smoke']
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        test -f /app/apps/web/tmp/aibeego-next/BUILD_ID &&
+        echo "BUILD_ID=$$(cat /app/apps/web/tmp/aibeego-next/BUILD_ID)" &&
+        grep -q tmp/aibeego-next /web-start.sh &&
+        echo QA_RECREATE_OK
+    volumes:
+      - ./docker/web-start.sh:/web-start.sh:ro
+      - ./bundles/current:/app/apps/web/tmp/aibeego-next:ro

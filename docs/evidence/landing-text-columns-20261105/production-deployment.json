@@ -1,0 +1,226 @@
+{
+  "url": "https://aibeego.com",
+  "buildId": "lpb-text-columns-3836ab4-20261105",
+  "checkedAt": "2026-11-05T11:54:32.751Z",
+  "pages": [
+    {
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "path": "/landing-pages/create",
+      "status": 200
+    },
+    {
+      "path": "/landing-pages/builder/af2566fa-67f8-4885-92e1-51e8d2b684af",
+      "status": 200
+    }
+  ],
+  "assets": [
+    {
+      "path": "/_next/static/css/00e8f34b089a56d6.css",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/css/447396532541793f.css",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/webpack-93dd5e5ac08709a9.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/43aa649d-8089a757d2f662a0.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/5710-a834a4e0e11e3ba8.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/main-app-755ce97c6131d6c5.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/857-0a6b05344c0438ba.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/274-85afe70b0357138a.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/1061-e7a1fd6b1567ee1f.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/3204-82909f2337d20529.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/layout-82ec01b137b6bac4.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/4857-fd3da999c6fbcf07.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/5412-da70af729b7ab53b.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/5884-66c8422dbab538fe.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/3992-f162e7bc3cef4a9a.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/7527-caa0bc160c41bd5d.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/(auth)/login/page-e7b141cdfc1f0f23.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/polyfills-42372ed130431b0a.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/ebc2606c-61644b391eed35a3.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/9795-6f5d960bd8afe14e.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/2860-e6b5f8b5de0d779f.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/4535-74e994de0f746147.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/1706-8cb822bb84203c76.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/3137-f0981fd838a7ca9d.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/1806-8a1a792a835be1ca.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/7818-3af31bab13216494.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/4369-b6a56e1770b05e1f.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/1869-592412f87d744a0a.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/9733-8104cd5e9c645f9e.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/5681-4b13911afe0516c2.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/9032-13b8986e808836d5.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/layout-29c9191cacf915e1.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/5206-897e603c788e92b7.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/landing-pages/create/page-fe843c315004c00e.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/loading-c015fed15312025a.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/css/6cfaccbc836e26aa.css",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/583-3bd04048f3558842.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/2613-a81763e0bd899f70.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/2580-d974712d2f9c1743.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/4471-35402445e1bf2657.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/6126-e183182faafbb408.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/chunks/app/(app)/landing-pages/builder/%5Bid%5D/page-ccb6d7424b999154.js?v=20261022d",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/css/c019c31aac8e8891.css",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/css/bc4a74d6206b8403.css",
+      "status": 200
+    },
+    {
+      "path": "/_next/static/css/5cf7b1e3c1b782f1.css",
+      "status": 200
+    }
+  ],
+  "deployed": true,
+  "manifestCache": "private, no-cache, no-store, max-age=0, must-revalidate",
+  "googleConfigurationPreserved": true,
+  "apiHealth": 200,
+  "images": {
+    "web": {
+      "tag": "marketingaz-web:text-columns-3836ab4-20261105",
+      "id": "sha256:8072ec73b56a623fe813887df0c717a8c48d39d02a01ec186abaf889b0f972e1"
+    },
+    "api": {
+      "tag": "marketingaz-api:text-columns-3836ab4-20261105",
+      "id": "sha256:8aa67767eb1d8f61c8c65497a4bd8d95f4cfa054771b418f7a319bd2f6602c0c"
+    }
+  },
+  "apiShared": {
+    "columnIndexRetained": true,
+    "columnStyleRetained": true
+  },
+  "apiModuleHash": "addb4e5451b801edb6aa8c79e4000813e49ff2e57b9f6876705e143c4125cae2",
+  "productionImageQa": {
+    "passed": true,
+    "groups": 8
+  },
+  "noProductionDraftModified": true,
+  "noProductionPublishCalled": true
+}

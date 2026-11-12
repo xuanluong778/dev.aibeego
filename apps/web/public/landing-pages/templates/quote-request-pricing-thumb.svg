@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <clipPath id="c"><rect width="640" height="400" rx="0"/></clipPath>
+  </defs>
+  <rect width="640" height="400" fill="url(#g)"/>
+  <g clip-path="url(#c)" transform="translate(24,24) scale(0.8222222222222222)">
+    
+
+  <title>Yêu cầu báo giá · Pricing First</title>
+  <rect width="720" height="996" fill="#F1F5F9"/>
+  <rect x="0" y="0" width="720" height="220" fill="#2563EB" opacity="0.92"/>
+  <rect x="40" y="36" width="320" height="18" rx="4" fill="#FFFFFF" opacity="0.95"/>
+  <rect x="40" y="66" width="260" height="10" rx="3" fill="#FFFFFF" opacity="0.55"/>
+  <rect x="40" y="90" width="260" height="10" rx="3" fill="#FFFFFF" opacity="0.45"/>
+  <rect x="40" y="130" width="140" height="36" rx="8" fill="#FFFFFF"/>
+  <rect x="420" y="40" width="240" height="140" rx="12" fill="#FFFFFF" opacity="0.25"/>
+  <text x="12" y="14" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Hero</text>
+  <rect x="0" y="220" width="720" height="100" fill="#F1F5F9" opacity="0.92"/>
+  <rect x="48" y="242" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="268" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="284" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="234" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Benefits</text>
+  <rect x="0" y="320" width="720" height="140" fill="#FEF3C7" opacity="0.92"/>
+  <rect x="60" y="350" width="180" height="90" rx="10" fill="#FFFFFF" opacity="0.9"/>
+  <rect x="270" y="340" width="180" height="110" rx="10" fill="#FFFFFF"/>
+  <rect x="480" y="350" width="180" height="90" rx="10" fill="#FFFFFF" opacity="0.9"/>
+  <text x="12" y="334" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Pricing</text>
+  <rect x="0" y="460" width="720" height="100" fill="#E2E8F0" opacity="0.92"/>
+  <rect x="48" y="482" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="508" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="524" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="474" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">Features</text>
+  <rect x="0" y="560" width="720" height="120" fill="#F1F5F9" opacity="0.92"/>
+  <rect x="48" y="582" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="608" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="624" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="574" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">FAQ</text>
+  <rect x="0" y="680" width="720" height="160" fill="#FFFFFF" opacity="1"/>
+  <rect x="180" y="696" width="360" height="128" rx="12" fill="#FFFFFF" stroke="#2563EB" stroke-width="3"/>
+  <rect x="48" y="702" width="200" height="12" rx="3" fill="#0F172A" opacity="0.85"/>
+  <rect x="48" y="728" width="624" height="8" rx="2" fill="#0F172A" opacity="0.25"/>
+  <rect x="48" y="744" width="560" height="8" rx="2" fill="#0F172A" opacity="0.18"/>
+  <text x="12" y="694" fill="#0F172A" font-family="system-ui,sans-serif" font-size="9" opacity="0.55">LeadForm</text>
+  <rect x="0" y="840" width="720" height="100" fill="#2563EB" opacity="0.92"/>
+  <rect x="48" y="862" width="200" height="12" rx="3" fill="#FFFFFF" opacity="0.85"/>
+  <rect x="48" y="888" width="624" height="8" rx="2" fill="#FFFFFF" opacity="0.25"/>
+  </g>
+  <rect x="24" y="24" width="592" height="352" fill="none" stroke="#fff" stroke-opacity="0.25" rx="8"/>
+  <rect x="0" y="336" width="640" height="64" fill="#0F172A" opacity="0.55"/>
+  <text x="28" y="372" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="18" font-weight="700">Yêu cầu báo giá · Pricing First</text>
+  <text x="28" y="352" fill="#FFFFFF" font-family="system-ui,sans-serif" font-size="11" opacity="0.8">quote · CORPORATE</text>
+</svg>

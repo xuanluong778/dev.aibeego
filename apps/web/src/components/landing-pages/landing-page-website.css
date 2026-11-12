@@ -1,0 +1,405 @@
+@font-face {
+  font-family: 'Website Be Vietnam Pro';
+  font-weight: 400;
+  src: url('/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-1.ttf');
+}
+@font-face {
+  font-family: 'Website Be Vietnam Pro';
+  font-weight: 600;
+  src: url('/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-3.ttf');
+}
+:where([data-lp-renderer='website-brief-v2']) {
+  container: website-page/inline-size;
+  color: #183330;
+  background: #f5f3ed;
+  font-family: 'Website Be Vietnam Pro', sans-serif;
+}
+:where([data-lp-renderer='website-brief-v2']) * {
+  box-sizing: border-box;
+  min-width: 0;
+}
+:where([data-lp-renderer='website-brief-v2']) :is(h1, h2, h3, p, figure, ul) {
+  margin: 0;
+}
+:where([data-lp-renderer='website-brief-v2']) :is(h1, h2, h3) {
+  overflow-wrap: anywhere;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  font-weight: 600;
+}
+:where([data-lp-renderer='website-brief-v2']) h1 {
+  font-size: clamp(42px, 5.2cqw, 72px);
+}
+:where([data-lp-renderer='website-brief-v2']) h2 {
+  font-size: clamp(30px, 3.3cqw, 46px);
+}
+:where([data-lp-renderer='website-brief-v2']) h3 {
+  font-size: 22px;
+  line-height: 1.4;
+}
+:where([data-lp-renderer='website-brief-v2']) p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #506461;
+}
+:where([data-lp-renderer='website-brief-v2']) a {
+  color: inherit;
+  text-decoration: none;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-shell {
+  width: min(1120px, calc(100% - 64px));
+  margin-inline: auto;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-header {
+  border-bottom: 1px solid #bac6b9;
+  padding: 24px 0;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-brand {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-brand small {
+  display: block;
+  font: 9px/1.8 monospace;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-nav {
+  display: flex;
+  gap: 28px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-nav-link {
+  display: inline-flex;
+  gap: 14px;
+  font-size: 13px;
+  align-items: center;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 16px 22px;
+  background: #b84721;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-menu-toggle {
+  display: none;
+  border: 1px solid #a5b2a9;
+  background: transparent;
+  padding: 10px;
+  color: #183330;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-section {
+  padding: 80px 0;
+  border-bottom: 1px solid #c4cdbf;
+  scroll-margin-top: 20px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-kicker {
+  font: 11px/1.8 monospace;
+  letter-spacing: 0.08em;
+  color: #9c3c1b;
+  margin-bottom: 22px;
+  display: block;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-hero > .webstudio-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 54px;
+  align-items: center;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-hero-copy > p {
+  margin-top: 26px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-actions {
+  margin-top: 30px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-trust {
+  list-style: none;
+  padding: 22px 0 0;
+  margin-top: 24px;
+  border-top: 1px solid #bac6b9;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  font-size: 10px;
+  color: #506461;
+}
+:where([data-lp-renderer='website-brief-v2']) figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-section-head {
+  max-width: 730px;
+  margin-bottom: 36px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-section-head > p {
+  margin-top: 20px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-card {
+  width: 100%;
+  padding: 28px 24px;
+  background: #fffdf7;
+  border: 1px solid #bac6b9;
+  border-radius: 6px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-number {
+  display: block;
+  font: 12px monospace;
+  color: #9c3c1b;
+  margin-bottom: 36px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-card p {
+  margin-top: 18px;
+  font-size: 14px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-process {
+  background: #e4e9df;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-process .webstudio-card {
+  border: 0;
+  border-top: 3px solid #183330;
+  border-radius: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-package {
+  width: 100%;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid #bac6b9;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-package[data-highlighted] {
+  border-top: 4px solid #b84721;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-package ul {
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 2;
+  color: #506461;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-package a {
+  margin-top: auto;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-faq > .webstudio-shell,
+:where([data-lp-renderer='website-brief-v2']) .webstudio-brief > .webstudio-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 56px;
+  align-items: start;
+}
+:where([data-lp-renderer='website-brief-v2']) details {
+  border-top: 1px solid #bac6b9;
+  padding: 22px 0;
+}
+:where([data-lp-renderer='website-brief-v2']) summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where([data-lp-renderer='website-brief-v2']) details p {
+  padding-top: 20px;
+  font-size: 14px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-brief aside > p {
+  margin-top: 24px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-note {
+  padding-top: 24px;
+  border-top: 1px solid #bac6b9;
+  font-size: 12px;
+}
+:where([data-lp-renderer='website-brief-v2']) form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: none;
+}
+:where([data-lp-renderer='website-brief-v2']) form > * {
+  grid-column: 1/-1;
+  min-width: 0;
+}
+:where([data-lp-renderer='website-brief-v2']) form > [data-lp-field-name] {
+  grid-column: auto;
+}
+:where([data-lp-renderer='website-brief-v2'])
+  form
+  > :is([data-lp-field-name='goal'], [data-lp-field-name='note']) {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='website-brief-v2']) label {
+  display: block;
+  font-size: 12px;
+  line-height: 1.7;
+}
+:where([data-lp-renderer='website-brief-v2']) .form-optional {
+  font-size: 9px;
+  font-weight: 400;
+  margin-left: 4px;
+  color: #506461;
+}
+:where([data-lp-renderer='website-brief-v2']) :is(input, select, textarea) {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #a5b2a9;
+  border-radius: 5px;
+  background: white;
+  color: #183330;
+  font:
+    13px/1.7 'Website Be Vietnam Pro',
+    sans-serif;
+}
+:where([data-lp-renderer='website-brief-v2']) textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+:where([data-lp-renderer='website-brief-v2']) [type='submit'] {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border: 0;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where([data-lp-renderer='website-brief-v2']) button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+:where([data-lp-renderer='website-brief-v2']) :is([data-lp-field-error], [data-lp-form-error]) {
+  color: #a72a2a;
+  font-size: 11px;
+}
+:where([data-lp-renderer='website-brief-v2']) .agency-form-footer {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #506461;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+:where([data-lp-renderer='website-brief-v2']) .agency-form-success {
+  padding: 30px 0;
+}
+:where([data-lp-renderer='website-brief-v2']) .agency-form-success button {
+  margin-top: 24px;
+  border: 1px solid #a5b2a9;
+  padding: 12px;
+}
+:where([data-lp-renderer='website-brief-v2']) .agency-is-success > [data-lp-field-name],
+:where([data-lp-renderer='website-brief-v2']) .agency-is-success > button[type='submit'] {
+  display: none;
+}
+:where([data-lp-renderer='website-brief-v2']) [data-industry-selection] {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #bac6b9;
+  font-size: 12px;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-footer {
+  padding: 48px 0;
+  background: #e4e9df;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-footer > .webstudio-shell {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: start;
+}
+:where([data-lp-renderer='website-brief-v2']) .webstudio-footer p {
+  font-size: 11px;
+  max-width: 660px;
+  margin-top: 16px;
+}
+:where([data-lp-renderer='website-brief-v2'])
+  [data-lp-heading-resize='1']:not([data-lp-heading-width-locked='1']) {
+  max-width: 100% !important;
+}
+:where([data-lp-renderer='website-brief-v2'])
+  [data-lp-text-box='1'][data-lp-heading-width-locked='1'] {
+  width: var(--lp-text-box-width) !important;
+  max-width: 100% !important;
+}
+@container website-page (max-width:767px) {
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-shell {
+    width: calc(100% - 36px);
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-menu-toggle {
+    display: block;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-header-cta {
+    display: none;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-nav {
+    display: none;
+    position: absolute;
+    top: 58px;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: #fffdf7;
+    border: 1px solid #bac6b9;
+    padding: 22px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-nav.open {
+    display: flex;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-section {
+    padding: 48px 0;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-hero > .webstudio-shell,
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-card-grid,
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-package-grid,
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-faq > .webstudio-shell,
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-brief > .webstudio-shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+  }
+  :where([data-lp-renderer='website-brief-v2']) form {
+    grid-template-columns: minmax(0, 1fr);
+    --agency-form-padding: 24px 20px;
+  }
+  :where([data-lp-renderer='website-brief-v2']) .webstudio-footer > .webstudio-shell {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,565 @@
+{
+  "steps": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#212830",
+      "layer": false,
+      "color": "rgb(255, 255, 255)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#212830",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(255, 255, 255)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#79b18b",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#79b18b",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#f7f7f7",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#f7f7f7",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": true,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": true,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#212830",
+      "layer": false,
+      "color": "rgb(255, 255, 255)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#212830",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(255, 255, 255)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#79b18b",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#79b18b",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#f7f7f7",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#f7f7f7",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": true,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 850
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": true,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#212830",
+      "layer": false,
+      "color": "rgb(255, 255, 255)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#212830",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(255, 255, 255)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#79b18b",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#79b18b",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#f7f7f7",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#f7f7f7",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": true,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 1,
+      "background": "#ffffff",
+      "layer": true,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#212830",
+      "layer": false,
+      "color": "rgb(255, 255, 255)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#212830",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(255, 255, 255)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#79b18b",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#79b18b",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#f7f7f7",
+      "layer": false,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#f7f7f7",
+      "layer": false,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": true,
+      "color": "rgb(0, 0, 0)",
+      "height": 20,
+      "singleBar": true,
+      "noFloatingCard": true,
+      "pointerPassThrough": true,
+      "nativeDrop": "after-headline"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 480
+      },
+      "zoom": 0.75,
+      "background": "#ffffff",
+      "layer": true,
+      "orientation": "vertical",
+      "color": "rgb(0, 0, 0)",
+      "width": 20,
+      "nativeDrop": "new-column-0"
+    }
+  ],
+  "passed": true
+}

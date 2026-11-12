@@ -1,0 +1,66 @@
+[data-lp-renderer="blank-starter-v1"] { container-type:inline-size; }
+[data-lp-renderer="blank-starter-v1"] .blank-section { color:var(--lp-text); box-sizing:border-box; padding:80px 24px; overflow-wrap:anywhere; }
+[data-lp-renderer="blank-starter-v1"] .blank-container { width:100%; max-width:1140px; margin:0 auto; }
+[data-lp-renderer="blank-starter-v1"] h1:not(:where([data-lp-section-library-scope] *)),
+[data-lp-renderer="blank-starter-v1"] h2:not(:where([data-lp-section-library-scope] *)),
+[data-lp-renderer="blank-starter-v1"] h3:not(:where([data-lp-section-library-scope] *)),
+[data-lp-renderer="blank-starter-v1"] p:not(:where([data-lp-section-library-scope] *)) { margin:0; color:inherit; }
+[data-lp-renderer="blank-starter-v1"] h1:not(:where([data-lp-section-library-scope] *)) { font-size:50px; font-weight:700; line-height:1.2; }
+[data-lp-renderer="blank-starter-v1"] h2:not(:where([data-lp-section-library-scope] *)) { font-size:42px; font-weight:700; line-height:1.25; }
+[data-lp-renderer="blank-starter-v1"] p:not(:where([data-lp-section-library-scope] *)) { font-size:18px; line-height:1.75; }
+[data-lp-renderer="blank-starter-v1"] .blank-centered { text-align:center; }
+[data-lp-renderer="blank-starter-v1"] .blank-header { padding:22px 24px; }
+[data-lp-renderer="blank-starter-v1"] .blank-header-inner { display:flex; align-items:center; justify-content:space-between; gap:24px; }
+[data-lp-renderer="blank-starter-v1"] .blank-logo { display:flex; gap:9px; align-items:center; font-size:17px; font-weight:800; letter-spacing:4px; }
+[data-lp-renderer="blank-starter-v1"] .blank-logo img { width:28px; height:28px; object-fit:contain; }
+[data-lp-renderer="blank-starter-v1"] .blank-social { display:flex; align-items:center; justify-content:center; gap:32px; }
+[data-lp-renderer="blank-starter-v1"] .blank-social svg { width:25px; height:25px; }
+[data-lp-renderer="blank-starter-v1"] .blank-hero { padding-top:0; padding-bottom:90px; }
+[data-lp-renderer="blank-starter-v1"] .blank-hero-image { display:flex; justify-content:center; margin-bottom:32px; }
+[data-lp-renderer="blank-starter-v1"] .blank-hero-image img { width:300px; height:250px; object-fit:contain; max-width:100%; }
+[data-lp-renderer="blank-starter-v1"] .blank-centered > p { max-width:920px; margin:36px auto 0; }
+[data-lp-renderer="blank-starter-v1"] .blank-button { display:inline-flex; justify-content:center; align-items:center; min-height:56px; max-width:100%; box-sizing:border-box; margin-top:36px; padding:16px 44px; background:var(--lp-button,var(--lp-primary)); color:#fff; border-radius:var(--lp-button-radius,5px); font-size:16px; font-weight:700; text-decoration:none; }
+[data-lp-renderer="blank-starter-v1"] .blank-button:hover { filter:brightness(1.08); }
+[data-lp-renderer="blank-starter-v1"] .blank-button:focus-visible { outline:3px solid #65a9f4; outline-offset:4px; }
+[data-lp-renderer="blank-starter-v1"] .blank-registration h2 { text-align:center; }
+[data-lp-renderer="blank-starter-v1"] .blank-registration-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:96px; max-width:890px; margin:68px auto 0; }
+[data-lp-renderer="blank-starter-v1"] .blank-intro p { font-size:26px; font-weight:700; line-height:1.7; }
+[data-lp-renderer="blank-starter-v1"] .blank-form { min-width:0; padding-top:24px; }
+[data-lp-renderer="blank-starter-v1"] .blank-form form { scroll-margin-top:40px; }
+[data-lp-renderer="blank-starter-v1"] .blank-form label { font-size:18px; }
+[data-lp-renderer="blank-starter-v1"] .blank-form label + label { margin-top:24px; }
+[data-lp-renderer="blank-starter-v1"] .blank-form button[type="submit"] { width:auto; min-width:146px; margin:28px auto 0; }
+[data-lp-renderer="blank-starter-v1"] .blank-features { padding-top:100px; padding-bottom:105px; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:54px; max-width:1008px; margin:0 auto; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature-grid > * { min-width:0; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature-image { background:#f6f6f6; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature-image img { display:block; width:100%; aspect-ratio:6/5; object-fit:cover; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature-copy { padding:12px 24px 0; }
+[data-lp-renderer="blank-starter-v1"] .blank-feature h3 { font-size:26px; font-weight:700; line-height:1.35; margin-bottom:12px; }
+[data-lp-renderer="blank-starter-v1"] .blank-cta { padding-top:116px; padding-bottom:138px; }
+[data-lp-renderer="blank-starter-v1"] .blank-footer { padding-top:50px; padding-bottom:50px; color:#fff; }
+@container (max-width:767px) {
+  [data-lp-renderer="blank-starter-v1"] .blank-section { padding:56px 24px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-header { padding:22px 24px; }
+  [data-lp-renderer="blank-starter-v1"] h1:not(:where([data-lp-section-library-scope] *)) { font-size:34px; }
+  [data-lp-renderer="blank-starter-v1"] h2:not(:where([data-lp-section-library-scope] *)) { font-size:30px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-hero { padding-top:0; }
+  [data-lp-renderer="blank-starter-v1"] .blank-hero-image { margin-bottom:12px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-registration-grid { grid-template-columns:minmax(0,1fr); gap:28px; margin-top:36px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-intro p { font-size:22px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-form { padding-top:0; }
+  [data-lp-renderer="blank-starter-v1"] .blank-feature-grid { grid-template-columns:minmax(0,1fr); gap:40px; }
+  [data-lp-renderer="blank-starter-v1"] .blank-feature-copy { padding:16px 0 0; }
+  [data-lp-renderer="blank-starter-v1"] .blank-social { gap:24px; }
+}
+/* Match flow layout in Builder while retaining user-resized text boxes. */
+[data-lp-renderer="blank-starter-v1"] :is(.blank-hero,.blank-cta,.blank-registration,.blank-features) [data-lp-inline-wrap]:is([data-lp-inline-wrap="heading"],[data-lp-inline-wrap="paragraph"]):not([data-lp-heading-width-locked="1"]):not([data-lp-heading-width-live]) {
+  display:block !important; width:100% !important; max-width:100% !important; padding:0 !important;
+}
+[data-lp-renderer="blank-starter-v1"] .blank-centered > [data-lp-inline-wrap="paragraph"]:not([data-lp-heading-width-locked="1"]):not([data-lp-heading-width-live]) {
+  max-width:920px !important; margin:36px auto 0;
+}
+/* A registration section contains a form, but its section shell spans the page. */
+[data-lp-renderer="blank-starter-v1"] [data-lp-block-slot] > [data-lp-section-chrome][data-lp-position-mode="flow"] {
+  width:100%; max-width:100%; line-height:normal;
+}

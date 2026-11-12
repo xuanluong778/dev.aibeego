@@ -1,0 +1,371 @@
+{
+  "test-landing-page-add-components-dnd.cjs": {
+    "gates": ["BLOCK_TYPE_DRAG"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "919996380df69a1605885ed4d1f2cd402e7f35e325a2fbd7cd578b89cad327a1"
+  },
+  "test-landing-page-builder-fixed-panels.cjs": {
+    "gates": [
+      "CANVAS_CORE_UNCHANGED",
+      "CANVAS_NO_OVERLAP",
+      "DESKTOP_SCROLL",
+      "INSPECTOR_FIXED",
+      "MOBILE_UNCHANGED"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "5b91ddc9a13b31f5d244cac6463877c335a051c8e7d6652a6dd94b49f2745ca1"
+  },
+  "test-landing-page-builder-library.cjs": {
+    "gates": ["RESPONSIVE", "TEMPLATE_CLONE", "TEMPLATE_PREVIEW"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "3f2475c19ae95af9a2837f41c913d1b1020085bf5a0fcdda69fe576552c465b9"
+  },
+  "test-landing-page-builder-preview-public-parity.cjs": {
+    "gates": ["BLOCKS_COVERED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "d74e7f3d3dc5154bf29147e4fd04e6cef6f9f43d7ab455d6355a7fc610a16995"
+  },
+  "test-landing-page-builder-responsive.cjs": {
+    "gates": [
+      "DESKTOP_INSPECTOR_DOCKED_SPACER_STILL_INERT",
+      "DESKTOP_OFFSETS_UNTOUCHED",
+      "DESKTOP_VIEWPORT_SIMULATOR_WIDTHS_UNCHANGED",
+      "INSPECTOR_HOST_MOBILE_BRANCH_HAS_NO_POINTER_EVENTS_NONE",
+      "INSPECTOR_HOST_NOT_UNCONDITIONALLY_INERT",
+      "INSPECTOR_MOBILE_HOST_HAS_BOUNDED_HEIGHT",
+      "SIDEBAR_RAIL_BELOW_ACTION_BAR_ON_MOBILE"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "39af14e5c861710cec31ae6b63f60c3af2d9a01455a4ed95ee5b504e6c5bdbcf"
+  },
+  "test-landing-page-builder-toolbar.cjs": {
+    "gates": [
+      "COMPACT_TOOLBAR",
+      "DEVICE_SWITCH",
+      "NO_DOUBLE_SCROLL",
+      "RESPONSIVE",
+      "SAVE",
+      "TOOLBAR_CANVAS_ALIGN",
+      "TOOLBAR_NO_WHEEL_SCROLL"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "82e2d105ec4659be8595495f0c5cc81a455680c6593e61ffa2f9f0925f4fd83b"
+  },
+  "test-landing-page-builder-upgrade.cjs": {
+    "gates": ["RESPONSIVE", "UNDO_REDO"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "f3b01e80cb43f4f1bb9619dd12e23bbbda18e917abcb0034aecc8534126e9e18"
+  },
+  "test-landing-page-business-profile.cjs": {
+    "gates": ["Builder"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "a7251cffcf1629a03cb208cdcd2c0833149b56c0056f0803f33af12aa255c931"
+  },
+  "test-landing-page-button-presets.cjs": {
+    "gates": ["RAIL_OPENS_PANEL"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "3d83a69566be31bd5db75e18e97d03b4155f9b606893a32c90581b3a4fb8c815"
+  },
+  "test-landing-page-canvas-full-scroll.cjs": {
+    "gates": [
+      "CANVAS_HEIGHT_AUTO",
+      "CONTENT_MOVED_UP",
+      "LANDING_PAGE_CORE_UNCHANGED",
+      "PAGE_SCROLL_FULL_CONTENT"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "d4fbae2aa6c87964341008279413d0ddf779955f5c74412ed8330541a41b02de"
+  },
+  "test-landing-page-canvas-production.cjs": {
+    "gates": ["STALE_SAVE_BLOCKED", "TOOLBAR_NO_OVERLAY"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "bb5986e30b2404d50e876afb9bf2e483ef06a1b2b17e31c0f8e187ea93d59554"
+  },
+  "test-landing-page-canvas-reserve-height.cjs": {
+    "gates": ["CONTENT_OVERFLOW_VISIBLE_BY_DESIGN", "LIVE_RESERVE_STILL_SERVES_ACTIVE_GESTURE"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "a80093ad800668629284ffccd76264ad504be610576bb7e22528842cd6e92cf1"
+  },
+  "test-landing-page-canvas-selection.cjs": {
+    "gates": [
+      "ONLY_ONE_TOOLBAR",
+      "SECTION_DRAG_ONLY_BY_HANDLE",
+      "SHIFT_MULTI_SELECT",
+      "SHIFT_TOGGLE"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "62da16be9515a3c84cf5141d4b51be3e8e63ea3aa312035e8be477ffc75708de"
+  },
+  "test-landing-page-content-image-toolbar.cjs": {
+    "gates": ["IMAGE_TOOLBAR_UI"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "1005fa0f5948eccb6261166d9ab0913c754dc186afee32da3a53f1ded96e5761"
+  },
+  "test-landing-page-content-safe-area.cjs": {
+    "gates": ["DRAG_BOUNDARY", "RESIZE_BOUNDARY"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "b5879c03aea23c124b842f33ad5409f98c74ad8d6c86b213df3e6fd37cfd49e8"
+  },
+  "test-landing-page-design-audit.cjs": {
+    "gates": ["CTA_BODY_SELECTS_CTA", "FREE_BODY_DRAG"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "9c10b00cc0b9459887722963cf6afe515d073422bbc95aa76d9ac73a07f95d45"
+  },
+  "test-landing-page-device-frame.cjs": {
+    "gates": [
+      "DESKTOP_TABLET_UNCHANGED",
+      "MOBILE_REAL_VIEWPORT",
+      "MOBILE_SCROLL",
+      "NO_HORIZONTAL_OVERFLOW"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "eb8220d4e775f9fb3e73e305416e31167f3399533733643057e623ee3ae7b23c"
+  },
+  "test-landing-page-drag-resize-engine.cjs": {
+    "gates": ["NO_REACT_FIGHT_WHILE_DRAGGING", "TEXT_BOX_WH"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "f811eb056cc7e46ab9ebb59b49a4b50871cff08984c912b2d8a9c8d2349b03d1"
+  },
+  "test-landing-page-element-free-drag.cjs": {
+    "gates": ["ELEMENT_CHROME_DRAG", "INLINE_TEXT_DRAG", "SECTION_DOES_NOT_STEAL"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "6546cc38695f9fa7b0e9b4d3532ed1343c2bc5fe9ec292c4b74d2385f86618b1"
+  },
+  "test-landing-page-free-drag-center-guides.cjs": {
+    "gates": ["FREE_DRAG_XY_ROOM"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "7795e64525a88ccc9cfc6d0feb0071e59f0b251b4228cd152bc4c4b2485eae47"
+  },
+  "test-landing-page-free-drag-move-size.cjs": {
+    "gates": ["CHILD_LAYOUT_PRESERVED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "c6b3bc4cbeed166dbc14700cef5e5da59846679930b1b7d11c1cabe6fbc1c64a"
+  },
+  "test-landing-page-free-position-canvas.cjs": {
+    "gates": ["RESPONSIVE_SAFE"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "dc2673856e00065332383f1543fa199379f62be9693fc1f6285deaf20c81d9a6"
+  },
+  "test-landing-page-free-toggle-content-rect-and-drag-handle.cjs": {
+    "gates": ["MEASURES_CHILDREN_UNION_NOT_SHELL", "TOGGLE_USES_CONTENT_RECT_FOR_XY"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "174f4f30f6ef54cb555ce02fbf035c29b79c3e20e9e57088a88f105df23be645"
+  },
+  "test-landing-page-free-toggle-no-collision.cjs": {
+    "gates": ["BUILDER_IMPORTS_MEASURING_HELPERS", "SHARED_MEASURE_HELPER_PRESENT"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "45496d3dcf5eaaa537300ac0265481af3bcfbebe8335fd364d581d2fed121870"
+  },
+  "test-landing-page-heading-box-resize-shrink.cjs": {
+    "gates": [
+      "CHROME_FIRES_FALSE_BEFORE_COMMIT_SAME_BATCH",
+      "DECLARATIVE_OVERRIDE_SKIPPED_WHILE_RESIZING"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "f814590f2304d3a34863f6d74b85454b3f1571506b83a878c988fecb08f0bc95"
+  },
+  "test-landing-page-heading-toolbar.cjs": {
+    "gates": [
+      "HANDLE_BOUND_SYNC",
+      "HEADING_AUTO_HEIGHT",
+      "HEADING_CORNER_BOX_SCALE",
+      "HEADING_LINE_HEIGHT",
+      "HEADING_NO_TEXT_LOSS",
+      "HEADING_RESIZE_SMOOTH",
+      "HEADING_TEXT_WRAP",
+      "SMALL_RESIZE_HANDLES"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "4957c8679b7e900b0f078840e2a6c8e0122f5967919b5e217a68df7ade5a153b"
+  },
+  "test-landing-page-inline-ai.cjs": {
+    "gates": ["8"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "bf492f79b834e852a7d380401ae95731e0c68a667f82d2417cb8bdcdd879c76e"
+  },
+  "test-landing-page-inline-edit-ready.cjs": {
+    "gates": ["MOBILE_INLINE_EDIT"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "311e1f04c3a3a49b95c15db908a17459f2bc63f59eb78a5e7ab8bcd4fd47b2e6"
+  },
+  "test-landing-page-inspector-canvas-first.cjs": {
+    "gates": ["CANVAS_FIRST_CONTENT", "STICKY_SCROLL"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "99973d1c5ff8ef96f8d5ef77f98db38897778d4e46b12cb660f413d537917dff"
+  },
+  "test-landing-page-inspector-context-aware.cjs": {
+    "gates": [
+      "ADVANCED_ACCORDIONS_COLLAPSED",
+      "CONTEXT_AWARE",
+      "CRM_UNCHANGED",
+      "NO_OVERFLOW",
+      "UNDO_REDO"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "e522bd84391d6aa0ba58a814887f229f156060bdfbd4335c2eb2f79aba81cf6c"
+  },
+  "test-landing-page-inspector-design-tab.cjs": {
+    "gates": ["BORDER_RADIUS", "FILTER", "UNDO_REDO"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "19e9a663ca2b24f5d391dbef3b728729959804173f07c3c586e1ba9fe4f2c9ac"
+  },
+  "test-landing-page-inspector-modes.cjs": {
+    "gates": [
+      "CANVAS_EXPAND",
+      "DOCKED_CANVAS_SCROLL_INDEPENDENT",
+      "FLOATING_PAGE_BROWSER_SCROLL",
+      "MOBILE_UNCHANGED"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "7d1ebd52286f217f7b5afce9889f1cba32e7c4e3d1aaec7ec972614174645f6e"
+  },
+  "test-landing-page-interaction-fixes.cjs": {
+    "gates": ["EMPTY_SECTION_CLICK", "HERO_FREE_SYNC", "SECTION_OVERLAP"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "cfd5c7cb4be5d7a7796cb9026af646ea151d04aafe6ee1c04f94b4bf20f6c983"
+  },
+  "test-landing-page-item-resize-shrink.cjs": {
+    "gates": ["FLOW_MODE_STILL_UNTOUCHED", "OFFSET_SHELL_GETS_OVERFLOW_HIDDEN_AND_MIN_HEIGHT_0"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "b81ffe83d49af837412fbca6765265cb5366f90e500a5f7aebe5a479664d9ce1"
+  },
+  "test-landing-page-premium.cjs": {
+    "gates": ["MOBILE_RESPONSIVE", "NO_FAKE_DATA", "TEMPLATE_PREMIUM_UI"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "97076af9a4b34e2028455eb1c55109376ca42ecbc4440b20dacead44e41900a7"
+  },
+  "test-landing-page-preview-mode.cjs": {
+    "gates": ["PREVIEW_HIDE_ALL_EDITOR_UI", "RESTORE_BUILDER"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "e6b7634b956b76d8a958f913f2b1a23a1e228fbf3e10ea31f0aea405962db0a5"
+  },
+  "test-landing-page-preview-toggle.cjs": {
+    "gates": ["BUILDER_PREVIEW_BEHAVIOR"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "404cf8756831c359adc14f3fa60c8f3449f776606abb43551470fba97ebb7c6a"
+  },
+  "test-landing-page-pro.cjs": {
+    "gates": ["AI_GENERATE", "AI_MENU_COMPACT", "AI_SELECTED_BLOCK", "AI_UNDO", "PREVIEW_PUBLISH"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "27724c62f1825a4e1406ee647b78b0d748651c563004486f5e24863082bd8465"
+  },
+  "test-landing-page-resize-after-rotate.cjs": {
+    "gates": ["ROTATION_PROJECTION_PRESENT"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "5a36c8b7f22dd992310ba4eaaa0c2afcc72c3a156c88606e0b81e865e9b3d381"
+  },
+  "test-landing-page-resize-rotate.cjs": {
+    "gates": ["UNDO_KEEP_SELECT"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "6e84b83cf88ecb6f9a80cf1ca5d73ba49569411f18e1aefe5134baecc34775ce"
+  },
+  "test-landing-page-section-background.cjs": {
+    "gates": ["BACKGROUND_SELECT"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "9b437917ad8f03cf31e10cdb011cd0bdce8df472300b18af430f46dcf03bd77d"
+  },
+  "test-landing-page-section-content-overflow.cjs": {
+    "gates": [
+      "GROW_WATCHER_NEVER_SHRINKS",
+      "GROW_WATCHER_YIELDS_TO_LIVE_GESTURE",
+      "SHELL_USES_MIN_HEIGHT_NOT_HARD_HEIGHT"
+    ],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "09e159ba1a8b79a1fe8c7cc67301d5585dafc76fc648b61a3ad60ca57501d24e"
+  },
+  "test-landing-page-section-overlap.cjs": {
+    "gates": ["RESIZE_4_CORNERS", "TEXT_WRAP"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "5fc3e5e25ae3c22bec6827a1f2964ea832d7def4a25148b36c1baf8a881d0100"
+  },
+  "test-landing-page-section-preset-dnd.cjs": {
+    "gates": ["PRESET_DND_REGRESSION"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "430c6d59f12716d171008b8722815621c886492d626fa9cf3b9398dbfa8f4c1e"
+  },
+  "test-landing-page-section-presets-fix.cjs": {
+    "gates": ["GUARANTEE_PUBLIC_RENDER"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "38fd5ecf5f6821b56c1e457ada7971df3609cadf11500d8d656e7596108229c1"
+  },
+  "test-landing-page-sections-responsive.cjs": {
+    "gates": ["ALL_SECTIONS_RESPONSIVE"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "32b2763ed395489e33a05dd3f4efc9bd8df0955698bafb00fbc3b849144e8378"
+  },
+  "test-landing-page-sidebar-compact.cjs": {
+    "gates": ["ADD_ELEMENT", "CANVAS_UI_UNCHANGED", "SIDEBAR_COLLAPSED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "167daae2ed99143b781517279917ea9af22001bcc07d86e6dacb385a6364fc1b"
+  },
+  "test-landing-page-sidebar-dnd.cjs": {
+    "gates": ["CLICK_PRESERVED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "f7cfc304234cf1301fa74788392e21a4e1e36223a515c3e12792b6d270b37173"
+  },
+  "test-landing-page-sidebar-height-upgrade.cjs": {
+    "gates": ["EXISTING_LOGIC_PRESERVED", "NO_CANVAS_OVERLAP"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "98be5933c7c63de6ff76747813d9e7f5400a4965ebaf8bda349c87be953cc66f"
+  },
+  "test-landing-page-spa-templates.cjs": {
+    "gates": ["CATALOG_VERSION_V7"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "3ccd97829a07391e13fe2a6477a2a54d035445c5977da35c188604b5c099a6a0"
+  },
+  "test-landing-page-template-differentiation.cjs": {
+    "gates": ["AI_ARCHITECTURE_SELECTION"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "5fa465db7a3b570706942f164790fa5dbcc20d4e926da4304c57b1085906833d"
+  },
+  "test-landing-page-template-engine.cjs": {
+    "gates": ["PREVIEW_RESPONSIVE"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "2a373ec49e34adffb92e1f46a07f3b88f567832747ea2d87dc182eee49ff6890"
+  },
+  "test-landing-page-template-foundation.cjs": {
+    "gates": ["CATALOG_VERSION_V7"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "067f4ad179cf56df23345ba91aeb63f24d7a46663e6dcfdb3c426eaa4c829a71"
+  },
+  "test-landing-page-template-gallery.cjs": {
+    "gates": ["DESIGN_FAMILY_GOAL_FILTERS", "PREVIEW_OPEN_WORKS", "PREVIEW_USES_REAL_RENDERER"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "3ccc280f01a875b5a4ccf4c0c9b94adcc032e781f66cf458a61096610966ff47"
+  },
+  "test-landing-page-template-ui.cjs": {
+    "gates": ["DESKTOP", "MOBILE", "NO_FAKE_DATA", "TABLET"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "1f9634c3d2e56ab7841f99706e8ac3edc20e8ff6282134e61e9851e67415b159"
+  },
+  "test-landing-page-text-toolbar.cjs": {
+    "gates": ["LANDING_PAGE_CORE_UNCHANGED", "NO_DUPLICATE_TOOLBAR", "TEXT_TOOLBAR_HORIZONTAL"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "187f5558c980abf2af88ca8746fffddccdace2a1f4ed9bdec07a74da9dd29e82"
+  },
+  "test-landing-page-theme-switcher.cjs": {
+    "gates": ["AI_THEME_SELECTION"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "55414fd378ed5a85e04fbaab00325dfcfb24dcdc043089ac030558c70db97171"
+  },
+  "test-landing-page-title-presets.cjs": {
+    "gates": ["INSERT_REUSES_ENGINE"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "0f3d4b694a6c039bcf513d1d585b445378acf5da699b8f08a8e5f99ab627f9be"
+  },
+  "test-landing-page-toolbar-float.cjs": {
+    "gates": ["LANDING_PAGE_CORE_UNCHANGED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "0cd87de557661e45d98db257310591ba117b25582d879bd52c323b1beb8845d4"
+  },
+  "test-landing-page-toolbar-no-scroll.cjs": {
+    "gates": ["LANDING_PAGE_CORE_UNCHANGED"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "fe7d803fddaca0c30c39dd14d630b767c7b4eaec46709abe4af0cf38ff3b0626"
+  },
+  "test-landing-page-toolbar-sidebar-edge-sync.cjs": {
+    "gates": ["SIDEBAR_EDGE_SYNC"],
+    "reason": "Matcher cấu trúc/comment/tên phiên bản hoặc số lượng cũ; giữ FAIL. Chưa xác nhận hành vi UI bằng browser.",
+    "sha256": "f8bcdf320ce7f9af686f50f5381bed902a7aa8681fbc4f568addd97ef95d58cb"
+  }
+}

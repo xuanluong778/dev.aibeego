@@ -1,0 +1,554 @@
+@font-face {
+  font-family: 'Dining Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-1.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Dining Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/landing-page-assets/agency-portfolio-v2/be-vietnam-pro-3.ttf') format('truetype');
+}
+:where([data-lp-renderer='restaurant-menu-v2']) {
+  --dining-ink: #263e32;
+  --dining-muted: #5b665d;
+  --dining-paper: #fffaf0;
+  --dining-line: #c8cdbb;
+  color: var(--dining-ink);
+  font-family: 'Dining Be Vietnam Pro', sans-serif;
+  container: dining-page / inline-size;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) * {
+  box-sizing: border-box;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) [data-lp-canvas-root] {
+  background: var(--dining-paper);
+  color: var(--dining-ink);
+  font-family: 'Dining Be Vietnam Pro', sans-serif;
+  line-height: 1.8;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-container {
+  width: min(1180px, calc(100% - 64px));
+  margin-inline: auto;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is(h1, h2, h3, p, figure) {
+  margin: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is(h1, h2) {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.13;
+  text-wrap: balance;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) h1 {
+  font-size: clamp(42px, 5.4cqw, 76px);
+  max-width: 660px;
+  white-space: pre-line;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) h2 {
+  font-size: clamp(34px, 3.8cqw, 52px);
+}
+:where([data-lp-renderer='restaurant-menu-v2']) h3 {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) p {
+  font-size: 15px;
+  color: var(--dining-muted);
+  line-height: 1.9;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) a {
+  color: inherit;
+  text-decoration: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is(a, button, input, textarea, select) {
+  outline-offset: 5px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is(a, button):focus-visible {
+  outline: 3px solid #906137;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-eyebrow {
+  display: block;
+  color: #77512b;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-header {
+  border-bottom: 1px solid var(--dining-line);
+  background: var(--dining-paper);
+  scroll-margin-top: 20px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-header-row {
+  min-height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-brand {
+  font:
+    30px/1.1 Georgia,
+    serif;
+  letter-spacing: -0.04em;
+  display: block;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-brand small {
+  display: block;
+  font:
+    8px/1.5 'Dining Be Vietnam Pro',
+    sans-serif;
+  letter-spacing: 0.14em;
+  margin-top: 9px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-nav {
+  display: flex;
+  gap: 30px;
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: #294b38;
+  color: #fffaf0;
+  padding: 13px 22px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-button:hover {
+  background: #1c3b29;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid currentColor;
+  padding-block: 8px;
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--dining-line);
+  background: transparent;
+  color: var(--dining-ink);
+  border-radius: 4px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-section {
+  padding: 80px 0;
+  scroll-margin-top: 20px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-hero > .dining-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 64px;
+  align-items: center;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-copy > p {
+  max-width: 490px;
+  margin-top: 26px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-notes {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 24px 0 0;
+  margin: 28px 0 0;
+  border-top: 1px solid var(--dining-line);
+  font-size: 10px;
+  color: var(--dining-muted);
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-notes li::before {
+  content: '·';
+  margin-right: 6px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-photo {
+  min-width: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-photo [data-lp-content-image] {
+  aspect-ratio: 4/5;
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 180px 180px 8px 8px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) figcaption {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--dining-muted);
+  margin-top: 14px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-section-head {
+  max-width: 660px;
+  margin-bottom: 40px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-section-head > p {
+  margin-top: 20px;
+  max-width: 580px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu {
+  background: #eff0e2;
+  border-block: 1px solid var(--dining-line);
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 64px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 24px;
+  gap: 18px;
+  border-top: 1px solid #b9c3ad;
+  padding-block: 28px;
+  min-width: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-item p {
+  margin-top: 10px;
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-number {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #77512b;
+  padding-top: 4px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-mark {
+  font-size: 24px;
+  color: #7c8c6b;
+  line-height: 1.3;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-space-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-space-grid > :nth-child(2) {
+  padding-top: 70px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-space-photo {
+  aspect-ratio: 5/4;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-space-photo [data-lp-content-image] {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-space-card p {
+  font-size: 13px;
+  margin-top: 8px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-process {
+  border-top: 1px solid var(--dining-line);
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-step-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-step {
+  border-top: 1px solid var(--dining-line);
+  padding-top: 20px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-step h3 {
+  margin-block: 18px 10px;
+  font-size: 18px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-step p {
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-faq {
+  background: #eff0e2;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-faq > .dining-container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 64px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) details {
+  border-bottom: 1px solid #b9c3ad;
+  padding: 22px 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) summary::-webkit-details-marker {
+  display: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) details p {
+  padding-top: 14px;
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-booking > .dining-container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 72px;
+  align-items: start;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-contact-note {
+  border-top: 1px solid var(--dining-line);
+  padding-top: 24px;
+  font-size: 12px;
+  max-width: 380px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form {
+  width: 100%;
+  max-width: none;
+  padding: 28px;
+  border: 1px solid var(--dining-line);
+  background: #fffdf8;
+  box-shadow: none;
+  border-radius: 8px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form > * {
+  min-width: 0;
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form > [data-lp-field-name] {
+  grid-column: auto;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form > [data-lp-field-name='note'] {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) label {
+  display: block;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .form-optional {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--dining-muted);
+  margin-left: 5px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is(input, textarea, select) {
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  border: 1px solid #abb6aa;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fffdf8;
+  font:
+    13px/1.7 'Dining Be Vietnam Pro',
+    sans-serif;
+  color: #263e32;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) [type='submit'] {
+  margin-top: 24px;
+  min-height: 48px;
+  width: 100%;
+  background: #294b38;
+  color: #fffaf0;
+  border: 0;
+  border-radius: 4px;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .icon {
+  width: 16px;
+  height: 16px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-footer {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--dining-muted);
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 16px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-footer span {
+  font-size: 10px;
+  flex: 1;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) :is([data-lp-field-error], [data-lp-form-error]) {
+  color: #9d2929;
+  font-size: 12px;
+  margin-top: 6px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-success {
+  padding: 24px 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-success h3 {
+  margin-bottom: 14px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-success button {
+  border: 1px solid #abb6aa;
+  padding: 10px 16px;
+  margin-top: 20px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) form.agency-is-success > [data-lp-field-name] {
+  display: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-footer {
+  background: #263e32;
+  color: #fffaf0;
+  padding: 44px 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-footer > .dining-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: start;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-footer h2 {
+  font-size: 34px;
+  margin-bottom: 18px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-footer span {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-footer p {
+  color: #d0d8c8;
+  max-width: 550px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+@container dining-page (max-width:1000px) {
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-header-action {
+    display: none;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-hero > .dining-container {
+    gap: 32px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-booking > .dining-container {
+    gap: 32px;
+  }
+}
+@container dining-page (max-width:767px) {
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-container {
+    width: calc(100% - 36px);
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-header-row {
+    min-height: 84px;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-brand {
+    font-size: 28px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-toggle {
+    display: block;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-nav {
+    display: none;
+    width: 100%;
+    padding: 18px 0 24px;
+    gap: 16px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-nav.open {
+    display: flex;
+    flex-direction: column;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-section {
+    padding: 48px 0;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) h1 {
+    font-size: 43px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-hero > .dining-container,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-faq > .dining-container,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-booking > .dining-container,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-menu-list,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-step-grid,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-space-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-photo [data-lp-content-image] {
+    aspect-ratio: 5/4;
+    border-radius: 100px 100px 4px 4px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-text-link {
+    align-self: start;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-space-grid > :nth-child(2) {
+    padding-top: 0;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-section-head {
+    margin-bottom: 28px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-booking-copy > .dining-section-head {
+    margin-bottom: 20px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) form {
+    padding: 20px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-footer > .dining-container {
+    flex-direction: column;
+  }
+}
+
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-footer > span:first-child {
+  flex: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .agency-form-footer > span:last-child {
+  flex: initial;
+  text-align: left;
+}

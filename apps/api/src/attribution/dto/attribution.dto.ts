@@ -1,0 +1,94 @@
+import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator';
+import { AdPlatform } from '@marketingspa/database';
+import type { FunnelTouchModel } from '@marketingspa/shared';
+
+export class AttributionDashboardQueryDto {
+  @IsOptional()
+  @IsString()
+  adCampaignId?: string;
+  @IsOptional()
+  @IsString()
+  adId?: string;
+  @IsOptional()
+  @IsString()
+  branchId?: string;
+  @IsOptional()
+  @IsEnum(AdPlatform)
+  channel?: AdPlatform;
+  @IsOptional()
+  @IsString()
+  customerType?: string;
+  @IsOptional()
+  @IsString()
+  employeeId?: string;
+  @IsOptional()
+  @IsString()
+  from?: string;
+  @IsOptional()
+  @IsBoolean()
+  groupByAd?: boolean;
+  @IsOptional()
+  @IsString()
+  serviceId?: string;
+  @IsOptional()
+  @IsString()
+  to?: string;
+  @IsOptional()
+  @IsString()
+  utmSource?: string;
+
+  @IsOptional()
+  @IsIn(['first', 'last'])
+  touchModel?: FunnelTouchModel;
+}
+
+export class AttributionInputDto {
+  @IsOptional()
+  @IsString()
+  adCampaignId?: string;
+  @IsOptional()
+  @IsString()
+  adId?: string;
+  @IsOptional()
+  @IsString()
+  adSetId?: string;
+  @IsOptional()
+  @IsEnum(AdPlatform)
+  channel?: AdPlatform;
+  @IsOptional()
+  @IsString()
+  externalAdId?: string;
+  @IsOptional()
+  @IsString()
+  externalAdSetId?: string;
+  @IsOptional()
+  @IsString()
+  externalCampaignId?: string;
+  @IsOptional()
+  @IsString()
+  fbclid?: string;
+  @IsOptional()
+  @IsString()
+  gclid?: string;
+  @IsOptional()
+  @IsString()
+  landingPage?: string;
+  @IsOptional()
+  @IsString()
+  referrer?: string;
+  @IsOptional()
+  @IsString()
+  utmCampaign?: string;
+  @IsOptional()
+  @IsString()
+  utmContent?: string;
+  @IsOptional()
+  @IsString()
+  utmMedium?: string;
+  @IsOptional()
+  @IsString()
+  utmSource?: string;
+  @IsOptional()
+  @IsString()
+  utmTerm?: string;
+}

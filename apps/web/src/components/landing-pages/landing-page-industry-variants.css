@@ -1,0 +1,519 @@
+/* Additive layouts and industry-scoped builder fixes. Legacy never matches. */
+/* The shared editor uses max-content wrappers. Bound only automatic text boxes;
+   explicitly saved text widths/free transforms remain controlled by the user. */
+:where([data-lp-renderer='restaurant-menu-v2']) [data-lp-heading-resize='1']:not([data-lp-heading-width-locked='1']),
+:where([data-lp-renderer='local-service-v2']) [data-lp-heading-resize='1']:not([data-lp-heading-width-locked='1']) {
+  max-width: 100% !important;
+}
+/* Published text boxes use the same persisted width variable as the editor.
+   The old visual-axis rules are intentionally excluded from these renderers. */
+:where([data-lp-renderer='restaurant-menu-v2']) [data-lp-text-box='1'][data-lp-heading-width-locked='1'],
+:where([data-lp-renderer='local-service-v2']) [data-lp-text-box='1'][data-lp-heading-width-locked='1'] {
+  width: var(--lp-text-box-width) !important;
+  max-width: 100% !important;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-package-grid,
+:where([data-lp-renderer='local-service-v2']) .local-package-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-package {
+  width: 100%;
+  border: 1px solid #b7c1aa;
+  background: #fffdf8;
+  border-radius: 5px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-package ul {
+  padding-left: 20px;
+  color: #5b665d;
+  font-size: 14px;
+  line-height: 2;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-package .dining-button {
+  margin-top: auto;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-package[data-highlighted] {
+  background: #e8eddf;
+}
+:where([data-lp-renderer='local-service-v2']) .local-package {
+  width: 100%;
+  border: 1px solid #b6cadb;
+  background: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+:where([data-lp-renderer='local-service-v2']) .local-package ul {
+  padding-left: 20px;
+  color: #4d6477;
+  font-size: 14px;
+  line-height: 2;
+}
+:where([data-lp-renderer='local-service-v2']) .local-package[data-highlighted] {
+  border-top: 4px solid #115b8a;
+}
+:where([data-lp-renderer='local-service-v2']) .local-package .local-button {
+  margin-top: auto;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-story-media,
+:where([data-lp-renderer='local-service-v2']) .local-story-media {
+  border: 1px solid #bacad1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f4f7f2;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-story-media :is(video, iframe),
+:where([data-lp-renderer='local-service-v2']) .local-story-media :is(video, iframe) {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  border: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) .dining-story-media img,
+:where([data-lp-renderer='local-service-v2']) .local-story-media img {
+  width: 100%;
+  height: 100%;
+  max-height: 470px;
+  object-fit: cover;
+  display: block;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) [data-industry-video-placeholder],
+:where([data-lp-renderer='local-service-v2']) [data-industry-video-placeholder] {
+  padding: 20px;
+  font-size: 13px;
+}
+:where([data-lp-renderer='restaurant-menu-v2']) [data-industry-selection],
+:where([data-lp-renderer='local-service-v2']) [data-industry-selection] {
+  font-size: 13px;
+  line-height: 1.7;
+  border-bottom: 1px solid #b5c7ba;
+  padding-bottom: 12px;
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='local-service-v2']) .local-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='local-service-v2']) .local-gallery-card {
+  width: 100%;
+  border: 1px solid #cbd7e2;
+  border-radius: 10px;
+  padding: 22px;
+  background: white;
+  min-width: 0;
+}
+:where([data-lp-renderer='local-service-v2']) .local-gallery-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  display: block;
+  object-fit: contain;
+  margin-bottom: 22px;
+}
+:where([data-lp-renderer='local-service-v2']) .local-gallery-card p {
+  margin-top: 12px;
+}
+
+/* Restaurant: editorial team story, comparison options, timeline, food mosaic, menu guide. */
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='chef-story'])
+  .dining-hero
+  > .dining-container {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='chef-story'])
+  .dining-menu-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='chef-story'])
+  .dining-menu-item {
+  display: block;
+  border-top: 3px solid #8e9f78;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='chef-story'])
+  .dining-menu-item
+  h3 {
+  margin-top: 18px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='chef-story'])
+  .dining-menu-mark {
+  display: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='set-menu'])
+  .dining-hero
+  > .dining-container {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.6fr);
+  gap: 80px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='set-menu'])
+  .dining-hero
+  h1 {
+  font-size: clamp(38px, 4cqw, 58px);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='set-menu'])
+  .dining-package-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='set-menu'])
+  .dining-package {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='set-menu'])
+  .dining-package
+  ul {
+  grid-column: 2;
+  grid-row: 1/4;
+  margin: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='dining-flow'])
+  .dining-step-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 940px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='dining-flow'])
+  .dining-step {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 32px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='dining-flow'])
+  .dining-step
+  .dining-number {
+  font:
+    42px Georgia,
+    serif;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='dining-flow'])
+  .dining-step
+  h3 {
+  margin-top: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='food-gallery'])
+  .dining-space-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='food-gallery'])
+  .dining-space-grid
+  > :first-child {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='food-gallery'])
+  .dining-space-grid
+  > :first-child
+  .dining-space-photo {
+  aspect-ratio: 2.7;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='food-gallery'])
+  .dining-space-grid
+  > :nth-child(2) {
+  padding: 0;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='kitchen-story'])
+  .dining-story-media {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='kitchen-story'])
+  .dining-story-media
+  :is(video, iframe) {
+  grid-column: 1/-1;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='booking-faq'])
+  .dining-faq
+  > .dining-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='booking-faq'])
+  .dining-faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 48px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='booking-faq']) details {
+  align-self: start;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='menu-guide'])
+  .dining-hero-photo {
+  order: -1;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='menu-guide'])
+  .dining-menu-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='menu-guide'])
+  .dining-menu-item {
+  grid-template-columns: 48px minmax(0, 1fr) 24px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='early-reserve'])
+  .dining-hero {
+  padding-block: 38px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='early-reserve'])
+  .dining-booking {
+  background: #eff0e2;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-menu-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-menu-item {
+  display: block;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-menu-item
+  h3 {
+  margin-top: 18px;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-menu-mark {
+  display: none;
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='food-gallery'])
+  .dining-hero
+  > .dining-container,
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='kitchen-story'])
+  .dining-hero
+  > .dining-container,
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='booking-faq'])
+  .dining-hero
+  > .dining-container,
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='early-reserve'])
+  .dining-hero
+  > .dining-container,
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-hero
+  > .dining-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction='quick-reserve'])
+  .dining-hero-copy {
+  max-width: 860px;
+}
+
+/* Local services: comparison table, process timeline, proof diagrams, area-first and quick forms. */
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='neighborhood-trust'])
+  .local-scope
+  > .local-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='neighborhood-trust'])
+  .local-scope-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='neighborhood-trust'])
+  .local-scope-row {
+  display: block;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='neighborhood-trust'])
+  .local-scope-row
+  h3 {
+  margin-top: 20px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='package-scope'])
+  .local-package-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='package-scope'])
+  .local-package {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: start;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='package-scope'])
+  .local-package
+  ul {
+  grid-column: 2;
+  grid-row: 1/4;
+  margin: 0;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='work-process'])
+  .local-process-list {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 900px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='work-process'])
+  .local-process-row {
+  gap: 32px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='work-process'])
+  .local-process-row
+  .local-number {
+  width: 64px;
+  height: 64px;
+  font-size: 22px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='job-gallery'])
+  .local-gallery-grid {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='job-gallery'])
+  .local-gallery-grid
+  > :first-child {
+  grid-row: 1/3;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='job-gallery'])
+  .local-gallery-grid
+  > :first-child
+  img {
+  aspect-ratio: 1;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='job-gallery'])
+  .local-gallery-grid
+  > :not(:first-child)
+  img {
+  max-height: 140px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='team-intro'])
+  .local-story
+  > .local-container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 40px;
+  align-items: start;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='scope-faq'])
+  .local-faq
+  > .local-container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 48px;
+  align-items: start;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='area-guide'])
+  .local-scope
+  > .local-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='area-guide'])
+  .local-scope-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 0 36px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='area-guide'])
+  .local-scope-list
+  > :first-child {
+  grid-row: 1/3;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='area-guide'])
+  .local-scope-row {
+  align-items: start;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='early-request'])
+  .local-request {
+  background: #e5f1fa;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='quick-request'])
+  .local-request
+  > .local-container {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='quick-request']) .local-hero {
+  padding-block: 40px;
+}
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='work-process'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='job-gallery'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='team-intro'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='scope-faq'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='early-request'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='quick-request'])
+  .local-hero
+  > .local-container,
+:where([data-lp-renderer='local-service-v2'][data-industry-direction='area-guide'])
+  .local-hero
+  > .local-container {
+  grid-template-columns: minmax(0, 1fr);
+}
+@container dining-page (max-width:767px) {
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction])
+    .dining-hero
+    > .dining-container,
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-menu-list,
+  :where([data-lp-renderer='restaurant-menu-v2']) .dining-package-grid,
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-space-grid,
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-faq-list,
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-story-media,
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-package {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-package ul {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-hero-photo {
+    order: 0;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction])
+    .dining-space-grid
+    > :first-child
+    .dining-space-photo {
+    aspect-ratio: 5/4;
+  }
+  :where([data-lp-renderer='restaurant-menu-v2'][data-industry-direction]) .dining-step {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 18px;
+  }
+}
+@container local-service (max-width:767px) {
+  :where([data-lp-renderer='local-service-v2']) .local-package-grid,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction]) .local-package,
+  :where([data-lp-renderer='local-service-v2']) .local-gallery-grid,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-scope
+    > .local-container,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction]) .local-scope-list,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-story
+    > .local-container,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-faq
+    > .local-container,
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-request
+    > .local-container {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction]) .local-package ul {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-gallery-grid
+    > :first-child {
+    grid-row: auto;
+  }
+  :where([data-lp-renderer='local-service-v2'][data-industry-direction])
+    .local-scope-list
+    > :first-child {
+    grid-row: auto;
+  }
+}

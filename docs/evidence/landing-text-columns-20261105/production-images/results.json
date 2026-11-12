@@ -1,0 +1,114 @@
+{
+  "scope": "Real Next Builder + Nest API + PostgreSQL, internal Docker QA network",
+  "steps": [
+    {
+      "name": "Hidden Hero subheadline does not hide inserted paragraph; inline edit saves immediately",
+      "status": "PASS"
+    },
+    {
+      "name": "Single column left: new paragraph stays in new column; Undo/Redo/reload",
+      "status": "PASS"
+    },
+    {
+      "name": "Single column right: new paragraph stays in new column; Undo/Redo/reload",
+      "status": "PASS"
+    },
+    {
+      "name": "Benefits: right then gap creates exactly one column; empty/body drops use existing column",
+      "status": "PASS"
+    },
+    {
+      "name": "Text library: native drag of a specific preset and click selection remain usable",
+      "status": "PASS"
+    },
+    {
+      "name": "Escape and outside drop clear marker and add nothing",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing native split: drop in right body then gap preserves native content positions",
+      "status": "PASS"
+    },
+    {
+      "name": "Preview + isolated public route + mobile preserve saved columns and readable text",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "writes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/28cc9482-f4f0-41aa-8ff9-d341d8da6a9c/autosave"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/landing-pages/public/landing-text-qa-20261105/events"
+    }
+  ],
+  "lastText": {
+    "text": "Add a paragraph text here. Click to the textbox to customize content, font style, color of your paragraph.",
+    "display": "block",
+    "color": "rgb(15, 23, 42)",
+    "width": 342,
+    "height": 69.75,
+    "inFrame": true,
+    "overflow": "visible"
+  },
+  "passed": true
+}

@@ -1,0 +1,44 @@
+{
+  "bundles": [
+    {
+      "id": "countdown-10b-lpb-countdow",
+      "buildId": "lpb-countdown-10b-20261111",
+      "gitSha": "0e49a0f",
+      "label": "countdown-10b",
+      "path": "deploy/aibeego-vps/bundles/countdown-10b-lpb-countdow",
+      "archivedAt": "2026-11-11T15:35:10.744Z"
+    },
+    {
+      "id": "countdown-10-lpb-countdow",
+      "buildId": "lpb-countdown-10-20261111",
+      "gitSha": "0e49a0f",
+      "label": "countdown-10",
+      "path": "deploy/aibeego-vps/bundles/countdown-10-lpb-countdow",
+      "archivedAt": "2026-11-11T15:29:52.673Z"
+    },
+    {
+      "id": "hier-fix-lpb-hier-fix",
+      "buildId": "lpb-hier-fix-20261106",
+      "gitSha": "b8e92b6",
+      "label": "hier-fix",
+      "path": "deploy/aibeego-vps/bundles/hier-fix-lpb-hier-fix",
+      "archivedAt": "2026-11-06T04:09:46.099Z"
+    },
+    {
+      "id": "release-drop-plus-lpb-drop-plu",
+      "buildId": "lpb-drop-plus-20261106",
+      "gitSha": "b8e92b6",
+      "label": "release-drop-plus",
+      "path": "deploy/aibeego-vps/bundles/release-drop-plus-lpb-drop-plu",
+      "archivedAt": "2026-11-06T03:57:49.981Z"
+    },
+    {
+      "id": "release-sidebar-expand-lpb-sidebar-",
+      "buildId": "lpb-sidebar-expand-20261106",
+      "gitSha": "b8e92b6",
+      "label": "release-sidebar-expand",
+      "path": "deploy/aibeego-vps/bundles/release-sidebar-expand-lpb-sidebar-",
+      "archivedAt": "2026-11-06T03:32:46.022Z"
+    }
+  ]
+}

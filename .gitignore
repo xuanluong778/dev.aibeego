@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.worktrees/
+.next/
+out/
+build/
+.build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example
+!**/.env.example
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+backups/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+
+# Prisma
+packages/database/prisma/migrations/**/migration_lock.toml
+
+# Docker volumes (local)
+docker/data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+apps/ai-service-placeholder/.venv/
+
+# Sentry
+.sentryclirc
+
+# Turbo
+.turbo/
+
+# Dev runtime logs / dumps
+tmp/
+
+# Local file uploads (HRM documents, etc.)
+apps/api/uploads/
+
+# Local uploads (root)
+/uploads/
+
+# Full database dumps (customer data; SQL exceeds GitHub file limit)
+marketingspa-db-full-*.zip

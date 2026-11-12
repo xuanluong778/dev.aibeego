@@ -1,0 +1,583 @@
+{
+  "version": 1,
+  "theme": "PREMIUM",
+  "themeTokens": {
+    "primary": "#FF6B00",
+    "secondary": "#FAFAF9",
+    "background": "#0A0A0A",
+    "surface": "#141414",
+    "text": "#FAFAF9",
+    "muted": "#B8B8B4",
+    "fontFamily": "\"Fraunces\", \"Palatino Linotype\", serif",
+    "radius": "14px",
+    "accent": "#FAFAF9",
+    "border": "#2A2A2A",
+    "button": "#FF6B00",
+    "gradient": "linear-gradient(165deg, #0A0A0A 0%, #141414 50%, #0E0E0E 100%)",
+    "shadow": "0 12px 36px rgba(15, 23, 42, 0.10)",
+    "canvas": "#0A0A0A",
+    "surfaceAlt": "#1C1C1C",
+    "textMuted": "#B8B8B4",
+    "containerWidth": "68rem",
+    "textWidth": "38rem",
+    "sectionSpacing": "2.75rem",
+    "fontSizeSm": "0.875rem",
+    "fontSizeMd": "1rem",
+    "fontSizeLg": "1.125rem",
+    "fontSizeXl": "1.5rem",
+    "fontSize2xl": "2rem",
+    "fontSizeHero": "clamp(2.4rem, 5.8vw, 4rem)",
+    "imageRadius": "14px",
+    "imageAspect": "4 / 5",
+    "buttonRadius": "calc(14px - 2px)",
+    "buttonStyle": "solid",
+    "density": "compact",
+    "radiusSm": "calc(14px - 4px)",
+    "radiusMd": "14px",
+    "radiusLg": "calc(14px + 4px)",
+    "radiusPill": "9999px",
+    "shadowSm": "0 4px 14px rgba(15, 23, 42, 0.06)",
+    "shadowMd": "0 14px 38px rgba(15, 23, 42, 0.09)",
+    "shadowLg": "0 24px 64px rgba(0, 0, 0, 0.45)",
+    "fontWeightHeading": 800,
+    "fontWeightBody": 400,
+    "lineHeightHeading": 1.08,
+    "lineHeightBody": 1.6,
+    "imageTreatment": "editorial",
+    "iconSurface": "color-mix(in srgb, #FF6B00 14%, #141414)",
+    "iconColor": "#FF6B00"
+  },
+  "seo": {
+    "title": "Agency Portfolio · Dark Direct-Response | Landing Page",
+    "metaDescription": "Hero → problem → solution → proof → offer → CTA — Landing agency: dịch vụ, case, liên hệ",
+    "canonical": null,
+    "ogImage": "/landing-pages/templates/agency-portfolio-thumb.webp",
+    "robotsIndex": true
+  },
+  "blocks": [
+    {
+      "id": "header_1",
+      "enabled": true,
+      "spacing": "none",
+      "background": "linear-gradient(165deg, #0A0A0A 0%, #141414 48%, #0E0E0E 100%)",
+      "variant": "default",
+      "style": {
+        "lpSectionTone": "dark"
+      },
+      "type": "Header",
+      "headline": "Agency Portfolio",
+      "subheadline": "",
+      "body": "Trang chủ|Dịch vụ|Bảng giá|Liên hệ",
+      "ctaLabel": "Liên hệ ngay",
+      "ctaUrl": "#lead-form",
+      "imageUrl": null,
+      "videoUrl": null
+    },
+    {
+      "id": "hero_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "lg",
+      "background": "linear-gradient(165deg, #0A0A0A 0%, #141414 48%, #0E0E0E 100%)",
+      "variant": "editorial-overlay",
+      "style": {
+        "lpSectionTone": "dark"
+      },
+      "type": "Hero",
+      "headline": "Agency growth partner — KPI rõ, creative chuẩn thương hiệu",
+      "subheadline": "Performance + brand trong một team. Sprint rõ scope, báo cáo minh bạch, không cam kết mơ hồ.",
+      "body": "Dành cho founder & marketing lead cần đối tác triển khai thật — không chỉ pitch deck.",
+      "ctaLabel": "Đặt discovery call",
+      "ctaUrl": "#lead-form",
+      "imageUrl": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=70",
+      "videoUrl": null,
+      "trustPoints": [
+        "Báo cáo KPI hàng tuần",
+        "Creative + media một team",
+        "Sprint 2–4 tuần, scope rõ"
+      ]
+    },
+    {
+      "id": "benefits_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "linear-gradient(180deg, #F5F1E6 0%, #FAF7F0 55%, #F3EFE4 100%)",
+      "variant": "icon-grid",
+      "style": {
+        "lpSectionTone": "cream"
+      },
+      "type": "Benefits",
+      "headline": "Vấn đề thường gặp khi thuê agency",
+      "subheadline": "",
+      "items": [
+        {
+          "id": "ben_1",
+          "title": "Báo cáo mơ hồ",
+          "description": "Spend tăng nhưng không biết điều gì thực sự drive kết quả.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "ben_2",
+          "title": "Creative và media tách rời",
+          "description": "Brief lệch, test chậm, learnings không được tái sử dụng.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "ben_3",
+          "title": "Scope trôi sprint",
+          "description": "Kickoff dài, deliverable không khớng timeline ban đầu.",
+          "icon": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "features_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "var(--lp-surface, #FFFFFF)",
+      "variant": "numbered",
+      "style": {
+        "lpSectionTone": "surface"
+      },
+      "type": "Features",
+      "headline": "Giải pháp: growth sprint có cấu trúc",
+      "subheadline": "",
+      "items": [
+        {
+          "id": "feat_1",
+          "title": "Audit & KPI map",
+          "description": "Chốt metric, baseline và ưu tiên channel trong tuần 1.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "feat_2",
+          "title": "Creative sản xuất nhanh",
+          "description": "Concept → asset test trong cùng sprint, không chờ handoff.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "feat_3",
+          "title": "Weekly growth review",
+          "description": "Decision log + next test — biết vì sao scale hoặc dừng.",
+          "icon": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "gallery_1",
+      "enabled": true,
+      "spacing": "md",
+      "background": "linear-gradient(165deg, #0A0A0A 0%, #141414 48%, #0E0E0E 100%)",
+      "variant": "editorial-mosaic",
+      "style": {
+        "lpSectionTone": "dark"
+      },
+      "type": "Gallery",
+      "headline": "Case study & visual proof",
+      "subheadline": "Before / after · chiến dịch thật · KPI đã public (ẩn danh khi cần)",
+      "items": [
+        {
+          "id": "g_1",
+          "title": "SaaS lead gen",
+          "description": "CPL −38% · MQL +2.1x — landing + paid sync.",
+          "icon": null,
+          "imageUrl": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=70"
+        },
+        {
+          "id": "g_2",
+          "title": "D2C scale",
+          "description": "ROAS 3.4x · creative refresh 2 tuần/lần.",
+          "icon": null,
+          "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=70"
+        },
+        {
+          "id": "g_3",
+          "title": "B2B ABM",
+          "description": "Pipeline +45% · LinkedIn + email nurture.",
+          "icon": null,
+          "imageUrl": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=70"
+        },
+        {
+          "id": "g_4",
+          "title": "Brand relaunch",
+          "description": "Awareness +60% · TVC + social cutdown.",
+          "icon": null,
+          "imageUrl": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=70"
+        }
+      ]
+    },
+    {
+      "id": "testimonials_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "var(--lp-surface, #FFFFFF)",
+      "variant": "metric-plus-quote",
+      "style": {
+        "lpSectionTone": "surface"
+      },
+      "type": "Testimonials",
+      "headline": "Client feedback",
+      "items": [
+        {
+          "id": "tm_1",
+          "quote": "Sprint 4 tuần — KPI dashboard rõ, creative test nhanh hơn agency cũ.",
+          "author": "Minh T.",
+          "role": "Marketing Lead · SaaS B2B",
+          "avatarUrl": null
+        },
+        {
+          "id": "tm_2",
+          "quote": "Retainer minh bạch: biết tuần nào làm gì, không surprise invoice.",
+          "author": "Lan P.",
+          "role": "Founder · D2C",
+          "avatarUrl": null
+        }
+      ]
+    },
+    {
+      "id": "process_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "linear-gradient(180deg, #F5F1E6 0%, #FAF7F0 55%, #F3EFE4 100%)",
+      "variant": "steps",
+      "style": {
+        "lpSectionTone": "cream"
+      },
+      "type": "Process",
+      "headline": "Quy trình 4 bước",
+      "subheadline": "",
+      "items": [
+        {
+          "id": "step_1",
+          "title": "Discovery",
+          "description": "Brief, KPI, constraint ngân sách & brand.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "step_2",
+          "title": "Strategy sprint",
+          "description": "Channel mix, creative angle, test plan.",
+          "icon": null,
+          "imageUrl": null
+        },
+        {
+          "id": "step_3",
+          "title": "Execute",
+          "description": "Launch, optimize, báo cáo tuần.",
+          "icon": null,
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "id": "pricing_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "var(--lp-surface, #FFFFFF)",
+      "variant": "comparison",
+      "style": {
+        "lpSectionTone": "surface"
+      },
+      "type": "Pricing",
+      "headline": "Gói đầu tư",
+      "subheadline": "",
+      "plans": [
+        {
+          "id": "plan_1",
+          "name": "Sprint 4 tuần",
+          "price": "45.000.000đ",
+          "period": "",
+          "features": [
+            "Audit",
+            "1 campaign",
+            "Report"
+          ],
+          "ctaLabel": "Chọn gói",
+          "highlighted": false
+        },
+        {
+          "id": "plan_2",
+          "name": "Retainer",
+          "price": "28.000.000đ",
+          "period": "/tháng",
+          "features": [
+            "Always-on",
+            "Creative pool",
+            "Weekly sync"
+          ],
+          "ctaLabel": "Chọn gói",
+          "highlighted": true
+        }
+      ]
+    },
+    {
+      "id": "faq_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "linear-gradient(180deg, #F5F1E6 0%, #FAF7F0 55%, #F3EFE4 100%)",
+      "variant": "accordion",
+      "style": {
+        "lpSectionTone": "cream"
+      },
+      "type": "FAQ",
+      "headline": "Câu hỏi thường gặp",
+      "items": [
+        {
+          "id": "gold_faq_1",
+          "question": "Timeline dự án?",
+          "answer": "Sprint chuẩn 4 tuần; retainer kickoff trong 5 ngày làm việc."
+        },
+        {
+          "id": "gold_faq_2",
+          "question": "Cam kết KPI?",
+          "answer": "Cam kết process & reporting; KPI phụ thuộc baseline và ngân sách media."
+        }
+      ]
+    },
+    {
+      "id": "cta_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "lg",
+      "background": "linear-gradient(120deg, var(--lp-primary) 0%, color-mix(in srgb, var(--lp-primary) 62%, #0A0A0A) 100%)",
+      "variant": "banner",
+      "style": {
+        "lpSectionTone": "accent"
+      },
+      "type": "CTA",
+      "headline": "Sẵn sàng sprint growth có KPI?",
+      "subheadline": "Discovery call miễn phí — slot có hạn mỗi tuần.",
+      "body": "",
+      "ctaLabel": "Đặt discovery call →",
+      "ctaUrl": "#lead-form",
+      "imageUrl": null,
+      "videoUrl": null
+    },
+    {
+      "id": "lead-form_agency_dark_direct",
+      "enabled": true,
+      "spacing": "md",
+      "background": "linear-gradient(165deg, #0A0A0A 0%, #141414 48%, #0E0E0E 100%)",
+      "variant": "card",
+      "style": {
+        "lpSectionTone": "dark"
+      },
+      "type": "LeadForm",
+      "headline": "Đặt lịch discovery call",
+      "subheadline": "15 phút — review fit, không sales ép.",
+      "submitLabel": "Giữ slot tư vấn",
+      "successMessage": "Cảm ơn bạn! Đội ngũ sẽ liên hệ sớm.",
+      "fields": [
+        {
+          "id": "f_ygf1yrr",
+          "name": "name",
+          "label": "Họ tên",
+          "fieldType": "text",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "f_oq8ddm7",
+          "name": "phone",
+          "label": "Số điện thoại",
+          "fieldType": "tel",
+          "required": true,
+          "placeholder": ""
+        },
+        {
+          "id": "f_zb1jg1o",
+          "name": "email",
+          "label": "Email",
+          "fieldType": "email",
+          "required": false,
+          "placeholder": ""
+        },
+        {
+          "id": "f_14rt9r4",
+          "name": "need",
+          "label": "Nhu cầu tư vấn",
+          "fieldType": "textarea",
+          "required": false,
+          "placeholder": "Mục tiêu dự án, ngân sách dự kiến và timeline"
+        }
+      ]
+    },
+    {
+      "id": "footer_1_agency_dark_direct",
+      "enabled": true,
+      "spacing": "sm",
+      "background": "var(--lp-surface, #FFFFFF)",
+      "variant": "default",
+      "style": {
+        "lpSectionTone": "surface"
+      },
+      "type": "Footer",
+      "headline": "Agency Portfolio",
+      "subheadline": "",
+      "body": "© 2026 Agency Portfolio — Powered by Ai Bee Go",
+      "ctaLabel": "",
+      "ctaUrl": "",
+      "imageUrl": null,
+      "videoUrl": null
+    }
+  ],
+  "meta": {
+    "profileAppliedAt": null,
+    "lastAiAt": null,
+    "layout": "agency",
+    "category": "agency",
+    "designFamily": "conversion",
+    "conversionGoal": "contact",
+    "goldStandard": "dark-direct",
+    "architectureRecipe": {
+      "architectureId": "agency_dark_direct",
+      "designFamily": "conversion",
+      "conversionGoal": "contact",
+      "flow": "dark-direct",
+      "flowSteps": [
+        {
+          "block": "Header",
+          "purpose": "nav_trust",
+          "variant": "default"
+        },
+        {
+          "block": "Hero",
+          "purpose": "hook_offer",
+          "variant": "editorial-overlay"
+        },
+        {
+          "block": "Benefits",
+          "purpose": "value_props",
+          "variant": "icon-grid"
+        },
+        {
+          "block": "Features",
+          "purpose": "capability",
+          "variant": "numbered"
+        },
+        {
+          "block": "Gallery",
+          "purpose": "visual_proof",
+          "variant": "editorial-mosaic"
+        },
+        {
+          "block": "Testimonials",
+          "purpose": "social_proof",
+          "variant": "metric-plus-quote"
+        },
+        {
+          "block": "Process",
+          "purpose": "how_it_works",
+          "variant": "steps"
+        },
+        {
+          "block": "Pricing",
+          "purpose": "commercial",
+          "variant": "comparison"
+        },
+        {
+          "block": "FAQ",
+          "purpose": "objection_handling",
+          "variant": "accordion"
+        },
+        {
+          "block": "CTA",
+          "purpose": "conversion_push",
+          "variant": "banner"
+        },
+        {
+          "block": "LeadForm",
+          "purpose": "capture",
+          "variant": "card"
+        },
+        {
+          "block": "Footer",
+          "purpose": "close",
+          "variant": "default"
+        }
+      ],
+      "blockVariants": {
+        "Features": "numbered",
+        "Process": "steps",
+        "Gallery": "editorial-mosaic",
+        "Testimonials": "metric-plus-quote",
+        "Benefits": "icon-grid",
+        "CTA": "banner",
+        "LeadForm": "card",
+        "Hero": "editorial-overlay",
+        "Pricing": "comparison",
+        "FAQ": "accordion",
+        "Header": "default"
+      },
+      "purpose": "Hero → problem → solution → proof → offer → CTA",
+      "sectionSequence": [
+        "Header",
+        "Hero",
+        "Benefits",
+        "Features",
+        "Gallery",
+        "Testimonials",
+        "Process",
+        "Pricing",
+        "FAQ",
+        "CTA",
+        "LeadForm",
+        "Footer"
+      ],
+      "heroVariant": "editorial-overlay",
+      "ctaStrategy": "consult",
+      "formPlacement": "late",
+      "proofType": "case_kpi",
+      "visualComposition": "header_nav",
+      "theme": "PREMIUM",
+      "layout": "agency"
+    },
+    "gallery": {
+      "thumbnail": "/landing-pages/templates/agency-portfolio-thumb.webp",
+      "previewLongImage": "/landing-pages/templates/agency-portfolio-long.webp",
+      "badges": [
+        "popular",
+        "high_conversion",
+        "new"
+      ],
+      "flowId": "dark-direct",
+      "architecture": {
+        "id": "agency_dark_direct",
+        "heroVariant": "editorial-overlay",
+        "sectionSequence": [
+          "Header",
+          "Hero",
+          "Benefits",
+          "Features",
+          "Gallery",
+          "Testimonials",
+          "Process",
+          "Pricing",
+          "FAQ",
+          "CTA",
+          "LeadForm",
+          "Footer"
+        ],
+        "ctaStrategy": "consult",
+        "formPlacement": "late",
+        "proofType": "case_kpi",
+        "visualComposition": "header_nav",
+        "designFamily": "conversion",
+        "conversionGoal": "contact",
+        "purpose": "Hero → problem → solution → proof → offer → CTA"
+      }
+    },
+    "catalogVersion": "gallery-v21-production-visual-axis",
+    "inlineTextStyles": {
+      "header_1::headline": {
+        "fontSize": 47,
+        "color": "#123456"
+      }
+    }
+  }
+}

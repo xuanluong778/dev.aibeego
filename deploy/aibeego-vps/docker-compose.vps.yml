@@ -1,0 +1,34 @@
+# Overlay cho VPS aibeego.com (mirror of /opt/marketingaz/docker-compose.vps.yml).
+# Sync: deploy/aibeego-vps → /opt/marketingaz (see deploy/aibeego-vps/README.md).
+services:
+  api:
+    build:
+      context: /var/www/marketingaut_usr/data/www/marketingautoaz.com
+      dockerfile: apps/api/Dockerfile
+    ports: !override []
+    environment:
+      HOST: 0.0.0.0
+      APP_URL: https://aibeego.com
+      API_URL: https://aibeego.com
+    volumes:
+      - /var/www/marketingaut_usr/data/www/marketingautoaz.com/apps/api/uploads:/app/uploads
+  web:
+    build:
+      context: /var/www/marketingaut_usr/data/www/marketingautoaz.com
+      dockerfile: apps/web/Dockerfile
+    ports: !override []
+    environment:
+      API_INTERNAL_URL: http://api:4000
+      APP_URL: https://aibeego.com
+      API_URL: https://aibeego.com
+    volumes:
+      - ./docker/web-start.sh:/web-start.sh:ro
+      - ./docker/web-api-proxy.js:/web-api-proxy.js:ro
+      - ./docker/brand/logo.png:/app/public/brand/logo.png:ro
+      - ./docker/brand/logo.png:/app/public/logo.png:ro
+      - ./docker/brand/favicon.png:/app/public/favicon.png:ro
+      - ./docker/brand/favicon.svg:/app/public/favicon.svg:ro
+    entrypoint: ["/bin/sh", "/web-start.sh"]
+  nginx:
+    ports: !override
+      - '3999:80'
