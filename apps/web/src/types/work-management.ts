@@ -31,6 +31,9 @@ export interface WorkTask {
   id: string;
   organizationId: string;
   projectId: string;
+  /** Tên dự án (hiển thị trên thẻ Kanban) */
+  projectName?: string;
+  project?: { id: string; name: string };
   columnId: string;
   columnKey: string;
   columnName: string;
@@ -69,6 +72,8 @@ export interface WorkTask {
   assignees: WorkEmployeeRef[];
   watchers: WorkEmployeeRef[];
   checklist: WorkChecklistItem[];
+  /** Số bình luận (không tính đã xóa) */
+  commentCount?: number;
   customFields?: Record<string, unknown>;
 }
 
@@ -158,6 +163,13 @@ export interface WorkProjectDetail extends WorkProject {
 export interface CreateWorkProjectInput {
   name: string;
   description?: string;
+  customFieldDefs?: WorkCustomFieldDef[];
+}
+
+export interface UpdateWorkProjectInput {
+  name?: string;
+  description?: string | null;
+  isArchived?: boolean;
   customFieldDefs?: WorkCustomFieldDef[];
 }
 

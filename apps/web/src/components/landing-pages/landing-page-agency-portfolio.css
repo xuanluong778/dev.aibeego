@@ -390,6 +390,12 @@
   background: #fff;
   border: 1px solid #e6e2d9;
   border-radius: 12px;
+  color: var(--ink);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .benefit-card h3,
+:where([data-lp-renderer='agency-portfolio-v2']) .service-card h3,
+:where([data-lp-renderer='agency-portfolio-v2']) .step h3 {
+  color: var(--ink);
 }
 :where([data-lp-renderer='agency-portfolio-v2']) .icon-box {
   display: flex;
@@ -580,6 +586,16 @@
   font-size: 24px;
   letter-spacing: -0.7px;
   margin-bottom: 10px;
+  color: var(--ink);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card:not(.dark) h3,
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card:not(.dark) h3 [data-lp-inline-field] {
+  color: var(--ink);
+}
+:where([data-lp-renderer='agency-portfolio-v2']) .price-card:not(.dark) .btn-outline {
+  color: var(--ink);
+  border-color: #b8c2cf;
+  background: #fff;
 }
 :where([data-lp-renderer='agency-portfolio-v2']) .price-card .price-intro {
   font-size: 14px;

@@ -9,6 +9,12 @@ import { invalidateLeadWorkspace } from '@/lib/lead-query-sync';
 import { useCurrentUser } from '@/hooks/use-auth';
 
 function resolveApiUrl(): string {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '::1') {
+      return window.location.origin;
+    }
+  }
   const fromEnv = process.env.NEXT_PUBLIC_API_URL?.trim();
   if (fromEnv && !fromEnv.includes('localhost') && !fromEnv.includes('127.0.0.1')) {
     return fromEnv.replace(/\/$/, '');

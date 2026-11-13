@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Archive,
@@ -9,11 +8,8 @@ import {
   ChevronRight,
   Copy,
   GripVertical,
-  LayoutGrid,
-  ListTodo,
-  BarChart3,
-  CalendarDays,
   MoreHorizontal,
+  Settings2,
   Pencil,
   Plus,
   Search,
@@ -72,6 +68,27 @@ import {
   WorkNotificationsBell,
   WorkTaskDetailDialog,
 } from '@/components/work-management/work-task-collab';
+import { WorkManagementSubNav } from '@/components/work-management/work-management-subnav';
+import { WorkProjectSettingsDialog } from '@/components/work-management/work-project-settings-dialog';
+import { WorkTaskBoardCard } from '@/components/work-management/work-task-board-card';
+
+const WORK_LAST_PROJECT_ID = 'work-management:lastProjectId';
+
+function readInitialProjectId(): string | null {
+  if (typeof window === 'undefined') return null;
+  const fromUrl = new URLSearchParams(window.location.search).get('projectId');
+  if (fromUrl) return fromUrl;
+  try {
+    return localStorage.getItem(WORK_LAST_PROJECT_ID);
+  } catch {
+    return null;
+  }
+}
+
+function readInitialWorkflow(): string {
+  // Không khôi phục lọc giai đoạn cũ (vd. Hoàn thành) — tránh ẩn thẻ / nhầm cột
+  return 'all';
+}
 
 export default function WorkManagementPage() {
   const t = useT();
@@ -89,7 +106,11 @@ function WorkManagementBoard() {
   const searchParams = useSearchParams();
   const taskIdParam = searchParams.get('taskId');
 
-  const projectsQ = useWorkProjects();
+  const [includeArchived, setIncludeArchived] = useState(false);
+  const [projectSettingsOpen, setProjectSettingsOpen] = useState(false);
+  /** `all` | `open` | `key:NEW` | `key:DONE` … — lọc theo giai đoạn (columnKey), không phải ẩn thẻ ở cột khác vô lý */
+  const [workflowFilter, setWorkflowFilter] = useState<string>(readInitialWorkflow);
+  const projectsQ = useWorkProjects(includeArchived);
   const createProject = useCreateWorkProject();
   const createTask = useCreateWorkTask();
   const updateTask = useUpdateWorkTask();
@@ -99,7 +120,7 @@ function WorkManagementBoard() {
   const deleteTask = useSoftDeleteWorkTask();
   const employeesQ = useHrmEmployees({ pageSize: 100 });
 
-  const [projectId, setProjectId] = useState<string | null>(null);
+  const [projectId, setProjectId] = useState<string | null>(readInitialProjectId);
   const projectQ = useWorkProject(projectId);
   const [query, setQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
@@ -141,40 +162,97 @@ function WorkManagementBoard() {
   const employees = employeesQ.data?.items ?? [];
   const firstProjectId = projects[0]?.id;
 
-  useEffect(() => {
-    if (!projectId && firstProjectId) setProjectId(firstProjectId);
-  }, [firstProjectId, projectId]);
-
-  const setTaskIdInUrl = useCallback(
-    (id: string | null) => {
+  const patchBoardUrl = useCallback(
+    (patch: { projectId?: string | null; workflow?: string; taskId?: string | null }) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (id) params.set('taskId', id);
-      else params.delete('taskId');
+      if (patch.projectId !== undefined) {
+        if (patch.projectId) params.set('projectId', patch.projectId);
+        else params.delete('projectId');
+      }
+      if (patch.workflow !== undefined) {
+        if (patch.workflow && patch.workflow !== 'all') params.set('workflow', patch.workflow);
+        else params.delete('workflow');
+      }
+      if (patch.taskId !== undefined) {
+        if (patch.taskId) params.set('taskId', patch.taskId);
+        else params.delete('taskId');
+      }
       const qs = params.toString();
-      router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
     [pathname, router, searchParams],
   );
+
+  const selectProject = useCallback(
+    (id: string) => {
+      setProjectId(id);
+      try {
+        localStorage.setItem(WORK_LAST_PROJECT_ID, id);
+      } catch {
+        /* ignore */
+      }
+      patchBoardUrl({ projectId: id });
+    },
+    [patchBoardUrl],
+  );
+
+  useEffect(() => {
+    if (!projects.length) return;
+    if (projectId && projects.some((p) => p.id === projectId)) {
+      const urlPid = searchParams.get('projectId');
+      if (urlPid !== projectId) {
+        try {
+          localStorage.setItem(WORK_LAST_PROJECT_ID, projectId);
+        } catch {
+          /* ignore */
+        }
+        patchBoardUrl({ projectId });
+      }
+      return;
+    }
+    if (firstProjectId) selectProject(firstProjectId);
+  }, [projects, projectId, firstProjectId, selectProject, patchBoardUrl, searchParams]);
+
+  const setTaskIdInUrl = useCallback(
+    (id: string | null) => {
+      patchBoardUrl({ taskId: id });
+    },
+    [patchBoardUrl],
+  );
+
+  const setWorkflowFilterPersisted = useCallback(
+    (value: string) => {
+      setWorkflowFilter(value);
+      patchBoardUrl({ workflow: value });
+    },
+    [patchBoardUrl],
+  );
+
+  useEffect(() => {
+    setWorkflowFilter('all');
+    const wf = searchParams.get('workflow');
+    if (wf && wf !== 'all') patchBoardUrl({ workflow: 'all' });
+  }, [patchBoardUrl, searchParams]);
 
   const openTaskDetail = useCallback(
     (task: WorkTask) => {
       setDetailSnapshot(task);
       setDetailTaskId(task.id);
-      if (task.projectId) setProjectId(task.projectId);
+      if (task.projectId) selectProject(task.projectId);
       setTaskIdInUrl(task.id);
     },
-    [setTaskIdInUrl],
+    [selectProject, setTaskIdInUrl],
   );
 
   const openTaskDetailById = useCallback(
     (id: string, nextProjectId?: string | null) => {
       setDetailTaskId(id);
-      if (nextProjectId) setProjectId(nextProjectId);
+      if (nextProjectId) selectProject(nextProjectId);
       const found = (projectQ.data?.tasks ?? []).find((t) => t.id === id);
       setDetailSnapshot(found ?? null);
       setTaskIdInUrl(id);
     },
-    [projectQ.data?.tasks, setTaskIdInUrl],
+    [projectQ.data?.tasks, selectProject, setTaskIdInUrl],
   );
 
   const closeTaskDetail = useCallback(() => {
@@ -199,6 +277,32 @@ function WorkManagementBoard() {
   }, [taskIdParam, projectQ.data?.tasks]);
 
   const columns = useMemo(() => projectQ.data?.columns ?? [], [projectQ.data?.columns]);
+
+  const workflowFilterOptions = useMemo(() => {
+    const byKey = new Map<string, string>();
+    for (const c of columns) {
+      if (!byKey.has(c.key)) byKey.set(c.key, c.name);
+    }
+    const order = ['NEW', 'ASSIGNED', 'IN_PROGRESS', 'PENDING_REVIEW', 'NEEDS_FIX', 'DONE', 'PAUSED'];
+    return Array.from(byKey.entries()).sort(
+      (a, b) => (order.indexOf(a[0]) + 1 || 99) - (order.indexOf(b[0]) + 1 || 99),
+    );
+  }, [columns]);
+
+  useEffect(() => {
+    if (workflowFilter === 'all' || workflowFilter === 'open') return;
+    if (!workflowFilter.startsWith('key:')) {
+      setWorkflowFilterPersisted('all');
+      return;
+    }
+    const key = workflowFilter.slice(4);
+    if (!columns.some((c) => c.key === key)) setWorkflowFilterPersisted('all');
+  }, [columns, workflowFilter, setWorkflowFilterPersisted]);
+
+  const workflowHighlightKey = workflowFilter.startsWith('key:')
+    ? workflowFilter.slice(4)
+    : null;
+
   const tasks = useMemo(() => {
     let list = projectQ.data?.tasks ?? [];
     if (query.trim()) {
@@ -234,18 +338,25 @@ function WorkManagementBoard() {
     return list;
   }, [projectQ.data?.tasks, query, priorityFilter, assigneeFilter, deadlineFilter]);
 
+  const columnIdSet = useMemo(() => new Set(columns.map((c) => c.id)), [columns]);
+
+  const orphanTasks = useMemo(
+    () => tasks.filter((t) => !columnIdSet.has(t.columnId)),
+    [tasks, columnIdSet],
+  );
+
   const tasksByColumn = useMemo(() => {
     const map: Record<string, WorkTask[]> = {};
     for (const c of columns) map[c.id] = [];
     for (const t of tasks) {
-      if (!map[t.columnId]) map[t.columnId] = [];
+      if (!columnIdSet.has(t.columnId)) continue;
       map[t.columnId]!.push(t);
     }
     for (const id of Object.keys(map)) {
       map[id]!.sort((a, b) => a.sortOrder - b.sortOrder);
     }
     return map;
-  }, [columns, tasks]);
+  }, [columns, tasks, columnIdSet]);
 
   // Full column list (unfiltered) to guarantee correct sortOrder calculation during drag-drop
   const allTasksByColumn = useMemo(() => {
@@ -388,33 +499,12 @@ function WorkManagementBoard() {
         description={t('work.description')}
       />
 
-      <div className="flex flex-wrap gap-2">
-        <Button variant="default" size="sm" asChild>
-          <Link href="/work-management">
-            <LayoutGrid className="h-3.5 w-3.5 mr-1" /> Kanban
-          </Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/work-management/my">
-            <ListTodo className="h-3.5 w-3.5 mr-1" /> Việc của tôi
-          </Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/work-management/dashboard">
-            <BarChart3 className="h-3.5 w-3.5 mr-1" /> Dashboard
-          </Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/work-management/calendar">
-            <CalendarDays className="h-3.5 w-3.5 mr-1" /> Lịch
-          </Link>
-        </Button>
-      </div>
+      <WorkManagementSubNav />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
         <div className="space-y-1 min-w-[200px] flex-1">
-          <Label>Dự án</Label>
-          <Select value={projectId ?? ''} onValueChange={(v) => setProjectId(v)}>
+          <Label className="text-base">Dự án</Label>
+          <Select value={projectId ?? ''} onValueChange={selectProject}>
             <SelectTrigger>
               <SelectValue placeholder="Chọn dự án" />
             </SelectTrigger>
@@ -428,9 +518,27 @@ function WorkManagementBoard() {
             </SelectContent>
           </Select>
         </div>
+        <label className="flex items-center gap-2 text-sm min-h-[44px]">
+          <input
+            type="checkbox"
+            className="h-4 w-4"
+            checked={includeArchived}
+            onChange={(e) => setIncludeArchived(e.target.checked)}
+          />
+          Hiện dự án đã lưu
+        </label>
         <WorkNotificationsBell onOpenTask={openTaskDetailById} />
         <Button
           variant="outline"
+          className="min-h-[44px]"
+          disabled={!projectQ.data}
+          onClick={() => setProjectSettingsOpen(true)}
+        >
+          <Settings2 className="h-4 w-4 mr-1" /> Cài đặt dự án
+        </Button>
+        <Button
+          variant="outline"
+          className="min-h-[44px]"
           onClick={() => {
             setProjectName('');
             setProjectDesc('');
@@ -439,10 +547,20 @@ function WorkManagementBoard() {
         >
           <Plus className="h-4 w-4 mr-1" /> {t('work.createProject')}
         </Button>
-        <Button disabled={!projectId} onClick={() => openCreateTask()}>
+        <Button className="min-h-[44px]" disabled={!projectId} onClick={() => openCreateTask()}>
           <Plus className="h-4 w-4 mr-1" /> {t('work.createTaskTitle')}
         </Button>
       </div>
+
+      <WorkProjectSettingsDialog
+        project={projectQ.data ?? null}
+        open={projectSettingsOpen}
+        onOpenChange={setProjectSettingsOpen}
+        onArchived={() => {
+          setProjectId(null);
+          projectsQ.refetch();
+        }}
+      />
 
       {projectId && (
         <div className="rounded-lg border bg-muted/30">
@@ -510,7 +628,10 @@ function WorkManagementBoard() {
             <SelectItem value="has_deadline">Có deadline</SelectItem>
           </SelectContent>
         </Select>
-        {(query || priorityFilter !== 'all' || assigneeFilter !== 'all' || deadlineFilter !== 'all') && (
+        {(query ||
+          priorityFilter !== 'all' ||
+          assigneeFilter !== 'all' ||
+          deadlineFilter !== 'all') && (
           <Button
             variant="ghost"
             size="sm"
@@ -617,7 +738,7 @@ function WorkManagementBoard() {
                         setDropCol(null);
                       }}
                       className={cn(
-                        'rounded-lg border bg-card p-3 shadow-sm cursor-grab active:cursor-grabbing touch-manipulation',
+                        'rounded-lg border border-white/10 bg-card p-3 text-white shadow-sm cursor-grab active:cursor-grabbing touch-manipulation',
                         draggingId === task.id && 'opacity-50',
                       )}
                     >
@@ -627,31 +748,10 @@ function WorkManagementBoard() {
                           className="min-w-0 flex-1 cursor-pointer"
                           onClick={() => openTaskDetail(task)}
                         >
-                          <p className="text-sm font-medium leading-snug">{task.title}</p>
-                          <div className="mt-1.5 flex flex-wrap gap-1">
-                            <Badge variant="outline" className="text-[10px]">
-                              {PRIORITY_LABELS[task.priority] || task.priority}
-                            </Badge>
-                            {task.labels.slice(0, 3).map((l) => (
-                              <Badge key={l} variant="secondary" className="text-[10px]">
-                                {l}
-                              </Badge>
-                            ))}
-                          </div>
-                          {(task.assignees.length > 0 || task.deadline) && (
-                            <p className="mt-1.5 text-[11px] text-muted-foreground line-clamp-1">
-                              {task.assignees.map((a) => a.name).join(', ') || '—'}
-                              {task.deadline ? ` · đến ${task.deadline}` : ''}
-                            </p>
-                          )}
-                          {task.progress > 0 && (
-                            <div className="mt-2 h-1.5 rounded-full bg-muted overflow-hidden">
-                              <div
-                                className="h-full bg-emerald-500"
-                                style={{ width: `${task.progress}%` }}
-                              />
-                            </div>
-                          )}
+                          <WorkTaskBoardCard
+                            task={task}
+                            projectNameFallback={projectQ.data?.name}
+                          />
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -712,12 +812,39 @@ function WorkManagementBoard() {
               </div>
             );
           })}
+          {orphanTasks.length > 0 && (
+            <div className="flex-shrink-0 w-[min(85vw,280px)] sm:w-[300px] rounded-xl border border-amber-500/50 bg-amber-500/10 flex flex-col max-h-[min(70vh,640px)]">
+              <div className="px-3 py-2.5 border-b border-amber-500/30">
+                <p className="text-sm font-semibold text-amber-100">Khác / Hoàn thành</p>
+                <p className="text-[11px] text-amber-200/80">
+                  {orphanTasks.length} việc — kéo về cột Xuân Lượng hoặc cột phù hợp
+                </p>
+              </div>
+              <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                {orphanTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="rounded-lg border border-white/10 bg-card p-3 text-white shadow-sm cursor-pointer"
+                    onClick={() => openTaskDetail(task)}
+                  >
+                    <WorkTaskBoardCard
+                      task={task}
+                      projectNameFallback={projectQ.data?.name}
+                    />
+                    <p className="mt-2 text-[10px] text-amber-200/90">
+                      Cột hiện tại: {task.columnName || '—'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* Rename column dialog */}
       <Dialog open={!!renameColumnId} onOpenChange={(v) => !v && setRenameColumnId(null)}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm" closeOnlyWithButton>
           <DialogHeader>
             <DialogTitle>Đổi tên cột Kanban</DialogTitle>
           </DialogHeader>
@@ -751,7 +878,7 @@ function WorkManagementBoard() {
 
       {/* Create project */}
       <Dialog open={projectDialog} onOpenChange={setProjectDialog}>
-        <DialogContent>
+        <DialogContent closeOnlyWithButton>
           <DialogHeader>
             <DialogTitle>{t('work.createProjectTitle')}</DialogTitle>
           </DialogHeader>
@@ -795,7 +922,7 @@ function WorkManagementBoard() {
 
       {/* Task form */}
       <Dialog open={taskDialog} onOpenChange={setTaskDialog}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto" closeOnlyWithButton>
           <DialogHeader>
             <DialogTitle>{editTask ? 'Sửa công việc' : 'Tạo công việc'}</DialogTitle>
           </DialogHeader>

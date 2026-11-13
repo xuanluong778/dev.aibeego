@@ -22,6 +22,38 @@ export function canManageAnyTask(role: string): boolean {
   return isWorkOrgWideRole(role) || role === SYSTEM_ROLES.MANAGER;
 }
 
+/**
+ * Lấy employeeId cho thao tác giao việc: User.employeeId hoặc khớp email HRM (tùy chọn ghi vào User).
+ */
+export async function resolveLinkedEmployeeId(
+  prisma: PrismaService,
+  organizationId: string,
+  user: AuthUser,
+  opts?: { persistUserLink?: boolean },
+): Promise<string | null> {
+  if (user.employeeId) return user.employeeId;
+  if (!user.email?.trim()) return null;
+  const emp = await prisma.employee.findFirst({
+    where: {
+      organizationId,
+      email: { equals: user.email.trim(), mode: 'insensitive' },
+      isActive: true,
+    },
+    select: { id: true },
+  });
+  if (!emp) return null;
+  if (opts?.persistUserLink) {
+    await prisma.user.updateMany({
+      where: { id: user.id, organizationId, employeeId: null },
+      data: { employeeId: emp.id },
+    });
+  }
+  return emp.id;
+}
+
+export const WORK_EMPLOYEE_LINK_REQUIRED_MSG =
+  'Tài khoản đăng nhập chưa gắn hồ sơ nhân viên (HRM). Trong HRM, đặt email nhân viên trùng email đăng nhập, hoặc gán nhân viên cho tài khoản trong phần thành viên/tổ chức.';
+
 export async function resolveWorkScope(
   prisma: PrismaService,
   organizationId: string,

@@ -67,4 +67,26 @@ assert.equal((kept.style as { lpBorderWidth?: number }).lpBorderWidth, 3);
 const bad = applySectionSettingsChange(block, { imageUrl: 'javascript:alert(1)', mediaOn: true });
 assert.equal((bad.style as { backgroundImage?: string }).backgroundImage, undefined);
 
+const gradient = applySectionSettingsChange(block, {
+  gradientOn: true,
+  gradientAngle: 160,
+  gradientFrom: '#0F3D34',
+  gradientTo: '#7DFFC3',
+});
+const gradientStyle = gradient.style as {
+  lpBgGradientOn?: boolean;
+  lpBgGradientAngle?: number;
+  backgroundImage?: string;
+};
+assert.equal(gradientStyle.lpBgGradientOn, true);
+assert.equal(gradientStyle.lpBgGradientAngle, 160);
+assert.equal(gradientStyle.backgroundImage, undefined);
+const painted = sectionLayerBoxStyle({ ...block, ...gradient } as LandingPageBlock);
+assert.match(String(painted.background), /^linear-gradient\(160deg, rgba\(15,61,52,1\) 0%, rgba\(125,255,195,1\) 100%\)$/);
+const keptSolid = applySectionSettingsChange({ ...block, ...gradient } as LandingPageBlock, { gradientOn: false });
+assert.equal((keptSolid.style as { lpBgGradientOn?: boolean }).lpBgGradientOn, false);
+assert.equal((keptSolid.style as { lpBgGradientFrom?: string }).lpBgGradientFrom, '#0F3D34FF');
+const solidAgain = sectionLayerBoxStyle({ ...block, background: '#112233FF', ...keptSolid } as LandingPageBlock);
+assert.match(String(solidAgain.background), /^rgba\(17,34,51,/);
+
 console.log('section-settings: ok');

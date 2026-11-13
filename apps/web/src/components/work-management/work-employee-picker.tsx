@@ -344,7 +344,7 @@ export function WorkEmployeePicker({
 
       {/* Add Employee Dialog */}
       <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md" closeOnlyWithButton>
           <DialogHeader>
             <DialogTitle>Thêm nhân viên mới</DialogTitle>
           </DialogHeader>

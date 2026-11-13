@@ -19,6 +19,7 @@ import { resolveInspectorContext } from './landing-page-inspector-context';
 import { LandingPageFormThemePanel } from './landing-page-form-theme-panel';
 import { LandingPageItemBoxPanel } from './landing-page-item-box-panel';
 import { LandingPageTextQuickPanel } from './landing-page-text-quick-panel';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import type { LandingPageLeadFormBlock } from '@marketingspa/shared';
 import {
   composeDesignTransformCss,
@@ -150,25 +151,47 @@ function BackgroundPanel({
           }
         }}
       />
-      {bgMode === 'color' ? (
-        <div className="flex items-center gap-2 pt-1">
-          <input
-            type="color"
-            data-lp-inspector-background
-            className="h-9 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
-            value={extractColor(selected)}
-            onChange={(e) =>
+      {bgMode === 'color' || bgMode === 'gradient' ? (
+        <div className="pt-2">
+          <LandingPageColorPickerPopover
+            allowGradient
+            mode={bgMode === 'gradient' ? 'gradient' : 'solid'}
+            onModeChange={(nextMode) => {
+              const m = nextMode === 'gradient' ? 'gradient' : 'color';
+              setBgModeOverride(m);
+              if (m === 'color') {
+                onUpdateBlock(selected.id, {
+                  background: extractColor(selected),
+                  style: { ...style, backgroundImage: undefined },
+                } as Partial<LandingPageBlock>);
+              } else {
+                onUpdateBlock(selected.id, {
+                  background: `linear-gradient(135deg, ${g1}, ${g2})`,
+                  style: { ...style, backgroundImage: undefined },
+                } as Partial<LandingPageBlock>);
+              }
+            }}
+            color={extractColor(selected)}
+            onColorChange={(hex) =>
               onUpdateBlock(selected.id, {
-                background: e.target.value,
+                background: hex,
                 style: { ...style, backgroundImage: undefined },
               } as Partial<LandingPageBlock>)
             }
-          />
-          <Input
-            className="h-9 text-xs"
-            value={String(selected.background || '')}
-            onChange={(e) => onUpdateBlock(selected.id, { background: e.target.value || null })}
-            placeholder="#0A3D30"
+            gradientFrom={g1}
+            gradientTo={g2}
+            gradientAngle={135}
+            onGradientChange={(g) => {
+              const from = g.from || g1;
+              const to = g.to || g2;
+              const angle = g.angle ?? 135;
+              onUpdateBlock(selected.id, {
+                background: `linear-gradient(${angle}deg, ${from}, ${to})`,
+                style: { ...style, backgroundImage: undefined },
+              } as Partial<LandingPageBlock>);
+            }}
+            side="left"
+            align="start"
           />
         </div>
       ) : null}
@@ -192,32 +215,6 @@ function BackgroundPanel({
           <Button type="button" size="sm" variant="secondary" className="h-8 w-full text-xs" onClick={onPickBackgroundImage}>
             Chọn ảnh nền
           </Button>
-        </div>
-      ) : null}
-      {bgMode === 'gradient' ? (
-        <div className="flex items-center gap-2 pt-1">
-          <input
-            type="color"
-            className="h-9 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
-            value={g1}
-            onChange={(e) =>
-              onUpdateBlock(selected.id, {
-                background: `linear-gradient(135deg, ${e.target.value}, ${g2})`,
-                style: { ...style, backgroundImage: undefined },
-              } as Partial<LandingPageBlock>)
-            }
-          />
-          <input
-            type="color"
-            className="h-9 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
-            value={g2}
-            onChange={(e) =>
-              onUpdateBlock(selected.id, {
-                background: `linear-gradient(135deg, ${g1}, ${e.target.value})`,
-                style: { ...style, backgroundImage: undefined },
-              } as Partial<LandingPageBlock>)
-            }
-          />
         </div>
       ) : null}
     </InspectorAccordion>
@@ -543,14 +540,13 @@ export function LandingPageInspectorTypographyPanel({
 
       <InspectorFieldLabel>Màu chữ</InspectorFieldLabel>
       <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="color"
-          className="h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-          value={colorHex}
-          onChange={(e) => patchColor(e.target.value)}
-          data-lp-design-text-color
-          onPointerDown={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
+        <LandingPageColorPickerPopover
+          mode="solid"
+          allowGradient={false}
+          color={colorHex}
+          onColorChange={(hex8) => patchColor(hex8.slice(0, 7))}
+          side="left"
+          align="start"
         />
         <input
           type="text"
@@ -835,14 +831,13 @@ function BorderRadiusPanel({
         <option value="dotted">Dotted</option>
         <option value="double">Double</option>
       </select>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <InspectorFieldLabel>Border color</InspectorFieldLabel>
-        <input
-          type="color"
-          className="ml-auto h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-          value={border.color}
-          onChange={(e) => {
-            const color = e.target.value;
+        <LandingPageColorPickerPopover
+          mode="solid"
+          allowGradient={false}
+          color={border.color}
+          onColorChange={(color) => {
             const w = border.width || 1;
             patchStyle({
               border: serializeBorder(w, border.style, color),
@@ -851,6 +846,8 @@ function BorderRadiusPanel({
               borderColor: color,
             });
           }}
+          side="left"
+          align="start"
         />
       </div>
 
@@ -950,13 +947,15 @@ function ShadowPanel({
           <InspectorSliderNumber label="Y" value={shadow.y} min={-40} max={40} onChange={(n) => setShadow({ ...shadow, y: n })} />
           <InspectorSliderNumber label="Blur" value={shadow.blur} min={0} max={80} onChange={(n) => setShadow({ ...shadow, blur: n })} />
           <InspectorSliderNumber label="Spread" value={shadow.spread} min={-20} max={40} onChange={(n) => setShadow({ ...shadow, spread: n })} />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
             <InspectorFieldLabel>Màu bóng</InspectorFieldLabel>
-            <input
-              type="color"
-              className="ml-auto h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-              value={shadow.color}
-              onChange={(e) => setShadow({ ...shadow, color: e.target.value })}
+            <LandingPageColorPickerPopover
+              mode="solid"
+              allowGradient={false}
+              color={shadow.color}
+              onColorChange={(color) => setShadow({ ...shadow, color })}
+              side="left"
+              align="start"
             />
           </div>
           <InspectorSliderNumber
@@ -1503,11 +1502,13 @@ export function LandingPageInspectorDesignTab({
         {!hidePageTheme ? (
           <InspectorAccordion title="Màu chủ đạo trang" data-lp="theme" defaultOpen={false}>
             <div className="flex items-center gap-2">
-              <input
-                type="color"
-                className="h-9 w-12 cursor-pointer rounded border border-white/10 bg-transparent"
-                value={themePrimary}
-                onChange={(e) => onThemePrimary(e.target.value)}
+              <LandingPageColorPickerPopover
+                mode="solid"
+                allowGradient={false}
+                color={themePrimary}
+                onColorChange={(color) => onThemePrimary(color)}
+                side="left"
+                align="start"
               />
             </div>
           </InspectorAccordion>

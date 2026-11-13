@@ -4,6 +4,12 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { LandingPageBlock } from '@marketingspa/shared';
 import { apiUpload } from '@/lib/api-client';
 import {
+  GradientFillEditor,
+  GradientModeSwitch,
+  seedGradientStops,
+} from './landing-page-gradient-fill-fields';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
+import {
   applySectionSettingsChange,
   parseHexAlpha,
   readSectionSettings,
@@ -128,93 +134,72 @@ export function LandingPageSectionSettingsPanel({
 
   const body = (
       <div className={embedded ? 'space-y-4' : 'min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-3 py-3'}>
-        <label className="block space-y-1.5">
-          <span className="text-xs font-medium text-slate-600">Màu nền</span>
-          <div className="relative flex items-center gap-2" ref={colorPop}>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-medium text-slate-600">Màu nền</span>
             <button
               type="button"
-              data-lp-section-color-swatch="1"
-              className="h-7 w-7 shrink-0 rounded-full border border-slate-300"
-              style={{ background: view.color.hex }}
-              onClick={() => setColorOpen((v) => !v)}
-            />
-            <input
-              data-lp-section-color-hex="1"
-              className="h-8 min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 text-xs uppercase"
-              value={hexDraft}
-              spellCheck={false}
-              onFocus={() => setHexFocused(true)}
-              onBlur={() => {
-                setHexFocused(false);
-                onEndGesture?.();
-                // Valid hex is already committed in onChange. Never re-commit on blur:
-                // after Ctrl+Z the input can still hold the old draft and would overwrite
-                // the restored background. Just resync the display to live view.
-                const trimmed = hexDraft.trim();
-                if (
-                  !/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(trimmed) ||
-                  parseHexAlpha(trimmed).hex8 !== view.color.hex8
-                ) {
-                  setHexDraft(view.color.hex8);
-                }
+              className="text-[11px] text-slate-400 hover:text-sky-600 transition-colors"
+              onClick={() => {
+                commit(block, { background: '#00000000', gradientOn: false }, onUpdateBlock);
               }}
-              onChange={(e) => {
-                const value = e.target.value;
-                setHexDraft(value);
-                if (/^#[0-9a-fA-F]{8}$/.test(value.trim()) || /^#[0-9a-fA-F]{6}$/.test(value.trim())) {
-                  commit(block, { background: parseHexAlpha(value).hex8 }, onUpdateBlock, {
-                    coalesce: true,
-                  });
-                }
-              }}
-            />
-            {colorOpen ? (
-              <div className="absolute left-0 top-9 z-20 w-56 rounded-lg border border-slate-200 bg-white p-3 shadow-xl">
-                <input
-                  type="color"
-                  aria-label="Chọn màu nền"
-                  className="h-9 w-full cursor-pointer"
-                  value={view.color.hex}
-                  onPointerUp={() => onEndGesture?.()}
-                  onBlur={() => onEndGesture?.()}
-                  onChange={(e) => {
-                    const picked = parseHexAlpha(e.target.value);
-                    const alpha = view.color.alpha > 0 ? view.color.alpha : 1;
-                    const aa = Math.round(alpha * 255)
-                      .toString(16)
-                      .padStart(2, '0');
-                    commit(block, { background: `${picked.hex}${aa}` }, onUpdateBlock, {
-                      coalesce: true,
-                    });
-                  }}
-                />
-                <SliderNumber
-                  label="Độ trong suốt"
-                  min={0}
-                  max={100}
-                  value={Math.round(view.color.alpha * 100)}
-                  suffix="%"
-                  onGestureEnd={onEndGesture}
-                  onChange={(n) =>
-                    commit(
-                      block,
-                      {
-                        background: parseHexAlpha(
-                          view.color.hex +
-                            Math.round((n / 100) * 255)
-                              .toString(16)
-                              .padStart(2, '0'),
-                        ).hex8,
-                      },
-                      onUpdateBlock,
-                      { coalesce: true },
-                    )
-                  }
-                />
-              </div>
-            ) : null}
+            >
+              Không màu
+            </button>
           </div>
-        </label>
+          <LandingPageColorPickerPopover
+            mode={view.gradient.on ? 'gradient' : 'solid'}
+            onModeChange={(nextMode) => {
+              if (nextMode === 'solid') {
+                commit(block, { gradientOn: false }, onUpdateBlock);
+              } else {
+                const style = (block.style || {}) as { lpBgGradientFrom?: string; lpBgGradientTo?: string };
+                const seeded = seedGradientStops(view.color.alpha > 0 ? view.color.hex8 : null, {
+                  from: style.lpBgGradientFrom,
+                  to: style.lpBgGradientTo,
+                  angle: view.gradient.angle,
+                });
+                commit(
+                  block,
+                  {
+                    gradientOn: true,
+                    gradientFrom: seeded.from,
+                    gradientTo: seeded.to,
+                    gradientAngle: seeded.angle,
+                  },
+                  onUpdateBlock,
+                );
+              }
+            }}
+            color={view.color.hex8}
+            onColorChange={(hex8) => {
+              commit(block, { background: hex8 }, onUpdateBlock, { coalesce: true });
+            }}
+            gradientFrom={view.gradient.from}
+            gradientTo={view.gradient.to}
+            gradientAngle={view.gradient.angle}
+            onGradientChange={(patch) => {
+              commit(
+                block,
+                {
+                  gradientOn: true,
+                  ...(patch.angle !== undefined ? { gradientAngle: patch.angle } : {}),
+                  ...(patch.from ? { gradientFrom: patch.from } : {}),
+                  ...(patch.to ? { gradientTo: patch.to } : {}),
+                },
+                onUpdateBlock,
+                { coalesce: true },
+              );
+            }}
+            onClear={() => {
+              commit(block, { background: '#00000000', gradientOn: false }, onUpdateBlock);
+            }}
+            onGestureEnd={onEndGesture}
+            side="left"
+            align="start"
+            testId="lp-section-color-picker"
+          />
+        </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -658,18 +643,15 @@ function SliderNumber({
 }
 
 function HexField({ value, onChange }: { value: string; onChange: (hex: string) => void }) {
-  const parsed = parseHexAlpha(value);
   return (
-    <div className="flex items-center gap-2">
-      <input type="color" className="h-7 w-9 cursor-pointer" value={parsed.hex} onChange={(e) => onChange(parseHexAlpha(e.target.value).hex8)} />
-      <input
-        className="h-8 min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 text-xs uppercase"
-        value={parsed.hex8}
-        onChange={(e) => {
-          if (/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(e.target.value.trim())) onChange(parseHexAlpha(e.target.value).hex8);
-        }}
-      />
-    </div>
+    <LandingPageColorPickerPopover
+      mode="solid"
+      allowGradient={false}
+      color={value}
+      onColorChange={onChange}
+      side="left"
+      align="start"
+    />
   );
 }
 

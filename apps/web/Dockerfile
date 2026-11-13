@@ -6,7 +6,10 @@ WORKDIR /app
 FROM base AS builder
 COPY . .
 # Cần devDependencies khi install; Next.js build bắt buộc NODE_ENV=production
-RUN NODE_ENV=development pnpm install --frozen-lockfile
+RUN pnpm config set network-timeout 300000 && \
+    pnpm config set fetch-retries 5 && \
+    pnpm config set fetch-retry-maxtimeout 180000 && \
+    NODE_ENV=development pnpm install --frozen-lockfile
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DOCKER_BUILD=true
 ENV NODE_ENV=production

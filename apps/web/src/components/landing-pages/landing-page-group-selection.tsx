@@ -3,6 +3,7 @@ import { protectFreeRect } from './landing-page-no-overlap';
 import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
 import { createPortal } from 'react-dom';
 import type { LandingPageSpec } from '@marketingspa/shared';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { readCanvasPointerScale } from './landing-page-free-drag';
 import {
   findCanvasTargetNode,
@@ -344,14 +345,16 @@ export function CanvasMultiInspector({
           ))}
         {allText && (
           <div data-lp-multi-text-controls className="space-y-3 border-t border-white/10 pt-3">
-            <label className="flex items-center justify-between text-xs">
-              Màu chữ
-              <input
-                data-lp-multi-color
-                type="color"
-                onChange={(e) => onStyle({ color: e.target.value })}
+            <div className="flex items-center justify-between text-xs">
+              <span>Màu chữ</span>
+              <LandingPageColorPickerPopover
+                allowGradient={false}
+                color="#000000"
+                onColorChange={(color) => onStyle({ color })}
+                side="left"
+                align="start"
               />
-            </label>
+            </div>
             <label className="flex items-center justify-between text-xs">
               Cỡ chữ
               <select

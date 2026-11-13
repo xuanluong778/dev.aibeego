@@ -7,6 +7,7 @@
 
 import type { LandingPageFormTheme, LandingPageLeadFormBlock } from '@marketingspa/shared';
 import { InspectorFieldLabel } from './landing-page-inspector-ui';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { Input } from '@/components/ui/input';
 
 type Props = {
@@ -27,18 +28,18 @@ function ColorRow({
 }) {
   const raw = (value || '').trim();
   const hex =
-    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(raw) ? raw.slice(0, 7) : fallback;
+    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(raw) ? raw : fallback;
   return (
-    <label className="flex items-center gap-2">
+    <div className="flex items-center justify-between gap-2">
       <span className="min-w-0 flex-1 text-[11px] text-white/70">{label}</span>
-      <input
-        type="color"
-        className="h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-        value={hex}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={label}
+      <LandingPageColorPickerPopover
+        allowGradient={false}
+        color={hex}
+        onColorChange={onChange}
+        side="left"
+        align="start"
       />
-    </label>
+    </div>
   );
 }
 

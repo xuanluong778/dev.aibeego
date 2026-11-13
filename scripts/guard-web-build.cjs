@@ -11,7 +11,23 @@ function isNextDevOnPort3000() {
       const out = execSync('netstat -ano | findstr ":3000" | findstr "LISTENING"', {
         encoding: 'utf8',
       });
-      return out.trim().length > 0;
+      if (!out.trim()) return false;
+      const lines = out.trim().split(/\r?\n/);
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/);
+        const pid = parts[parts.length - 1];
+        if (pid && !isNaN(Number(pid))) {
+          try {
+            const task = execSync(`tasklist /fi "PID eq ${pid}" /fo csv /nh`, { encoding: 'utf8' });
+            if (task.toLowerCase().includes('node.exe')) {
+              return true;
+            }
+          } catch {
+            // ignore
+          }
+        }
+      }
+      return false;
     }
     let out = '';
     try {

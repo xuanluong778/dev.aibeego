@@ -23,6 +23,7 @@ import {
   serializeBorder,
   serializeBoxShadow,
 } from './landing-page-block-design-style';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { isLandingPageBoxStyle } from './landing-page-box-presets';
 import { cn } from '@/lib/utils';
 
@@ -313,28 +314,32 @@ export function LandingPageIconInspector({ block, elementKey, onUpdateBlock, mot
 
       <InspectorAccordion title="Màu & nền" data-lp="icon-color" defaultOpen>
         <div className="grid grid-cols-2 gap-2">
-          <label className="text-[10px]">
+          <div className="text-[10px]">
             <span className="mb-0.5 block opacity-60">Màu icon</span>
-            <input
-              type="color"
-              className="h-8 w-full cursor-pointer rounded border border-white/10 bg-transparent p-0.5"
-              value={/^#[0-9a-fA-F]{6}$/.test(chromeSource.color) ? chromeSource.color : '#ffffff'}
-              onChange={(e) => setColor(e.target.value)}
+            <LandingPageColorPickerPopover
+              mode="solid"
+              allowGradient={false}
+              color={/^#[0-9a-fA-F]{6}$/.test(chromeSource.color) ? chromeSource.color : '#ffffff'}
+              onColorChange={(c) => setColor(c.slice(0, 7))}
+              side="left"
+              align="start"
             />
-          </label>
-          <label className="text-[10px]">
+          </div>
+          <div className="text-[10px]">
             <span className="mb-0.5 block opacity-60">Nền</span>
-            <input
-              type="color"
-              className="h-8 w-full cursor-pointer rounded border border-white/10 bg-transparent p-0.5"
-              value={
+            <LandingPageColorPickerPopover
+              mode="solid"
+              allowGradient={false}
+              color={
                 /^#[0-9a-fA-F]{6}$/.test(chromeSource.background)
                   ? chromeSource.background
                   : '#0f172a'
               }
-              onChange={(e) => setBackground(e.target.value)}
+              onColorChange={(c) => setBackground(c.slice(0, 7))}
+              side="left"
+              align="start"
             />
-          </label>
+          </div>
         </div>
       </InspectorAccordion>
 
@@ -348,15 +353,17 @@ export function LandingPageIconInspector({ block, elementKey, onUpdateBlock, mot
           Bật viền
         </label>
         {border.width > 0 ? (
-          <label className="text-[10px]">
+          <div className="text-[10px]">
             <span className="mb-0.5 block opacity-60">Màu viền</span>
-            <input
-              type="color"
-              className="h-8 w-full cursor-pointer rounded border border-white/10 bg-transparent p-0.5"
-              value={/^#[0-9a-fA-F]{6}$/.test(border.color) ? border.color : '#ffffff'}
-              onChange={(e) => setBorderColor(e.target.value)}
+            <LandingPageColorPickerPopover
+              mode="solid"
+              allowGradient={false}
+              color={/^#[0-9a-fA-F]{6}$/.test(border.color) ? border.color : '#ffffff'}
+              onColorChange={(c) => setBorderColor(c.slice(0, 7))}
+              side="left"
+              align="start"
             />
-          </label>
+          </div>
         ) : null}
         <InspectorSliderNumber label="Bo góc" value={radius} min={0} max={999} onChange={setRadius} />
         <InspectorSliderNumber label="Padding" value={pad} min={0} max={48} onChange={setPadding} />

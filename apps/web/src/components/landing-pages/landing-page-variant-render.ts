@@ -4,6 +4,7 @@
  */
 
 import type { CSSProperties } from 'react';
+import { readableSurfaceColors } from './landing-page-readable-colors';
 import type {
   LandingPageBlockType,
   LandingPageLayout,
@@ -326,8 +327,9 @@ export function extendedTokenStyle(tokens: LandingPageThemeTokens): CSSPropertie
   const surfaceIsDark = surfaceLum != null && surfaceLum < 0.35;
   const canvasLum = hexRelativeLuminance(tokens.canvas) ?? surfaceLum;
   const canvasIsDark = canvasLum != null && canvasLum < 0.35;
-  const textOnLight = surfaceIsDark ? '#F8FAFC' : '#0f172a';
-  const mutedOnLight = surfaceIsDark ? '#CBD5E1' : '#475569';
+  const surfaceColors = readableSurfaceColors(tokens.surface || tokens.background);
+  const textOnLight = surfaceColors?.ink || (surfaceIsDark ? '#F8FAFC' : '#0f172a');
+  const mutedOnLight = surfaceColors?.muted || (surfaceIsDark ? '#CBD5E1' : '#475569');
   const onPrimary = (() => {
     const lum = hexRelativeLuminance(tokens.button || tokens.primary);
     if (lum == null) return '#ffffff';

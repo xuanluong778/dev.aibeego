@@ -24,6 +24,7 @@ import {
   LP_TEXT_FONT_OPTIONS,
   type LandingPageInlineTextStyle,
 } from './landing-page-canvas-ux';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import {
   parseBorderParts,
   parseBoxShadow,
@@ -1083,22 +1084,15 @@ function ColorRow({
   onChange: (hex: string) => void;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between gap-2">
       <InspectorFieldLabel>{label}</InspectorFieldLabel>
-      <input
-        type="color"
-        className="ml-auto h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <input
-        type="text"
-        className="w-[78px] rounded border border-white/10 bg-zinc-900 px-1.5 py-1 text-[11px] text-white/80"
-        value={value}
-        onChange={(e) => {
-          const v = e.target.value.trim();
-          if (/^#[0-9a-fA-F]{3,8}$/.test(v)) onChange(v.length === 4 ? hexOrFallback(v, value) : v.slice(0, 7));
-        }}
+      <LandingPageColorPickerPopover
+        mode="solid"
+        allowGradient={false}
+        color={value}
+        onColorChange={(hex8) => onChange(hex8.slice(0, 7))}
+        side="left"
+        align="start"
       />
     </div>
   );

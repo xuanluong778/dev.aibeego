@@ -9,6 +9,7 @@ import {
 } from '@marketingspa/shared';
 import { LandingPageThemeSwitcher } from './landing-page-theme-switcher';
 import { InspectorAccordion, InspectorFieldLabel } from './landing-page-inspector-ui';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -175,15 +176,16 @@ export function LandingPageInspectorGlobalDesign({
               ['muted', 'Muted'],
             ] as const
           ).map(([key, label]) => (
-            <label key={key} className="text-[10px]">
-              <span className="mb-0.5 block opacity-60">{label}</span>
-              <Input
-                type="color"
-                className="h-8 w-full cursor-pointer p-0.5"
-                value={(tokens[key] as string)?.slice(0, 7) || '#000000'}
-                onChange={(e) => onChange(withCustomTokens(spec, { [key]: e.target.value }))}
+            <div key={key} className="space-y-1">
+              <span className="block text-[10px] opacity-60">{label}</span>
+              <LandingPageColorPickerPopover
+                allowGradient={false}
+                color={(tokens[key] as string)?.slice(0, 7) || '#000000'}
+                onColorChange={(color) => onChange(withCustomTokens(spec, { [key]: color }))}
+                side="left"
+                align="start"
               />
-            </label>
+            </div>
           ))}
         </div>
       </InspectorAccordion>

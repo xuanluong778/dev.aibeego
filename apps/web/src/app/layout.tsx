@@ -1,14 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { AppProviders } from '@/providers/app-providers';
 
-const inter = Inter({
-  subsets: ['latin', 'vietnamese'],
-  display: 'swap',
-  preload: true,
-  adjustFontFallback: true,
-});
+const inter = { className: 'font-sans' };
 
 export const metadata: Metadata = {
   title: 'Ai Bee Go - Nền tảng Marketing Automation',

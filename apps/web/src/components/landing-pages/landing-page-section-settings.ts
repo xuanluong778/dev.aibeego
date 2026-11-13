@@ -7,11 +7,20 @@
 
 import type { CSSProperties } from 'react';
 import type { LandingPageBlock } from '@marketingspa/shared';
+import { fillGradientCss } from '@marketingspa/shared';
 
 export type SectionBgKind = 'image' | 'video';
 export type SectionBgSpan = 'full' | 'frame';
 export type SectionBorderStyle = 'solid' | 'dashed' | 'dotted' | 'double';
 export type SectionVisibility = 'all' | 'mobile' | 'desktop';
+
+export type SectionGradient = {
+  on: boolean;
+  /** 0–360 degrees. */
+  angle: number;
+  from: string;
+  to: string;
+};
 
 export type SectionRadius = {
   tl: number;
@@ -186,6 +195,7 @@ function shadowOf(style: StyleBag): SectionShadow {
 export type SectionSettingsView = {
   active: boolean;
   color: ReturnType<typeof parseHexAlpha>;
+  gradient: SectionGradient;
   mediaOn: boolean;
   kind: SectionBgKind;
   imageUrl: string | null;
@@ -219,6 +229,12 @@ export function readSectionSettings(block: LandingPageBlock): SectionSettingsVie
   return {
     active: style.lpSectionSettings === true,
     color: parseHexAlpha(typeof block.background === 'string' ? block.background : '', '#00000000'),
+    gradient: {
+      on: style.lpBgGradientOn === true,
+      angle: num(style.lpBgGradientAngle, 0, 360, 135),
+      from: parseHexAlpha(style.lpBgGradientFrom || '#0F3D34FF', '#0F3D34FF').hex8,
+      to: parseHexAlpha(style.lpBgGradientTo || '#7DFFC3FF', '#7DFFC3FF').hex8,
+    },
     mediaOn: style.lpBgMediaOn === true,
     kind,
     imageUrl: cssUrlValue(style.backgroundImage),
@@ -244,6 +260,10 @@ export function readSectionSettings(block: LandingPageBlock): SectionSettingsVie
 
 export type SectionSettingsChange = {
   background?: string | null;
+  gradientOn?: boolean;
+  gradientAngle?: number;
+  gradientFrom?: string;
+  gradientTo?: string;
   mediaOn?: boolean;
   kind?: SectionBgKind;
   imageUrl?: string | null;
@@ -311,9 +331,14 @@ export function applySectionSettingsChange(
   const next: SectionSettingsView = {
     ...view,
     active: true,
+    gradient: { ...view.gradient },
     radius: { ...view.radius, ...(change.radius || {}) },
     shadow: { ...view.shadow, ...(change.shadow || {}) },
   };
+  if (change.gradientOn !== undefined) next.gradient.on = change.gradientOn;
+  if (change.gradientAngle !== undefined) next.gradient.angle = num(change.gradientAngle, 0, 360, next.gradient.angle);
+  if (change.gradientFrom) next.gradient.from = parseHexAlpha(change.gradientFrom, next.gradient.from).hex8;
+  if (change.gradientTo) next.gradient.to = parseHexAlpha(change.gradientTo, next.gradient.to).hex8;
   if (change.background !== undefined) {
     const parsed = parseHexAlpha(change.background || '', '#00000000');
     next.color = change.background ? parsed : parseHexAlpha('#00000000');
@@ -359,6 +384,19 @@ export function applySectionSettingsChange(
   style.lpRadius = next.radius;
   style.lpShadowOn = next.shadowOn;
   style.lpShadow = next.shadow;
+  const touchGradient =
+    change.gradientOn !== undefined ||
+    change.gradientAngle !== undefined ||
+    change.gradientFrom !== undefined ||
+    change.gradientTo !== undefined ||
+    style.lpBgGradientOn !== undefined ||
+    style.lpBgGradientFrom !== undefined;
+  if (touchGradient) {
+    style.lpBgGradientOn = next.gradient.on;
+    style.lpBgGradientAngle = next.gradient.angle;
+    style.lpBgGradientFrom = next.gradient.from;
+    style.lpBgGradientTo = next.gradient.to;
+  }
   style.backgroundRepeat = next.repeat;
   style.backgroundPosition = next.position;
   style.backgroundSize = `${next.size}% auto`;
@@ -452,18 +490,21 @@ export function sectionLayerBoxStyle(
   const raw = typeof block.background === 'string' ? block.background.trim() : '';
   const isHex = HEX6.test(raw) || HEX8.test(raw);
   const parsed = isHex ? parseHexAlpha(raw) : null;
+  const gradient = view.gradient.on ? fillGradientCss(view.gradient) : null;
   const box: CSSProperties = {
     top: insets.top,
     right: insets.right,
     bottom: insets.bottom,
     left: insets.left,
-    background: parsed
-      ? parsed.alpha > 0
-        ? parsed.css
-        : parsed.hex === '#000000'
-          ? 'transparent'
-          : parsed.hex
-      : raw || fallback || 'transparent',
+    background: gradient
+      ? gradient
+      : parsed
+        ? parsed.alpha > 0
+          ? parsed.css
+          : parsed.hex === '#000000'
+            ? 'transparent'
+            : parsed.hex
+        : raw || fallback || 'transparent',
     pointerEvents: 'none',
   };
   if (view.borderOn && view.borderWidth > 0) {

@@ -17,6 +17,7 @@ import { lpImgStyle, lpImgMotionAttr } from './landing-page-content-image-style'
 import { LpContentImage } from './landing-page-content-image';
 import { landingPageSectionSurfaceStyle } from './landing-page-section-surface';
 import './landing-page-agency-portfolio.css';
+import { readableSurfaceColors } from './landing-page-readable-colors';
 
 const paths: Record<string, string> = {
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -97,6 +98,12 @@ export function AgencyPortfolioBlock({
       '--lp-item-box-shadow': 'boxShadow',
     })) {
       if (vars[variable]) style[property] = vars[variable]!;
+    }
+    // A saved item fill can differ from both the theme surface and its section.
+    const colors = readableSurfaceColors(vars['--lp-item-box-bg-color'], block.background || spec.themeTokens?.surface);
+    if (colors && !vars['--lp-item-box-bg-image']) {
+      style['--lp-card-ink'] = colors.ink;
+      style['--lp-card-muted'] = colors.muted;
     }
     return { ...props, style: style as CSSProperties };
   };

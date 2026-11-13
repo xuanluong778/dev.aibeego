@@ -1,0 +1,41 @@
+﻿/* Match ink to each card's own surface; retain designed gradient text fills. */
+[data-lp-canvas-root] [data-lp-card-item] {
+  --lp-card-ink: var(--lp-text-on-light, #0f172a);
+  --lp-card-muted: var(--lp-muted-on-light, #475569);
+}
+[data-lp-canvas-root] :is(.benefit-card, .service-card, .step) {
+  background-color: var(--lp-surface, #fff);
+  --lp-card-ink: var(--lp-surface-ink, #0f172a);
+  --lp-card-muted: var(--lp-surface-muted, #475569);
+}
+/* These Agency surfaces are literally white, independent of the page theme. */
+[data-lp-canvas-root] :is(.work-copy, .price-card:not(.dark)) {
+  --lp-card-ink: #0f172a;
+  --lp-card-muted: #475569;
+  color: var(--lp-card-ink);
+}
+[data-lp-canvas-root] .work-copy { background-color: #fff; }
+[data-lp-canvas-root] .price-card.dark {
+  --lp-card-ink: #f8fafc;
+  --lp-card-muted: #cbd5e1;
+}
+[data-lp-canvas-root] :is(.benefit-card, .service-card, .step, .work-copy, .price-card, [data-lp-card-item])
+  :is(h1, h2, h3, h4, [data-lp-inline-field^='planName'], [data-lp-inline-field^='itemTitle']) {
+  color: var(--lp-card-ink) !important;
+}
+[data-lp-canvas-root] :is(.benefit-card, .service-card, .step, .work-copy, .price-card, [data-lp-card-item])
+  :is(p, .price-intro, [data-lp-inline-field^='itemDesc'], [data-lp-inline-field^='planPrice']) {
+  color: var(--lp-card-muted) !important;
+}
+[data-lp-canvas-root] .price-card :is(li, .overline, .btn-outline),
+[data-lp-canvas-root] .price-card .btn-outline [data-lp-inline-field] {
+  color: var(--lp-card-ink) !important;
+}
+/* Fixed cream badges keep dark ink inside dark cards. */
+[data-lp-canvas-root] .step-num { color: #7c3b10; }
+[data-lp-canvas-root] .service-top > .icon { color: var(--lp-card-muted, #475569); }
+[data-lp-canvas-root] .btn-primary,
+[data-lp-canvas-root] .btn-primary [data-lp-inline-field] {
+  color: var(--lp-on-primary, #0b1220);
+}
+[data-lp-canvas-root] .work-copy .media-label { color: var(--lp-card-muted); }

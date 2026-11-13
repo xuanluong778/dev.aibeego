@@ -47,6 +47,34 @@ assert(cssOn.border.includes('dashed'), 'dashed border');
 assert(cssOn.backgroundImage.includes('https://cdn.example.com/a.png'), 'background image on the box');
 assert(!('color' in cssOn) && !('fontSize' in cssOn), 'box css does not set text properties');
 
+const gradientBox = sanitizeTextBoxChrome({
+  gradientOn: true,
+  gradientAngle: 90,
+  gradientFrom: '#112233',
+  gradientTo: 'red;background:url(https://evil)',
+});
+assert(gradientBox.gradientOn === true && gradientBox.gradientFrom === '#112233FF', 'gradient from is hex');
+assert(gradientBox.gradientTo === undefined, 'gradient rejects non-hex stop');
+const gradientCss = textBoxChromeCss({
+  gradientOn: true,
+  gradientAngle: 90,
+  gradientFrom: '#112233FF',
+  gradientTo: '#AABBCCFF',
+});
+assert(
+  gradientCss.backgroundImage === 'linear-gradient(90deg, rgba(17,34,51,1) 0%, rgba(170,187,204,1) 100%)',
+  'box paints linear gradient',
+);
+const layered = textBoxChromeCss({
+  gradientOn: true,
+  gradientAngle: 90,
+  gradientFrom: '#112233FF',
+  gradientTo: '#AABBCCFF',
+  mediaOn: true,
+  mediaUrl: 'https://cdn.example.com/a.png',
+});
+assert(layered.backgroundImage.startsWith('url("https://cdn.example.com/a.png"), linear-gradient('), 'image stays above gradient');
+
 const mobile = textBoxHideAttrs({ visibility: 'mobile' });
 assert(mobile['data-lp-text-hide-desktop'] === '1' && mobile['data-lp-text-hide-mobile'] === undefined, 'mobile uses desktop+tablet hide');
 const desktop = textBoxHideAttrs({ visibility: 'desktop' });

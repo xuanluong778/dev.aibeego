@@ -210,6 +210,18 @@ export function attachmentDescriptionLine(name: string, id: string): string {
   return `[${name}](attachment:${id})`;
 }
 
+/** Markdown image line for an uploaded file (shown in description). */
+export function imageAttachmentDescriptionLine(name: string, id: string): string {
+  return `![${name}](attachment:${id})`;
+}
+
+export function appendImageToDescription(description: string, name: string, id: string): string {
+  const line = imageAttachmentDescriptionLine(name, id);
+  if (description.includes(`(attachment:${id})`)) return description;
+  if (!description.trim()) return line;
+  return `${description.replace(/\s+$/, '')}\n${line}`;
+}
+
 export function appendAttachmentToDescription(
   description: string,
   name: string,

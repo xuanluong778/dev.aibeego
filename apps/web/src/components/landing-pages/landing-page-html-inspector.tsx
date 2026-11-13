@@ -12,6 +12,7 @@ import {
   InspectorSegmented,
   InspectorSliderNumber,
 } from './landing-page-inspector-ui';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import {
   htmlNodeLabel,
   type HtmlNodePatch,
@@ -246,38 +247,13 @@ export function LandingPageHtmlInspector({
 
           <div className="pt-1">
             <InspectorFieldLabel>Màu chữ</InspectorFieldLabel>
-            <div className="mb-2 flex items-center gap-2">
-              <input
-                type="color"
-                className="h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-                value={color}
-                data-lp-design-text-color
-                onChange={(event) => onCommit({ color: event.target.value })}
-              />
-              <input
-                className="min-w-0 flex-1 rounded border border-white/10 bg-zinc-900 px-2 py-1 font-mono text-[11px] text-white"
-                value={color}
-                spellCheck={false}
-                data-lp-design-text-color-hex
-                onChange={(event) => {
-                  const value = event.target.value.trim();
-                  if (/^#[0-9a-fA-F]{6}$/.test(value)) onCommit({ color: value });
-                }}
-              />
-            </div>
-            <div className="flex flex-wrap gap-1" data-lp-design-color-swatches>
-              {SWATCHES.map((swatch) => (
-                <button
-                  key={swatch}
-                  type="button"
-                  title={swatch}
-                  className={`h-6 w-6 rounded border ${swatch.toLowerCase() === color.toLowerCase() ? 'border-emerald-400' : 'border-white/20'}`}
-                  style={{ background: swatch }}
-                  data-lp-design-color-swatch={swatch}
-                  onClick={() => onCommit({ color: swatch })}
-                />
-              ))}
-            </div>
+            <LandingPageColorPickerPopover
+              allowGradient={false}
+              color={color}
+              onColorChange={(hex) => onCommit({ color: hex })}
+              side="left"
+              align="start"
+            />
           </div>
 
           <InspectorSliderNumber
@@ -314,24 +290,19 @@ export function LandingPageHtmlInspector({
 
       <InspectorAccordion title="Nền" data-lp="html-bg" defaultOpen>
         <InspectorFieldLabel>Màu nền</InspectorFieldLabel>
-        <div className="flex items-center gap-2">
-          <input
-            type="color"
-            className="h-8 w-10 cursor-pointer rounded border border-white/10 bg-transparent"
-            value={background}
-            data-lp-html-background
-            onChange={(event) => onCommit({ background: event.target.value })}
-          />
-          <input
-            className="min-w-0 flex-1 rounded border border-white/10 bg-zinc-900 px-2 py-1 font-mono text-[11px] text-white"
-            value={background}
-            spellCheck={false}
-            onChange={(event) => {
-              const value = event.target.value.trim();
-              if (/^#[0-9a-fA-F]{6}$/.test(value)) onCommit({ background: value });
-            }}
-          />
-        </div>
+        <LandingPageColorPickerPopover
+          allowGradient
+          color={background}
+          onColorChange={(hex) => onCommit({ background: hex })}
+          onGradientChange={(g) => {
+            if (g.from && g.to) {
+              const angle = g.angle ?? 135;
+              onCommit({ background: `linear-gradient(${angle}deg, ${g.from}, ${g.to})` });
+            }
+          }}
+          side="left"
+          align="start"
+        />
       </InspectorAccordion>
 
       <InspectorAccordion title="Viền & bo góc" data-lp="html-border" defaultOpen>
@@ -343,11 +314,12 @@ export function LandingPageHtmlInspector({
           onChange={(borderWidth) => onCommit({ borderWidth })}
         />
         <InspectorFieldLabel>Màu viền</InspectorFieldLabel>
-        <input
-          type="color"
-          className="mb-2 h-8 w-full rounded border border-white/10 bg-transparent"
-          value={borderColor}
-          onChange={(event) => onCommit({ borderColor: event.target.value })}
+        <LandingPageColorPickerPopover
+          allowGradient={false}
+          color={borderColor}
+          onColorChange={(hex) => onCommit({ borderColor: hex })}
+          side="left"
+          align="start"
         />
         <InspectorSliderNumber
           label="Bo góc"

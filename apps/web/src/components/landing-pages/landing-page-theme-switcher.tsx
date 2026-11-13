@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import type { LandingPageSpec } from '@marketingspa/shared';
 import {
   LANDING_PAGE_QUICK_THEME_PRESETS,
@@ -182,15 +183,16 @@ export function LandingPageThemeSwitcher({ spec, onChange, aiSuggested }: Props)
                 ['surface', 'Surface'],
               ] as const
             ).map(([key, label]) => (
-              <label key={key} className="block text-[10px]">
-                <span className="mb-0.5 block opacity-60">{label}</span>
-                <Input
-                  type="color"
-                  className="h-8 w-full cursor-pointer p-0.5"
-                  value={customDraft[key] || '#000000'}
-                  onChange={(e) => setCustomDraft((d) => ({ ...d, [key]: e.target.value }))}
+              <div key={key} className="space-y-1">
+                <span className="block text-[10px] opacity-60">{label}</span>
+                <LandingPageColorPickerPopover
+                  allowGradient={false}
+                  color={customDraft[key] || '#000000'}
+                  onColorChange={(color) => setCustomDraft((d) => ({ ...d, [key]: color }))}
+                  side="left"
+                  align="start"
                 />
-              </label>
+              </div>
             ))}
           </div>
           <label className="block text-[10px]">

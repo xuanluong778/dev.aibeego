@@ -343,6 +343,12 @@ export class WorkManagementController {
     return this.insights.dashboard(user.organizationId, user, mode);
   }
 
+  @Get('employees/:employeeId/stats')
+  @RequirePermissions(WORK_PERMISSIONS.TASK_READ)
+  employeeStats(@CurrentUser() user: AuthUser, @Param('employeeId') employeeId: string) {
+    return this.insights.employeeStats(user.organizationId, user, employeeId);
+  }
+
   // ── Insights: Xuất báo cáo ───────────────────────────────────────────────
 
   @Get('export-report')

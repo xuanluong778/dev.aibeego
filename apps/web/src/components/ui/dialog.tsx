@@ -23,10 +23,27 @@ const DialogOverlay = React.forwardRef<
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+export type DialogContentProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+  /** Chỉ đóng bằng nút X — không đóng khi bấm nền mờ hoặc Escape */
+  closeOnlyWithButton?: boolean;
+};
+
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  DialogContentProps
+>(
+  (
+    {
+      className,
+      children,
+      closeOnlyWithButton,
+      onInteractOutside,
+      onPointerDownOutside,
+      onEscapeKeyDown,
+      ...props
+    },
+    ref,
+  ) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -35,6 +52,18 @@ const DialogContent = React.forwardRef<
         'fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-1.5rem)] max-w-lg max-h-[min(90dvh,calc(100vh-1.5rem))] translate-x-[-50%] translate-y-[-50%] gap-4 overflow-y-auto border bg-background p-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:p-6 sm:rounded-lg',
         className,
       )}
+      onInteractOutside={(e) => {
+        if (closeOnlyWithButton) e.preventDefault();
+        onInteractOutside?.(e);
+      }}
+      onPointerDownOutside={(e) => {
+        if (closeOnlyWithButton) e.preventDefault();
+        onPointerDownOutside?.(e);
+      }}
+      onEscapeKeyDown={(e) => {
+        if (closeOnlyWithButton) e.preventDefault();
+        onEscapeKeyDown?.(e);
+      }}
       {...props}
     >
       {children}
@@ -44,7 +73,8 @@ const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-));
+  ),
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

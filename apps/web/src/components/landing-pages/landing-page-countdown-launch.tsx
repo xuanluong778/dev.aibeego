@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react';
 import type { LandingPageCountdownBlock } from '@marketingspa/shared';
 import {
   countdownPresetById,
@@ -8,6 +8,9 @@ import {
 } from '@marketingspa/shared';
 import {
   InlineEditable,
+  mergeTextStyle,
+  styleKeyForInlineField,
+  useLpPublicRenderMeta,
   type LandingPageCanvasHandlers,
 } from './landing-page-canvas-ux';
 import { LandingPageCountdownLive } from './landing-page-countdown';
@@ -17,6 +20,40 @@ const COUNTDOWN_FONTS =
   'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap';
 
 let fontsInjected = false;
+
+function CountdownStaticText({
+  as: Tag,
+  blockId,
+  field,
+  className,
+  baseStyle,
+  children,
+}: {
+  as: 'div' | 'h2' | 'p' | 'h3';
+  blockId: string;
+  field: string;
+  className: string;
+  baseStyle: CSSProperties;
+  children: ReactNode;
+}) {
+  const meta = useLpPublicRenderMeta();
+  const key = styleKeyForInlineField(blockId, field);
+  const hidden = Boolean(meta?.elementHidden?.[key]);
+  if (hidden) return null;
+  const style = mergeTextStyle(baseStyle, meta?.inlineTextStyles?.[key]) || baseStyle;
+  return (
+    <Tag
+      className={className}
+      data-lp-inline-field={field}
+      data-lp-element-id={key}
+      data-lp-free-id={key}
+      style={style}
+    >
+      {children}
+    </Tag>
+  );
+}
+
 function ensureCountdownFonts() {
   if (typeof document === 'undefined' || fontsInjected) return;
   if (document.getElementById('lp-countdown-fonts')) {
@@ -84,8 +121,12 @@ export function LandingPageCountdownLaunch({
   if (typeof document !== 'undefined') ensureCountdownFonts();
   if (!tokens || !isCountdownLaunchStyle(block.styleVariant)) return null;
 
-  const kicker = block.kicker || preset?.kicker || 'Aibeego';
-  const formTitle = block.formHeadline || preset?.formHeadline || 'Đăng ký nhận thông báo';
+  const kicker =
+    typeof block.kicker === 'string' ? block.kicker : preset?.kicker ?? 'Aibeego';
+  const formTitle =
+    typeof block.formHeadline === 'string'
+      ? block.formHeadline
+      : preset?.formHeadline || 'Đăng ký nhận thông báo';
   const submitLabel = block.submitLabel || preset?.submitLabel || 'Đăng ký ngay';
   const showForm = block.showSignup !== false;
   const blockStyle = (block.style || {}) as Record<string, unknown>;
@@ -97,10 +138,12 @@ export function LandingPageCountdownLaunch({
     const data = new FormData(form);
     const fields: Record<string, string> = {
       name: String(data.get('name') || ''),
+      phone: String(data.get('phone') || ''),
       email: String(data.get('email') || ''),
+      need: String(data.get('need') || ''),
     };
-    if (!fields.name.trim() || !fields.email.trim()) {
-      setError('Vui lòng điền họ tên và email.');
+    if (!fields.name.trim() || !fields.phone.trim()) {
+      setError('Vui lòng điền họ tên và số điện thoại.');
       return;
     }
     setError(null);
@@ -173,6 +216,18 @@ export function LandingPageCountdownLaunch({
     fontSize: '0.95rem',
     fontWeight: 500,
   };
+  const needStyle: CSSProperties = {
+    ...inputStyle,
+    display: 'block',
+    width: '100%',
+    boxSizing: 'border-box',
+    minHeight: '7.5rem',
+    margin: '0 0 0.95rem',
+    padding: '0.7rem 0.95rem',
+    lineHeight: 1.45,
+    resize: 'vertical',
+    outline: 'none',
+  };
   const buttonStyle: CSSProperties = {
     background: tokens.ctaBg,
     color: tokens.ctaColor,
@@ -186,6 +241,7 @@ export function LandingPageCountdownLaunch({
   return (
     <section
       className="lp-cd-launch"
+      data-lp-block-id={block.id}
       data-lp-countdown
       data-lp-countdown-launch="1"
       data-lp-countdown-theme={block.styleVariant}
@@ -207,7 +263,15 @@ export function LandingPageCountdownLaunch({
               style={kickerStyle}
             />
           ) : (
-            <div className="lp-cd-kicker" style={kickerStyle}>{kicker}</div>
+            <CountdownStaticText
+              as="div"
+              blockId={block.id}
+              field="kicker"
+              className="lp-cd-kicker"
+              baseStyle={kickerStyle}
+            >
+              {kicker}
+            </CountdownStaticText>
           )}
           {canvas ? (
             <InlineEditable
@@ -222,7 +286,15 @@ export function LandingPageCountdownLaunch({
               style={headlineStyle}
             />
           ) : (
-            <h2 className="lp-cd-headline" style={headlineStyle}>{block.headline}</h2>
+            <CountdownStaticText
+              as="h2"
+              blockId={block.id}
+              field="headline"
+              className="lp-cd-headline"
+              baseStyle={headlineStyle}
+            >
+              {block.headline}
+            </CountdownStaticText>
           )}
           {canvas ? (
             <InlineEditable
@@ -238,7 +310,15 @@ export function LandingPageCountdownLaunch({
               style={subStyle}
             />
           ) : (
-            <p className="lp-cd-sub" style={subStyle}>{block.subheadline}</p>
+            <CountdownStaticText
+              as="p"
+              blockId={block.id}
+              field="subheadline"
+              className="lp-cd-sub"
+              baseStyle={subStyle}
+            >
+              {block.subheadline}
+            </CountdownStaticText>
           )}
           <LandingPageCountdownLive
             block={block}
@@ -280,20 +360,39 @@ export function LandingPageCountdownLaunch({
                 style={formTitleStyle}
               />
             ) : (
-              <h3 className="lp-cd-form-title" style={formTitleStyle}>{formTitle}</h3>
+              <CountdownStaticText
+                as="h3"
+                blockId={block.id}
+                field="formHeadline"
+                className="lp-cd-form-title"
+                baseStyle={formTitleStyle}
+              >
+                {formTitle}
+              </CountdownStaticText>
             )}
             {success ? (
               <p className="lp-cd-form-msg">Cảm ơn bạn! Chúng tôi sẽ thông báo khi ra mắt.</p>
             ) : (
               <>
-                <label htmlFor={`${block.id}-cd-name`} style={{ color: tokens.muted, fontFamily: champ ? face : sans }}>Họ và tên</label>
+                <label htmlFor={`${block.id}-cd-name`} style={{ color: tokens.muted, fontFamily: champ ? face : sans }}>Họ và tên *</label>
                 <input
                   id={`${block.id}-cd-name`}
                   name="name"
                   type="text"
                   autoComplete="name"
                   required
-                  placeholder="Nguyễn Minh Anh"
+                  placeholder="Tên của bạn"
+                  readOnly={Boolean(canvas)}
+                  style={inputStyle}
+                />
+                <label htmlFor={`${block.id}-cd-phone`} style={{ color: tokens.muted, fontFamily: champ ? face : sans }}>Số điện thoại / Zalo *</label>
+                <input
+                  id={`${block.id}-cd-phone`}
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  required
+                  placeholder="Số điện thoại liên hệ"
                   readOnly={Boolean(canvas)}
                   style={inputStyle}
                 />
@@ -303,10 +402,18 @@ export function LandingPageCountdownLaunch({
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
-                  placeholder="ban@example.com"
+                  placeholder="Email của bạn"
                   readOnly={Boolean(canvas)}
                   style={inputStyle}
+                />
+                <label htmlFor={`${block.id}-cd-need`} style={{ color: tokens.muted, fontFamily: champ ? face : sans }}>Nhu cầu của bạn (không bắt buộc)</label>
+                <textarea
+                  id={`${block.id}-cd-need`}
+                  name="need"
+                  rows={4}
+                  placeholder="Chia sẻ điều bạn đang tìm về chiến lược thương hiệu"
+                  readOnly={Boolean(canvas)}
+                  style={needStyle}
                 />
                 <button type="submit" disabled={pending || Boolean(canvas)} style={buttonStyle}>
                   {pending ? 'Đang gửi…' : submitLabel}

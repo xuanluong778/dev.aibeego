@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Download, LayoutGrid, ListTodo, CalendarDays, BarChart3 } from 'lucide-react';
+import { Download } from 'lucide-react';
+import { WorkManagementSubNav } from '@/components/work-management/work-management-subnav';
 import { PageHeader } from '@/components/shared/page-header';
 import { LoadingState, ErrorState, EmptyState } from '@/components/shared/page-state';
 import { Button } from '@/components/ui/button';
@@ -32,33 +32,6 @@ type BucketTask = {
   risk?: string;
   project?: { id: string; name: string };
 };
-
-function SubNav() {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <Button variant="outline" size="sm" asChild>
-        <Link href="/work-management">
-          <LayoutGrid className="h-3.5 w-3.5 mr-1" /> Kanban
-        </Link>
-      </Button>
-      <Button variant="default" size="sm" asChild>
-        <Link href="/work-management/my">
-          <ListTodo className="h-3.5 w-3.5 mr-1" /> Việc của tôi
-        </Link>
-      </Button>
-      <Button variant="outline" size="sm" asChild>
-        <Link href="/work-management/dashboard">
-          <BarChart3 className="h-3.5 w-3.5 mr-1" /> Dashboard
-        </Link>
-      </Button>
-      <Button variant="outline" size="sm" asChild>
-        <Link href="/work-management/calendar">
-          <CalendarDays className="h-3.5 w-3.5 mr-1" /> Lịch
-        </Link>
-      </Button>
-    </div>
-  );
-}
 
 function TaskList({ items }: { items: BucketTask[] }) {
   const t = useT();
@@ -136,7 +109,7 @@ export default function MyWorkPage() {
           title={t('work.myWork')}
           description="Quản lý công việc được giao của bạn"
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <LoadingState message={t('work.loadingMyWork')} />
       </div>
     );
@@ -152,7 +125,7 @@ export default function MyWorkPage() {
           title={t('work.myWork')}
           description="Quản lý công việc được giao của bạn"
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <ErrorState message={msg} onRetry={() => meQ.refetch()} />
       </div>
     );
@@ -168,7 +141,7 @@ export default function MyWorkPage() {
           title={t('work.myWork')}
           description="Quản lý công việc được giao của bạn"
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <ErrorState message={msg} onRetry={() => q.refetch()} />
       </div>
     );
@@ -180,7 +153,7 @@ export default function MyWorkPage() {
           title={t('work.myWork')}
           description="Quản lý công việc được giao của bạn"
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <EmptyState title={t('work.noData')} />
       </div>
     );
@@ -202,7 +175,7 @@ export default function MyWorkPage() {
         title={t('work.myWork')}
         description={t('work.myWorkDesc', { timezone: q.data.timezone, today: q.data.today })}
       />
-      <SubNav />
+      <WorkManagementSubNav showHelp={false} />
       {q.data.warning ? (
         <p className="text-sm rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2">
           {q.data.warning}
@@ -288,7 +261,7 @@ export function WorkDashboardPageInner() {
           title={t('work.dashboard')}
           description={t('work.dashboardDesc')}
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <LoadingState />
       </div>
     );
@@ -300,7 +273,7 @@ export function WorkDashboardPageInner() {
           title={t('work.dashboard')}
           description={t('work.dashboardDesc')}
         />
-        <SubNav />
+        <WorkManagementSubNav showHelp={false} />
         <ErrorState onRetry={q.refetch} />
       </div>
     );
@@ -313,7 +286,7 @@ export function WorkDashboardPageInner() {
         title={t('work.dashboard')}
         description={t('work.dashboardDesc')}
       />
-      <SubNav />
+      <WorkManagementSubNav showHelp={false} />
       <div className="flex flex-wrap items-end gap-3">
         <div className="space-y-1">
           <Label>{t('work.groupBy')}</Label>
@@ -447,7 +420,7 @@ export function WorkCalendarPageInner() {
   return (
     <div className="space-y-4">
       <PageHeader title={t('work.calendar')} description={t('work.calendarDesc')} />
-      <SubNav />
+      <WorkManagementSubNav showHelp={false} />
       <div className="flex gap-2">
         <Button
           size="sm"

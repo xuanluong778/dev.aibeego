@@ -49,6 +49,7 @@ import {
   resolveSectionDropMode,
 } from './landing-page-sidebar-dnd';
 import { SectionBackgroundToolbar } from './landing-page-section-background-toolbar';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { SectionSettingsStack } from './landing-page-section-bg-layer';
 import { sectionSettingsActive } from './landing-page-section-settings';
 import { readElementCustomCssStyle, safeCustomClassName } from './landing-page-block-design-style';
@@ -389,6 +390,19 @@ export function readInlineTextStyles(
   return raw as Record<string, LandingPageInlineTextStyle>;
 }
 
+export function readElementHidden(
+  meta: Record<string, unknown> | null | undefined,
+): Record<string, boolean> {
+  const raw =
+    meta && typeof meta === 'object' ? (meta as { elementHidden?: unknown }).elementHidden : null;
+  if (!raw || typeof raw !== 'object') return {};
+  const out: Record<string, boolean> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof k === 'string' && v === true) out[k] = true;
+  }
+  return out;
+}
+
 export function readElementFreeLayouts(
   meta: Record<string, unknown> | null | undefined,
 ): Record<string, LandingPageFreeLayout> {
@@ -405,6 +419,7 @@ export type LpPublicRenderMeta = {
   rendererVersion?: string;
   inlineTextStyles: Record<string, LandingPageInlineTextStyle>;
   elementFreeLayouts: Record<string, LandingPageFreeLayout>;
+  elementHidden: Record<string, boolean>;
 };
 
 const LpPublicRenderMetaContext = createContext<LpPublicRenderMeta | null>(null);
@@ -421,6 +436,7 @@ export function LandingPagePublicMetaProvider({
       rendererVersion: typeof meta?.rendererVersion === 'string' ? meta.rendererVersion : undefined,
       inlineTextStyles: readInlineTextStyles(meta),
       elementFreeLayouts: readElementFreeLayouts(meta),
+      elementHidden: readElementHidden(meta),
     }),
     [meta],
   );
@@ -2978,7 +2994,7 @@ function placeCaretAtPoint(el: HTMLElement, clientX: number, clientY: number): b
   }
 }
 
-function mergeTextStyle(
+export function mergeTextStyle(
   base: CSSProperties | undefined,
   textStyle: LandingPageInlineTextStyle | undefined,
   opts?: { widthOnWrapOnly?: boolean },
@@ -3902,17 +3918,12 @@ function TextEditToolbar({
         </div>
         <div className="space-y-3 p-3">
           <div className="flex items-center gap-2">
-            <input
-              type="color"
-              className="h-10 w-14 cursor-pointer rounded border border-zinc-200 bg-transparent p-0"
-              value={color}
-              onChange={(e) => applyColor(e.target.value)}
-              data-lp-text-color-native
-            />
-            <div
-              className="h-10 flex-1 rounded-md border border-zinc-200"
-              style={{ background: color }}
-              data-lp-text-color-preview
+            <LandingPageColorPickerPopover
+              allowGradient={false}
+              color={color}
+              onColorChange={(c) => applyColor(c)}
+              side="bottom"
+              align="start"
             />
           </div>
           <div className="flex items-center gap-2">

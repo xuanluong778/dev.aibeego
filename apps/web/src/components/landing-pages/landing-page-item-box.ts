@@ -66,7 +66,7 @@ export function itemBoxDomProps(
 } {
   const box = normalizeItemBoxChrome(readItemBox(block, itemId));
   if (!itemBoxHasUserChrome(box)) return { style: {} };
-  if (box?.backgroundOn === false) {
+  if (box?.backgroundOn === false && box.gradientOn !== true) {
     return {
       style: {},
       'data-lp-item-box-custom': '1',

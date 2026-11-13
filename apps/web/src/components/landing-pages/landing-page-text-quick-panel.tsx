@@ -15,6 +15,8 @@ import {
   type LandingPageTextBoxChrome,
   type LandingPageTextBoxVisibility,
 } from '@marketingspa/shared';
+import { GradientFillEditor, GradientModeSwitch, seedGradientStops } from './landing-page-gradient-fill-fields';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import type { LandingPageInlineTextStyle } from './landing-page-canvas-ux';
 import {
   readCanvasInlineWrapBackgroundHex,
@@ -148,6 +150,9 @@ function ColorRow({
   onChange,
   onClear,
   testId,
+  gradient,
+  onGradientMode,
+  onGradientChange,
 }: {
   label: string;
   value: string;
@@ -155,65 +160,42 @@ function ColorRow({
   /** X — bỏ màu nền, trả về nền mặc định của theme. */
   onClear?: () => void;
   testId: string;
+  gradient?: { on: boolean; angle: number; from: string; to: string };
+  onGradientMode?: (on: boolean) => void;
+  onGradientChange?: (patch: { angle?: number; from?: string; to?: string }) => void;
 }) {
-  const parsed = parseHexAlpha(value || '#00000000');
-  const hasFill = parsed.alpha > 0 && Boolean(value) && value !== '#00000000';
+  const allowGradient = Boolean(onGradientMode);
   return (
     <div className="space-y-1.5" data-lp-text-box-color={testId}>
-      <div className="text-xs text-slate-500">{label}</div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-medium text-slate-600">{label}</div>
         {onClear ? (
           <button
             type="button"
             title="Không màu nền"
             aria-label="Không màu nền"
             data-lp-text-box-color-clear="1"
-            className={
-              'relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border ' +
-              (hasFill ? 'border-slate-300 bg-white text-slate-400 hover:bg-slate-50' : 'border-sky-500 bg-sky-50 text-sky-600 ring-1 ring-sky-200')
-            }
+            className="text-[11px] text-slate-400 hover:text-sky-600 transition-colors"
             onClick={onClear}
           >
-            <X className="h-3.5 w-3.5" aria-hidden />
+            Không màu
           </button>
         ) : null}
-        <label
-          className="relative h-7 w-7 shrink-0 overflow-hidden rounded-full border border-slate-300"
-          style={{
-            background: hasFill ? parsed.hex : 'linear-gradient(135deg,#fff 46%,#cbd5e1 46%,#cbd5e1 54%,#fff 54%)',
-          }}
-        >
-          <input
-            type="color"
-            aria-label={`${label} chọn`}
-            className="absolute inset-0 cursor-pointer opacity-0"
-            value={parsed.hex}
-            onChange={(e) => onChange(hexWithAlpha(e.target.value, parsed.alpha > 0 ? parsed.alpha : 1))}
-          />
-        </label>
-        <input
-          className="min-w-0 flex-1 rounded-md border border-slate-200 bg-white px-2 py-1 font-mono text-xs uppercase text-slate-800"
-          value={parsed.hex8}
-          spellCheck={false}
-          aria-label={`${label} mã`}
-          onChange={(e) => {
-            const next = e.target.value.trim();
-            if (/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(next)) onChange(parseHexAlpha(next).hex8);
-          }}
-        />
       </div>
-      <SliderNumber
-        label="Độ phủ"
-        value={Math.round(parsed.alpha * 100)}
-        min={0}
-        max={100}
-        onChange={(n) => {
-          if (n <= 0 && onClear) {
-            onClear();
-            return;
-          }
-          onChange(hexWithAlpha(parsed.hex, n / 100));
-        }}
+      <LandingPageColorPickerPopover
+        mode={gradient?.on ? 'gradient' : 'solid'}
+        allowGradient={allowGradient}
+        onModeChange={(nextMode) => onGradientMode?.(nextMode === 'gradient')}
+        color={value}
+        onColorChange={onChange}
+        gradientFrom={gradient?.from}
+        gradientTo={gradient?.to}
+        gradientAngle={gradient?.angle}
+        onGradientChange={onGradientChange}
+        onClear={onClear}
+        side="left"
+        align="start"
+        testId={`lp-color-picker-${testId}`}
       />
     </div>
   );
@@ -303,6 +285,28 @@ export function LandingPageTextQuickPanel({
     const next = { ...box };
     delete next.background;
     next.backgroundOn = false;
+    next.gradientOn = false;
+    onPatchBox(next);
+  }
+
+  function setBoxGradientMode(on: boolean) {
+    if (!on) {
+      patch({ gradientOn: false });
+      return;
+    }
+    const seeded = seedGradientStops(box.background || (sampledBgHex ? hexWithAlpha(sampledBgHex, 1) : null), {
+      from: box.gradientFrom,
+      to: box.gradientTo,
+      angle: box.gradientAngle,
+    });
+    const next: LandingPageTextBoxChrome = {
+      ...box,
+      gradientOn: true,
+      gradientFrom: seeded.from,
+      gradientTo: seeded.to,
+      gradientAngle: seeded.angle,
+    };
+    if (next.backgroundOn === false) delete next.backgroundOn;
     onPatchBox(next);
   }
 
@@ -434,6 +438,21 @@ export function LandingPageTextQuickPanel({
               value={backgroundDisplayHex}
               onChange={commitBoxBackground}
               onClear={clearBoxBackground}
+              gradient={{
+                on: box.gradientOn === true,
+                angle: box.gradientAngle ?? 135,
+                from: box.gradientFrom || '#0F3D34FF',
+                to: box.gradientTo || '#7DFFC3FF',
+              }}
+              onGradientMode={setBoxGradientMode}
+              onGradientChange={(partial) =>
+                patch({
+                  gradientOn: true,
+                  ...(partial.angle !== undefined ? { gradientAngle: partial.angle } : {}),
+                  ...(partial.from ? { gradientFrom: partial.from } : {}),
+                  ...(partial.to ? { gradientTo: partial.to } : {}),
+                })
+              }
             />
 
             <Toggle

@@ -7,6 +7,8 @@ import {
   CheckCircle2,
   CheckSquare,
   ChevronDown,
+  Heading1,
+  Heading2,
   Circle,
   Download,
   ExternalLink,
@@ -37,6 +39,7 @@ import {
   useUpdateWorkTask,
   useWorkComments,
   useCreateWorkComment,
+  useUpdateWorkComment,
   useDeleteWorkComment,
   useTaskFiles,
   useUploadTaskFile,
@@ -61,6 +64,7 @@ import { apiDownload } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
 import {
   appendAttachmentToDescription,
+  appendImageToDescription,
   commentBodyForAttachment,
   confirmDiscardUnsavedDescription,
   fileExtensionBadge,
@@ -74,7 +78,9 @@ import {
   WorkTaskActionPopovers,
   type CardPopoverKey,
 } from '@/components/work-management/work-task-card-popovers';
+import { WorkEmployeePicker } from '@/components/work-management/work-employee-picker';
 import { useT } from '@/i18n/i18n-provider';
+import { ApiError } from '@/lib/api-client';
 
 const EMOJIS = ['✅', '👍', '👀', '🔥', '❗', '🎉', '📎', '🙏'];
 
@@ -92,6 +98,89 @@ function initials(name: string) {
   if (!parts.length) return '?';
   if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
   return `${parts[0]![0] ?? ''}${parts[parts.length - 1]![0] ?? ''}`.toUpperCase();
+}
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function cleanMentionIds(ids: string[]) {
+  return ids.filter((id) => UUID_RE.test(id));
+}
+
+function DescriptionReadView({ text }: { text: string }) {
+  if (!text.trim()) {
+    return <p className="text-sm text-muted-foreground">Chưa có mô tả.</p>;
+  }
+  const lines = text.split(/\r?\n/);
+  return (
+    <div className="space-y-1 text-sm leading-relaxed text-slate-800 dark:text-slate-100">
+      {lines.map((line, i) => {
+        const trimmed = line.trimEnd();
+        if (!trimmed) return <div key={i} className="h-2" />;
+        const h1 = trimmed.match(/^#\s+(.+)/);
+        const h2 = trimmed.match(/^##\s+(.+)/);
+        const h3 = trimmed.match(/^###\s+(.+)/);
+        if (h1) {
+          return (
+            <p key={i} className="text-lg font-bold text-slate-900 dark:text-slate-50">
+              {h1[1]}
+            </p>
+          );
+        }
+        if (h2) {
+          return (
+            <p key={i} className="text-base font-semibold text-slate-900 dark:text-slate-50">
+              {h2[1]}
+            </p>
+          );
+        }
+        if (h3) {
+          return (
+            <p key={i} className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+              {h3[1]}
+            </p>
+          );
+        }
+        const img = trimmed.match(/^!\[([^\]]*)\]\((attachment:[^)]+|https?:\/\/[^)]+)\)/);
+        if (img) {
+          return (
+            <p key={i} className="text-sky-700 dark:text-sky-400">
+              🖼 {img[1] || 'Hình ảnh'}
+            </p>
+          );
+        }
+        const link = trimmed.match(/^\[([^\]]+)\]\((attachment:[^)]+|https?:\/\/[^)]+)\)/);
+        if (link) {
+          const href = link[2]!.startsWith('attachment:')
+            ? undefined
+            : link[2];
+          if (href) {
+            return (
+              <a
+                key={i}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-sky-700 underline dark:text-sky-400"
+              >
+                {link[1]}
+              </a>
+            );
+          }
+          return (
+            <p key={i} className="break-all text-sky-700 dark:text-sky-400">
+              📎 {link[1]}
+            </p>
+          );
+        }
+        return (
+          <p key={i} className="whitespace-pre-wrap break-words">
+            {trimmed}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 type PanelKey = null | 'files' | 'review';
@@ -122,7 +211,8 @@ export function WorkTaskDetailDialog({
   const filesQ = useTaskFiles(open ? taskId : null);
   const historyQ = useTaskStatusHistory(open ? taskId : null);
   const reviewsQ = useTaskReviewEvents(open ? taskId : null);
-  const createComment = useCreateWorkComment(taskId || '');
+  const createComment = useCreateWorkComment();
+  const updateComment = useUpdateWorkComment();
   const deleteComment = useDeleteWorkComment();
   const uploadFile = useUploadTaskFile(taskId || '');
   const deleteFile = useDeleteWorkFile();
@@ -140,7 +230,10 @@ export function WorkTaskDetailDialog({
   const [checklist, setChecklist] = useState<WorkChecklistDraftItem[]>([]);
   const [checklistTitle, setChecklistTitle] = useState('Việc cần làm');
   const [showChecklist, setShowChecklist] = useState(false);
+  const [hideCompletedChecklist, setHideCompletedChecklist] = useState(false);
   const [newCheckItem, setNewCheckItem] = useState('');
+  const [descEditing, setDescEditing] = useState(false);
+  const [commentError, setCommentError] = useState<string | null>(null);
   const [formSeededFor, setFormSeededFor] = useState<string | null>(null);
   const [panel, setPanel] = useState<PanelKey>(null);
   const [cardPopover, setCardPopover] = useState<CardPopoverKey>(null);
@@ -151,9 +244,12 @@ export function WorkTaskDetailDialog({
   const [body, setBody] = useState('');
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [mentionIds, setMentionIds] = useState<string[]>([]);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editCommentBody, setEditCommentBody] = useState('');
   const [reviewNote, setReviewNote] = useState('');
   const [preview, setPreview] = useState<{ url: string; mime: string; name: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const descImageInputRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const commentsSectionRef = useRef<HTMLDivElement>(null);
@@ -168,6 +264,9 @@ export function WorkTaskDetailDialog({
     setAssigneeIds(t.assignees?.map((a) => a.id) ?? []);
     setChecklist(toChecklistDraft(t.checklist));
     setShowChecklist((t.checklist?.length ?? 0) > 0);
+    setHideCompletedChecklist(false);
+    setDescEditing(!(t.description || '').trim());
+    setCommentError(null);
     setFormSeededFor(t.id);
     setPanel(null);
     setCardPopover(null);
@@ -185,12 +284,17 @@ export function WorkTaskDetailDialog({
       setBody('');
       setReplyTo(null);
       setMentionIds([]);
+      setEditingCommentId(null);
+      setEditCommentBody('');
       setReviewNote('');
       setPanel(null);
       setCardPopover(null);
       setShowActivityDetail(false);
       setCustomFieldsMsg(false);
       setShowChecklist(false);
+      setHideCompletedChecklist(false);
+      setDescEditing(false);
+      setCommentError(null);
       setChecklistTitle('Việc cần làm');
     }
   }, [open]);
@@ -229,6 +333,15 @@ export function WorkTaskDetailDialog({
   );
 
   const doneCount = checklist.filter((c) => c.isDone).length;
+  const checklistPercent =
+    checklist.length > 0 ? Math.round((doneCount / checklist.length) * 100) : 0;
+  const visibleChecklist = useMemo(() => {
+    if (!hideCompletedChecklist) return checklist;
+    const pending = checklist.filter((c) => !c.isDone);
+    // Không ẩn trống toàn bộ danh sách khi tick hết mục — luôn hiện hạng mục
+    if (pending.length === 0) return checklist;
+    return pending;
+  }, [checklist, hideCompletedChecklist]);
 
   function toChecklistPayload(items: WorkChecklistDraftItem[]) {
     return items.map((c, i) => ({
@@ -250,6 +363,7 @@ export function WorkTaskDetailDialog({
           if (opts?.syncDesc) {
             setSavedDescription(updated.description || '');
             setDescription(updated.description || '');
+            setDescEditing(false);
           }
           if (partial.title !== undefined) setTitle(updated.title);
           opts?.onDone?.(updated);
@@ -290,6 +404,9 @@ export function WorkTaskDetailDialog({
   function persistChecklist(next: WorkChecklistDraftItem[]) {
     setChecklist(next);
     setShowChecklist(true);
+    if (next.length > 0 && next.every((c) => c.isDone)) {
+      setHideCompletedChecklist(false);
+    }
     patchTask({ checklist: toChecklistPayload(next) });
   }
 
@@ -310,6 +427,22 @@ export function WorkTaskDetailDialog({
 
   function cancelDescription() {
     setDescription(savedDescription);
+    setDescEditing(false);
+  }
+
+  function saveDescriptionOnly() {
+    if (!taskId) return;
+    patchTask(
+      { description: description.trim() || null },
+      { syncDesc: true },
+    );
+  }
+
+  function deleteChecklist() {
+    if (checklist.length > 0 && !window.confirm('Xóa toàn bộ danh sách việc cần làm?')) return;
+    setChecklist([]);
+    setShowChecklist(false);
+    persistChecklist([]);
   }
 
   function wrapDesc(prefix: string, suffix = prefix) {
@@ -330,14 +463,30 @@ export function WorkTaskDetailDialog({
   }
 
   function postComment() {
-    if (!body.trim() || !taskId) return;
+    const text = body.trim();
+    if (!text || !taskId) return;
+    setCommentError(null);
+    const mentions = cleanMentionIds(mentionIds);
     createComment.mutate(
-      { body: body.trim(), parentId: replyTo || undefined, mentionIds },
+      {
+        taskId,
+        body: text,
+        parentId: replyTo || undefined,
+        mentionIds: mentions.length ? mentions : undefined,
+      },
       {
         onSuccess: () => {
           setBody('');
           setReplyTo(null);
           setMentionIds([]);
+          setCommentError(null);
+        },
+        onError: (err) => {
+          const msg =
+            err instanceof ApiError
+              ? err.message
+              : 'Không gửi được bình luận. Vui lòng thử lại.';
+          setCommentError(msg);
         },
       },
     );
@@ -387,9 +536,10 @@ export function WorkTaskDetailDialog({
   }
 
   function commentAboutFile(f: WorkAttachment) {
+    if (!taskId) return;
     const text = commentBodyForAttachment(f.originalName, f.id);
     createComment.mutate(
-      { body: text },
+      { taskId, body: text },
       {
         onSuccess: () => {
           setBody('');
@@ -399,6 +549,19 @@ export function WorkTaskDetailDialog({
         },
       },
     );
+  }
+
+  function handleDescImageUpload(file: File) {
+    if (!taskId) return;
+    uploadFile.mutate(file, {
+      onSuccess: (att) => {
+        setDescEditing(true);
+        setDescription((prev) => {
+          const next = appendImageToDescription(prev, att.originalName, att.id);
+          return next;
+        });
+      },
+    });
   }
 
   function removeAttachment(f: WorkAttachment) {
@@ -671,26 +834,56 @@ export function WorkTaskDetailDialog({
 
               {/* Checklist body */}
               {(showChecklist || checklist.length > 0) && (
-                <div className="ml-9 space-y-2">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-100">
-                    <CheckSquare className="h-4 w-4 text-slate-500" />
-                    {checklistTitle || 'Việc cần làm'}
+                <div className="ml-9 rounded-xl border bg-muted/20 p-4 space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CheckSquare className="h-4 w-4 shrink-0 text-slate-500" />
+                    <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                      {checklistTitle || 'Việc cần làm'}
+                    </span>
                     <span className="text-xs font-normal text-muted-foreground">
                       {doneCount}/{checklist.length || 0}
                     </span>
+                    <div className="ml-auto flex flex-wrap items-center gap-2">
+                      {checklist.some((c) => c.isDone) && (
+                        <button
+                          type="button"
+                          className="text-xs font-medium text-slate-600 hover:text-sky-700 hover:underline dark:text-slate-300"
+                          onClick={() => setHideCompletedChecklist((v) => !v)}
+                        >
+                          {hideCompletedChecklist
+                            ? 'Hiện mục đã hoàn thành'
+                            : 'Ẩn các mục đã chọn'}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="text-xs font-medium text-slate-600 hover:text-red-600 hover:underline dark:text-slate-300"
+                        onClick={deleteChecklist}
+                      >
+                        Xóa
+                      </button>
+                    </div>
                   </div>
                   {checklist.length > 0 && (
-                    <div className="h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div className="relative h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700">
                       <div
-                        className="h-full rounded-full bg-sky-500 transition-all"
-                        style={{
-                          width: `${checklist.length ? Math.round((doneCount / checklist.length) * 100) : 0}%`,
-                        }}
+                        className="absolute inset-y-0 left-0 rounded-full bg-sky-600 transition-all"
+                        style={{ width: `${checklistPercent}%` }}
                       />
+                      <span
+                        className={cn(
+                          'absolute inset-0 flex items-center justify-center text-[10px] font-semibold',
+                          checklistPercent > 45 ? 'text-white' : 'text-slate-700 dark:text-slate-200',
+                        )}
+                      >
+                        {checklistPercent}%
+                      </span>
                     </div>
                   )}
                   <ul className="space-y-1.5">
-                    {checklist.map((item, index) => (
+                    {visibleChecklist.map((item) => {
+                      const index = checklist.indexOf(item);
+                      return (
                       <li
                         key={`${item.id || item.title}-${index}`}
                         className="flex items-center gap-2"
@@ -722,7 +915,8 @@ export function WorkTaskDetailDialog({
                           onBlur={() => persistChecklist(checklist)}
                         />
                       </li>
-                    ))}
+                    );
+                    })}
                   </ul>
                   <div className="flex gap-2">
                     <Input
@@ -770,75 +964,112 @@ export function WorkTaskDetailDialog({
                 </div>
               )}
 
-              {/* Description — rich-ish toolbar */}
-              <div className="ml-9 space-y-2">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-100">
-                  <AlignLeft className="h-4 w-4 text-slate-500" />
-                  Mô tả
-                </div>
-                <div className="overflow-hidden rounded-lg border border-slate-200 bg-white text-black dark:border-slate-700 dark:bg-slate-950">
-                  <div className="flex flex-wrap items-center gap-0.5 border-b border-slate-100 bg-slate-50/80 px-1.5 py-1 text-black dark:border-slate-800 dark:bg-slate-900/80">
-                    <ToolbarBtn title="In đậm" onClick={() => wrapDesc('**')}>
-                      <Bold className="h-3.5 w-3.5" />
-                    </ToolbarBtn>
-                    <ToolbarBtn title="Nghiêng" onClick={() => wrapDesc('_')}>
-                      <Italic className="h-3.5 w-3.5" />
-                    </ToolbarBtn>
-                    <ToolbarBtn
-                      title="Danh sách"
-                      onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}- `)}
-                    >
-                      <List className="h-3.5 w-3.5" />
-                    </ToolbarBtn>
-                    <ToolbarBtn
-                      title="Danh sách số"
-                      onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}1. `)}
-                    >
-                      <ListOrdered className="h-3.5 w-3.5" />
-                    </ToolbarBtn>
-                    <ToolbarBtn title="Liên kết" onClick={() => wrapDesc('[', '](https://)')}>
-                      <Link2 className="h-3.5 w-3.5" />
-                    </ToolbarBtn>
-                    <div className="ml-auto flex items-center gap-0.5">
-                      <ToolbarBtn
-                        title="Đính kèm"
-                        onClick={() => {
-                          setPanel('files');
-                          fileInputRef.current?.click();
-                        }}
-                      >
-                        <Paperclip className="h-3.5 w-3.5" />
-                      </ToolbarBtn>
-                    </div>
+              {/* Description — collapse when saved; edit on demand */}
+              <div className="ml-9 rounded-xl border bg-muted/20 p-4 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-slate-100">
+                    <AlignLeft className="h-4 w-4 text-slate-500" />
+                    Mô tả
                   </div>
-                  <Textarea
-                    ref={descRef}
-                    rows={8}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Mẹo: Enter để xuống dòng. Mô tả công việc tại đây…"
-                    className="min-h-[160px] resize-y rounded-none border-0 bg-transparent px-3 py-2.5 text-sm text-black placeholder:text-slate-400 shadow-none focus-visible:ring-0 dark:text-black"
-                  />
+                  {!descEditing && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-xs"
+                      onClick={() => setDescEditing(true)}
+                    >
+                      Sửa
+                    </Button>
+                  )}
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="bg-sky-600 hover:bg-sky-700"
-                    onClick={() => saveAll()}
-                    disabled={updateTask.isPending || (!dirty && !metaDirty)}
-                  >
-                    {updateTask.isPending ? 'Đang lưu…' : 'Lưu'}
-                  </Button>
-                  <button
-                    type="button"
-                    className="text-sm text-slate-500 hover:underline"
-                    onClick={cancelDescription}
-                  >
-                    Hủy
-                  </button>
-                  {dirty && <span className="text-xs text-amber-600">Chưa lưu mô tả</span>}
-                </div>
+                {descEditing ? (
+                  <>
+                    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white text-black dark:border-slate-700 dark:bg-slate-950">
+                      <div className="flex flex-wrap items-center gap-0.5 border-b border-slate-100 bg-slate-50/80 px-1.5 py-1 text-black dark:border-slate-800 dark:bg-slate-900/80">
+                        <ToolbarBtn
+                          title="Tiêu đề lớn"
+                          onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}# `)}
+                        >
+                          <Heading1 className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn
+                          title="Tiêu đề"
+                          onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}## `)}
+                        >
+                          <Heading2 className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn title="In đậm" onClick={() => wrapDesc('**')}>
+                          <Bold className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn title="Nghiêng" onClick={() => wrapDesc('_')}>
+                          <Italic className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn
+                          title="Danh sách"
+                          onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}- `)}
+                        >
+                          <List className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn
+                          title="Danh sách số"
+                          onClick={() => setDescription((d) => `${d}${d ? '\n' : ''}1. `)}
+                        >
+                          <ListOrdered className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <ToolbarBtn title="Liên kết" onClick={() => wrapDesc('[', '](https://)')}>
+                          <Link2 className="h-3.5 w-3.5" />
+                        </ToolbarBtn>
+                        <div className="ml-auto flex items-center gap-0.5">
+                          <ToolbarBtn
+                            title="Tải hình ảnh"
+                            onClick={() => descImageInputRef.current?.click()}
+                          >
+                            <ImageIcon className="h-3.5 w-3.5" />
+                          </ToolbarBtn>
+                          <ToolbarBtn
+                            title="Đính kèm"
+                            onClick={() => {
+                              setPanel('files');
+                              fileInputRef.current?.click();
+                            }}
+                          >
+                            <Paperclip className="h-3.5 w-3.5" />
+                          </ToolbarBtn>
+                        </div>
+                      </div>
+                      <Textarea
+                        ref={descRef}
+                        rows={8}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Mẹo: Enter để xuống dòng. Dùng ## cho tiêu đề, nút ảnh để chèn hình…"
+                        className="min-h-[160px] resize-y rounded-none border-0 bg-transparent px-3 py-2.5 text-sm text-black placeholder:text-slate-400 shadow-none focus-visible:ring-0 dark:text-black"
+                      />
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="bg-sky-600 hover:bg-sky-700"
+                        onClick={saveDescriptionOnly}
+                        disabled={updateTask.isPending || !dirty}
+                      >
+                        {updateTask.isPending ? 'Đang lưu…' : 'Lưu'}
+                      </Button>
+                      <button
+                        type="button"
+                        className="text-sm text-slate-500 hover:underline"
+                        onClick={cancelDescription}
+                      >
+                        Hủy
+                      </button>
+                      {dirty && <span className="text-xs text-amber-600">Chưa lưu mô tả</span>}
+                    </div>
+                  </>
+                ) : (
+                  <DescriptionReadView text={savedDescription} />
+                )}
               </div>
 
               {/* Always mounted so paperclip / "Thêm file" can open the native picker */}
@@ -850,6 +1081,17 @@ export function WorkTaskDetailDialog({
                 onChange={(e) => {
                   const f = e.target.files?.[0];
                   if (f) handleUploadFile(f);
+                  e.target.value = '';
+                }}
+              />
+              <input
+                ref={descImageInputRef}
+                type="file"
+                className="hidden"
+                accept=".jpg,.jpeg,.png,.gif,.webp"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleDescImageUpload(f);
                   e.target.value = '';
                 }}
               />
@@ -1049,6 +1291,12 @@ export function WorkTaskDetailDialog({
                       rows={2}
                       value={body}
                       onChange={(e) => setBody(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                          e.preventDefault();
+                          postComment();
+                        }
+                      }}
                       placeholder="Viết bình luận..."
                       className={cn('min-h-[64px] resize-none text-sm shadow-sm', lightTextarea)}
                     />
@@ -1064,31 +1312,31 @@ export function WorkTaskDetailDialog({
                         </button>
                       ))}
                       <Smile className="ml-0.5 h-3.5 w-3.5 text-slate-400" />
-                      <select
-                        multiple
-                        className="ml-auto max-h-16 max-w-[140px] rounded border bg-white px-1 text-[10px] dark:bg-slate-950"
-                        value={mentionIds}
-                        onChange={(e) =>
-                          setMentionIds(Array.from(e.target.selectedOptions).map((o) => o.value))
-                        }
-                        title="@mention"
-                      >
-                        {employees.slice(0, 50).map((emp) => (
-                          <option key={emp.id} value={emp.id}>
-                            {emp.name}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="ml-auto min-w-[140px] max-w-[200px] flex-1">
+                        <WorkEmployeePicker
+                          label="Nhắc tên"
+                          value={mentionIds}
+                          onChange={setMentionIds}
+                          multiple
+                        />
+                      </div>
                       <Button
+                        type="button"
                         size="sm"
                         className="h-7 bg-sky-600 hover:bg-sky-700"
-                        disabled={!body.trim() || createComment.isPending}
+                        disabled={!body.trim() || !taskId || createComment.isPending}
                         onClick={postComment}
                       >
                         <Send className="mr-1 h-3 w-3" />
                         Gửi
                       </Button>
                     </div>
+                    {commentError && (
+                      <p className="text-xs text-red-600 dark:text-red-400">{commentError}</p>
+                    )}
+                    {createComment.isError && !commentError && (
+                      <p className="text-xs text-red-600">Không gửi được bình luận.</p>
+                    )}
                     {replyTo && (
                       <p className="text-[11px] text-muted-foreground">
                         Đang trả lời…{' '}
@@ -1119,16 +1367,67 @@ export function WorkTaskDetailDialog({
                           {formatDateTime(c.createdAt)}
                         </span>
                       </p>
-                      <p className="mt-0.5 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
-                        {c.body}
-                      </p>
+                      {editingCommentId === c.id ? (
+                        <div className="mt-1 space-y-2">
+                          <Textarea
+                            value={editCommentBody}
+                            onChange={(e) => setEditCommentBody(e.target.value)}
+                            className="min-h-[60px] text-sm"
+                          />
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              className="h-7"
+                              disabled={!editCommentBody.trim() || updateComment.isPending}
+                              onClick={() =>
+                                updateComment.mutate(
+                                  { id: c.id, body: editCommentBody.trim() },
+                                  {
+                                    onSuccess: () => {
+                                      setEditingCommentId(null);
+                                      setEditCommentBody('');
+                                    },
+                                  },
+                                )
+                              }
+                            >
+                              Lưu
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7"
+                              onClick={() => {
+                                setEditingCommentId(null);
+                                setEditCommentBody('');
+                              }}
+                            >
+                              Hủy
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="mt-0.5 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
+                          {c.body}
+                        </p>
+                      )}
                       <div className="mt-0.5 flex gap-2 text-[11px]">
                         <button
                           type="button"
                           className="text-sky-700 hover:underline"
                           onClick={() => setReplyTo(c.id)}
                         >
-                          Reply
+                          Trả lời
+                        </button>
+                        <button
+                          type="button"
+                          className="text-sky-700 hover:underline"
+                          onClick={() => {
+                            setEditingCommentId(c.id);
+                            setEditCommentBody(c.body);
+                          }}
+                        >
+                          Sửa
                         </button>
                         <button
                           type="button"

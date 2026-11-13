@@ -12,6 +12,7 @@ import {
   loadRecentBgColors,
   pushRecentBgColor,
 } from './landing-page-section-surface';
+import { LandingPageColorPickerPopover } from './landing-page-color-picker-popover';
 import { cn } from '@/lib/utils';
 
 export type SectionBackgroundToolbarAction =
@@ -176,60 +177,27 @@ export function SectionBackgroundToolbar({
         Xóa ảnh
       </button>
 
-      <div className="relative">
-        <button type="button" className={btn} onClick={() => setColorOpen((v) => !v)}>
+      <LandingPageColorPickerPopover
+        allowGradient
+        color="#ffffff"
+        onColorChange={(color) => {
+          pushRecentBgColor(color);
+          setRecent(loadRecentBgColors());
+          onAction({ type: 'set-color', color });
+        }}
+        onGradientChange={(g) => {
+          if (g.from && g.to) {
+            const angle = g.angle ?? 135;
+            onAction({ type: 'set-color', color: `linear-gradient(${angle}deg, ${g.from}, ${g.to})` });
+          }
+        }}
+        side="bottom"
+        align="center"
+      >
+        <button type="button" className={btn}>
           Màu nền
         </button>
-        {colorOpen ? (
-          <div className="absolute left-1/2 top-full z-50 mt-1 w-48 -translate-x-1/2 rounded-md border border-zinc-200 bg-white p-2 shadow-lg">
-            <input
-              type="color"
-              className="mb-2 h-8 w-full cursor-pointer rounded border border-zinc-200"
-              defaultValue="#ffffff"
-              onChange={(e) => {
-                const c = e.target.value;
-                pushRecentBgColor(c);
-                setRecent(loadRecentBgColors());
-                onAction({ type: 'set-color', color: c });
-              }}
-            />
-            <div className="mb-1 text-[10px] font-medium text-zinc-500">Mẫu</div>
-            <div className="mb-2 flex flex-wrap gap-1">
-              {LP_BG_PRESET_COLORS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className="h-5 w-5 rounded border border-zinc-200"
-                  style={{ background: c }}
-                  title={c}
-                  onClick={() => {
-                    pushRecentBgColor(c);
-                    setRecent(loadRecentBgColors());
-                    onAction({ type: 'set-color', color: c });
-                  }}
-                />
-              ))}
-            </div>
-            {recent.length ? (
-              <>
-                <div className="mb-1 text-[10px] font-medium text-zinc-500">Gần đây</div>
-                <div className="flex flex-wrap gap-1">
-                  {recent.map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      className="h-5 w-5 rounded border border-zinc-200"
-                      style={{ background: c }}
-                      title={c}
-                      onClick={() => onAction({ type: 'set-color', color: c })}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
+      </LandingPageColorPickerPopover>
 
       <Menu label="Căn chỉnh ảnh">
         {(

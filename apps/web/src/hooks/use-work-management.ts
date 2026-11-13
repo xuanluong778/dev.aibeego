@@ -5,6 +5,7 @@ import type {
   WorkProjectDetail,
   WorkTask,
   CreateWorkProjectInput,
+  UpdateWorkProjectInput,
   CreateWorkTaskInput,
   UpdateWorkTaskInput,
   MoveWorkTaskInput,
@@ -47,6 +48,18 @@ export function useCreateWorkProject() {
     mutationFn: (body: CreateWorkProjectInput) =>
       apiClient<WorkProject>('/work-management/projects', {
         method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
+}
+
+export function useUpdateWorkProject() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: UpdateWorkProjectInput & { id: string }) =>
+      apiClient<WorkProject>(`/work-management/projects/${id}`, {
+        method: 'PATCH',
         body: JSON.stringify(body),
       }),
     onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
@@ -112,6 +125,15 @@ export function useArchiveWorkTask() {
   });
 }
 
+export function useUnarchiveWorkTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiClient(`/work-management/tasks/${id}/unarchive`, { method: 'POST' }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+  });
+}
+
 export function useSoftDeleteWorkTask() {
   const qc = useQueryClient();
   return useMutation({
@@ -128,16 +150,29 @@ export function useWorkComments(taskId: string | null) {
   });
 }
 
-export function useCreateWorkComment(taskId: string) {
+export type CreateWorkCommentInput = {
+  taskId: string;
+  body: string;
+  parentId?: string;
+  mentionIds?: string[];
+};
+
+export function useCreateWorkComment() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (body: { body: string; parentId?: string; mentionIds?: string[] }) =>
+    mutationFn: ({ taskId, body, parentId, mentionIds }: CreateWorkCommentInput) =>
       apiClient<WorkComment>(`/work-management/tasks/${taskId}/comments`, {
         method: 'POST',
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          body,
+          ...(parentId ? { parentId } : {}),
+          ...(mentionIds?.length ? { mentionIds } : {}),
+        }),
       }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: [...KEY, 'comments', taskId] });
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: [...KEY, 'comments', vars.taskId] });
+      qc.invalidateQueries({ queryKey: [...KEY, 'project'] });
+      qc.invalidateQueries({ queryKey: [...KEY, 'task', vars.taskId] });
       qc.invalidateQueries({ queryKey: [...KEY, 'notifications'] });
     },
   });
@@ -159,7 +194,10 @@ export function useDeleteWorkComment() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => apiClient(`/work-management/comments/${id}`, { method: 'DELETE' }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEY }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: KEY });
+      qc.invalidateQueries({ queryKey: [...KEY, 'project'] });
+    },
   });
 }
 
@@ -422,6 +460,14 @@ export function useWorkDashboard(groupBy: 'employee' | 'project' = 'employee') {
     queryKey: [...KEY, 'dashboard', groupBy],
     queryFn: () =>
       apiClient<DashboardData>(`/work-management/dashboard?groupBy=${groupBy}`),
+  });
+}
+
+export function useEmployeeWorkStats(employeeId: string | null) {
+  return useQuery({
+    queryKey: [...KEY, 'employee-stats', employeeId],
+    queryFn: () => apiClient(`/work-management/employees/${employeeId}/stats`),
+    enabled: !!employeeId,
   });
 }
 

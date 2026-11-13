@@ -10,7 +10,13 @@ import { join } from 'path';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import type { AuthUser } from '../common/interfaces/auth-user.interface';
-import { assertCanWriteTask, canManageAnyTask, resolveWorkScope } from './work-management.scope';
+import {
+  assertCanWriteTask,
+  canManageAnyTask,
+  resolveLinkedEmployeeId,
+  resolveWorkScope,
+  WORK_EMPLOYEE_LINK_REQUIRED_MSG,
+} from './work-management.scope';
 import {
   WORK_COLUMN_KEYS,
   WORK_NOTIFICATION_TYPES,
@@ -132,7 +138,10 @@ export class WorkCollabService {
     taskId: string,
     dto: CreateWorkCommentDto,
   ) {
-    if (!user.employeeId) throw new ForbiddenException('Tài khoản chưa gắn nhân viên');
+    const authorId = await resolveLinkedEmployeeId(this.prisma, organizationId, user, {
+      persistUserLink: true,
+    });
+    if (!authorId) throw new ForbiddenException(WORK_EMPLOYEE_LINK_REQUIRED_MSG);
     const task = await this.requireWriteTask(organizationId, user, taskId);
     if (dto.parentId) {
       const parent = await this.prisma.workTaskComment.findFirst({
@@ -154,7 +163,7 @@ export class WorkCollabService {
         organizationId,
         taskId,
         parentId: dto.parentId || null,
-        authorId: user.employeeId,
+        authorId,
         body: dto.body.trim(),
         mentionIds,
       },
@@ -172,7 +181,7 @@ export class WorkCollabService {
       type: WORK_NOTIFICATION_TYPES.COMMENT,
       title: `Bình luận mới: ${task.title}`,
       body: dto.body.trim().slice(0, 200),
-      actorId: user.employeeId,
+      actorId: authorId,
       taskId: task.id,
       projectId: task.projectId,
     });
@@ -181,7 +190,7 @@ export class WorkCollabService {
         type: WORK_NOTIFICATION_TYPES.MENTION,
         title: `Bạn được nhắc tên trong: ${task.title}`,
         body: dto.body.trim().slice(0, 200),
-        actorId: user.employeeId,
+        actorId: authorId,
         taskId: task.id,
         projectId: task.projectId,
       });

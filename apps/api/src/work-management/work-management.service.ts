@@ -32,6 +32,7 @@ import { WorkCollabService } from './work-collab.service';
 
 const taskInclude = {
   column: true,
+  project: { select: { id: true, name: true } },
   assigner: { select: { id: true, name: true } },
   createdBy: { select: { id: true, name: true } },
   lastSubmittedBy: { select: { id: true, name: true } },
@@ -43,6 +44,11 @@ const taskInclude = {
     include: { employee: { select: { id: true, name: true } } },
   },
   checklist: { orderBy: { sortOrder: 'asc' as const } },
+  _count: {
+    select: {
+      comments: { where: { deletedAt: null } },
+    },
+  },
 } satisfies Prisma.WorkTaskInclude;
 
 @Injectable()
@@ -632,6 +638,8 @@ export class WorkManagementService {
       id: task.id,
       organizationId: task.organizationId,
       projectId: task.projectId,
+      projectName: task.project.name,
+      project: { id: task.project.id, name: task.project.name },
       columnId: task.columnId,
       columnKey: task.column.key,
       columnName: task.column.name,
@@ -669,6 +677,7 @@ export class WorkManagementService {
         isDone: c.isDone,
         sortOrder: c.sortOrder,
       })),
+      commentCount: task._count.comments,
       canSubmitReview:
         task.column.key === WORK_COLUMN_KEYS.IN_PROGRESS ||
         task.column.key === WORK_COLUMN_KEYS.NEEDS_FIX,

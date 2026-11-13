@@ -46,6 +46,14 @@ export type LandingPageTextBoxChrome = {
   background?: string;
   /** false = user cleared fill → transparent (not theme default). */
   backgroundOn?: boolean;
+  /** Two-stop linear fill. Stops stay stored when the toggle is off. */
+  gradientOn?: boolean;
+  /** 0–360, degrees. */
+  gradientAngle?: number;
+  /** #RRGGBB or #RRGGBBAA */
+  gradientFrom?: string;
+  /** #RRGGBB or #RRGGBBAA */
+  gradientTo?: string;
   paddingOn?: boolean;
   padding?: LandingPageTextBoxPadding;
   borderOn?: boolean;
@@ -105,6 +113,32 @@ export function hexWithAlpha(hex: string, alpha: number): string {
   return `${parsed.hex}${aa}`.toUpperCase();
 }
 
+/** Second stop that stays visible against `raw` (lighten a dark color, darken a light one). */
+export function contrastStopHex8(raw: string): string {
+  const parsed = parseHexAlpha(raw, '#0F3D34FF');
+  const channels = [1, 3, 5].map((i) => parseInt(parsed.hex.slice(i, i + 2), 16));
+  const lum = (0.2126 * channels[0]! + 0.7152 * channels[1]! + 0.0722 * channels[2]!) / 255;
+  const dest = lum > 0.62 ? 0 : 255;
+  const amount = lum > 0.62 ? 0.45 : 0.55;
+  const mixed = channels.map((channel) => Math.round(channel + (dest - channel) * amount));
+  const hex = `#${mixed.map((n) => n.toString(16).padStart(2, '0')).join('')}`;
+  return `${hex}${parsed.hex8.slice(7)}`.toUpperCase();
+}
+
+/** CSS linear-gradient from two stored stops. Rejects anything that is not a hex color. */
+export function fillGradientCss(input: {
+  angle?: number;
+  from?: string;
+  to?: string;
+} | null | undefined): string | null {
+  if (!input?.from || !input?.to) return null;
+  const from = parseHexAlpha(input.from);
+  const to = parseHexAlpha(input.to);
+  if (from.alpha <= 0 && to.alpha <= 0) return null;
+  const angle = Math.round(clamp(Number(input.angle ?? 135), 0, 360));
+  return `linear-gradient(${angle}deg, ${from.css} 0%, ${to.css} 100%)`;
+}
+
 export function safeTextBoxMediaUrl(input: unknown): string | null {
   if (typeof input !== 'string') return null;
   const raw = input.trim().slice(0, 2000);
@@ -148,6 +182,14 @@ export function sanitizeTextBoxChrome(raw: unknown): LandingPageTextBoxChrome | 
     out.background = parseHexAlpha(s.background).hex8;
   }
   if (s.backgroundOn === true || s.backgroundOn === false) out.backgroundOn = s.backgroundOn;
+  if (s.gradientOn === true || s.gradientOn === false) out.gradientOn = s.gradientOn;
+  if (s.gradientAngle !== undefined) out.gradientAngle = num(s.gradientAngle, 0, 360, 135);
+  if (typeof s.gradientFrom === 'string' && (HEX6.test(s.gradientFrom.trim()) || HEX8.test(s.gradientFrom.trim()))) {
+    out.gradientFrom = parseHexAlpha(s.gradientFrom).hex8;
+  }
+  if (typeof s.gradientTo === 'string' && (HEX6.test(s.gradientTo.trim()) || HEX8.test(s.gradientTo.trim()))) {
+    out.gradientTo = parseHexAlpha(s.gradientTo).hex8;
+  }
   if (s.paddingOn === true || s.paddingOn === false) out.paddingOn = s.paddingOn;
   if (s.padding && typeof s.padding === 'object') {
     const p = s.padding as Record<string, unknown>;
@@ -223,10 +265,17 @@ export function sanitizeTextBoxChrome(raw: unknown): LandingPageTextBoxChrome | 
 export function textBoxChromeCss(box: LandingPageTextBoxChrome | null | undefined): Record<string, string> {
   if (!box) return {};
   const css: Record<string, string> = {};
-  if (box.backgroundOn === false) {
+  const gradientCss = box.gradientOn
+    ? fillGradientCss({ angle: box.gradientAngle, from: box.gradientFrom, to: box.gradientTo })
+    : null;
+  if (box.backgroundOn === false && !gradientCss) {
     css.backgroundColor = 'transparent';
   } else if (box.background) {
     const paint = parseHexAlpha(box.background);
+    if (paint.alpha > 0) css.backgroundColor = paint.css;
+  }
+  if (gradientCss && !css.backgroundColor && box.gradientFrom) {
+    const paint = parseHexAlpha(box.gradientFrom);
     if (paint.alpha > 0) css.backgroundColor = paint.css;
   }
   if (box.paddingOn && box.padding) {
@@ -247,10 +296,14 @@ export function textBoxChromeCss(box: LandingPageTextBoxChrome | null | undefine
     css.boxShadow = `${sh.x}px ${sh.y}px ${sh.blur}px ${sh.spread}px rgba(${parseInt(rgb.hex.slice(1, 3), 16)},${parseInt(rgb.hex.slice(3, 5), 16)},${parseInt(rgb.hex.slice(5, 7), 16)},${clamp(sh.opacity, 0, 1)})`;
   }
   if (box.mediaOn && box.mediaUrl) {
-    css.backgroundImage = `url("${box.mediaUrl}")`;
-    css.backgroundSize = box.mediaFit === 'contain' ? 'contain' : 'cover';
-    css.backgroundPosition = box.mediaPosition || 'center';
+    css.backgroundImage = gradientCss ? `url("${box.mediaUrl}"), ${gradientCss}` : `url("${box.mediaUrl}")`;
+    const fit = box.mediaFit === 'contain' ? 'contain' : 'cover';
+    const position = box.mediaPosition || 'center';
+    css.backgroundSize = gradientCss ? `${fit}, auto` : fit;
+    css.backgroundPosition = gradientCss ? `${position}, center` : position;
     css.backgroundRepeat = 'no-repeat';
+  } else if (gradientCss) {
+    css.backgroundImage = gradientCss;
   }
   return css;
 }
@@ -284,6 +337,7 @@ export function textBoxHideAttrs(
 export function textBoxChromeActive(box: LandingPageTextBoxChrome | null | undefined): boolean {
   if (!box) return false;
   if (box.backgroundOn === false) return true;
+  if (box.gradientOn && fillGradientCss({ angle: box.gradientAngle, from: box.gradientFrom, to: box.gradientTo })) return true;
   if (box.background && parseHexAlpha(box.background).alpha > 0) return true;
   if (box.paddingOn) return true;
   if (box.borderOn) return true;

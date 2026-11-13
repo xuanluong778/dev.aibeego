@@ -1,4 +1,6 @@
 'use client';
+import './landing-page-text-contrast.css';
+import { readableSurfaceColors } from './landing-page-readable-colors';
 import { installLpMotion, LP_MOTION_CSS } from './landing-page-motion-runtime';
 import {LandingPageRenderOverlapGuard} from './landing-page-render-overlap-guard';
 import { projectLandingFlow } from './landing-page-no-overlap';
@@ -57,6 +59,10 @@ import {
   canonicalBlockVariant,
 } from './landing-page-variant-render';
 
+function escCssAttr(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
 function buildElementHiddenCss(spec: LandingPageSpec): string | null {
   const map = (spec.meta as { elementHidden?: Record<string, boolean> } | undefined)?.elementHidden;
   const rules: string[] = [
@@ -67,21 +73,80 @@ function buildElementHiddenCss(spec: LandingPageSpec): string | null {
       if (!hidden) continue;
       const sep = key.indexOf('::');
       if (sep <= 0) continue;
-      const blockId = key.slice(0, sep).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-      const field = key.slice(sep + 2).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      const blockId = escCssAttr(key.slice(0, sep));
+      const field = escCssAttr(key.slice(sep + 2));
+      const elementId = escCssAttr(key);
       // Scope hidden text to its owner; nested portal elements can use the same field name.
       rules.push(
         `[data-lp-block-id="${blockId}"] [data-lp-inline-field="${field}"][data-lp-element-id^="${blockId}::"]{display:none!important}`,
       );
       // Element chrome (Hero trust icons, boxes keyed by data-lp-element-id)
       rules.push(
-        `[data-lp-block-id="${blockId}"] [data-lp-element-id="${blockId}::${field}"]{display:none!important}`,
+        `[data-lp-block-id="${blockId}"] [data-lp-element-id="${elementId}"]{display:none!important}`,
       );
+      // Preview/public blocks without an outer shell (e.g. countdown launch section).
+      rules.push(`[data-lp-element-id="${elementId}"]{display:none!important}`);
       // Orange text-box wrap (data-lp-free-id) — hiding only the inner <p> left a ghost.
       rules.push(
-        `[data-lp-block-id="${blockId}"] [data-lp-free-id="${blockId}::${field}"]{display:none!important}`,
+        `[data-lp-block-id="${blockId}"] [data-lp-free-id="${elementId}"]{display:none!important}`,
       );
     }
+  }
+  return rules.length ? rules.join('\n') : null;
+}
+
+function isLightCssColor(color: string): boolean {
+  const c = color.trim().toLowerCase();
+  if (c === 'white' || c === '#fff' || c === '#ffffff' || c === 'transparent') return true;
+  const hex = /^#([0-9a-f]{6})$/i.exec(c) || /^#([0-9a-f]{3})$/i.exec(c);
+  if (hex) {
+    let h = hex[1]!;
+    if (h.length === 3) h = h.split('').map((x) => x + x).join('');
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.78;
+  }
+  const rgb = c.match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/);
+  if (rgb) {
+    const lum =
+      (0.299 * Number(rgb[1]) + 0.587 * Number(rgb[2]) + 0.114 * Number(rgb[3])) / 255;
+    return lum > 0.78;
+  }
+  return false;
+}
+
+function buildInlineTextStyleCss(spec: LandingPageSpec): string | null {
+  const map = (spec.meta as { inlineTextStyles?: Record<string, Record<string, unknown>> } | undefined)
+    ?.inlineTextStyles;
+  if (!map) return null;
+  const rules: string[] = [];
+  for (const [key, style] of Object.entries(map)) {
+    if (!style || typeof style !== 'object') continue;
+    const sep = key.indexOf('::');
+    if (sep <= 0) continue;
+    const elementId = escCssAttr(key);
+    const decl: string[] = [];
+    const fontSize = style.fontSize;
+    if (typeof fontSize === 'number' && fontSize > 0) {
+      const unit = style.fontSizeUnit === 'rem' ? 'rem' : 'px';
+      const size =
+        unit === 'rem' ? `${Math.round((fontSize / 16) * 1000) / 1000}rem` : `${fontSize}px`;
+      decl.push(`font-size:${size}!important`);
+    }
+    if (style.fontWeight != null) decl.push(`font-weight:${style.fontWeight}!important`);
+    if (typeof style.textAlign === 'string') decl.push(`text-align:${style.textAlign}!important`);
+    if (typeof style.fontFamily === 'string') decl.push(`font-family:${style.fontFamily}!important`);
+    if (typeof style.fontStyle === 'string') decl.push(`font-style:${style.fontStyle}!important`);
+    if (typeof style.textTransform === 'string') decl.push(`text-transform:${style.textTransform}!important`);
+    if (typeof style.textDecoration === 'string') decl.push(`text-decoration:${style.textDecoration}!important`);
+    if (typeof style.letterSpacing === 'string') decl.push(`letter-spacing:${style.letterSpacing}!important`);
+    if (style.lineHeight != null) decl.push(`line-height:${style.lineHeight}!important`);
+    if (typeof style.color === 'string' && !isLightCssColor(style.color)) {
+      decl.push(`color:${style.color}!important`);
+    }
+    if (!decl.length) continue;
+    rules.push(`[data-lp-element-id="${elementId}"]{${decl.join(';')}}`);
   }
   return rules.length ? rules.join('\n') : null;
 }
@@ -377,7 +442,13 @@ function sectionEyebrowFor(blockType: LandingPageBlock['type'], category?: strin
 
 function tokenStyle(tokens: LandingPageThemeTokens): CSSProperties {
   const t = normalizeLandingPageThemeTokens(tokens);
+  const surface = readableSurfaceColors(t.surface);
+  const canvas = readableSurfaceColors(t.canvas || t.background);
   return {
+    ['--lp-surface-ink' as string]: surface?.ink,
+    ['--lp-surface-muted' as string]: surface?.muted,
+    ['--lp-canvas-ink' as string]: canvas?.ink,
+    ['--lp-canvas-muted' as string]: canvas?.muted,
     ['--lp-primary' as string]: t.primary,
     ['--lp-accent' as string]: t.accent || t.secondary,
     ['--lp-secondary' as string]: t.secondary,
@@ -4014,7 +4085,7 @@ function BlockView({
               blockStyle={(cd.style || {}) as Record<string, unknown>}
             />
             {cd.timezone ? (
-              <p className="mb-4 text-center text-[11px] opacity-50">Timezone: {cd.timezone}</p>
+              <p className="mb-4 text-center text-[11px]" style={{ color: 'var(--lp-canvas-muted, var(--lp-muted))' }}>Timezone: {cd.timezone}</p>
             ) : null}
             <LandingPageCountdownLive block={cd} primary={primary} blockId={cd.id} canvas={canvas} />
           </div>
@@ -4463,11 +4534,13 @@ export function LandingPageRenderer({
       })()}
       {(() => {
         const hiddenCss = buildElementHiddenCss(spec);
-        if (!hiddenCss) return null;
+        const inlineCss = buildInlineTextStyleCss(spec);
+        const css = [hiddenCss, inlineCss].filter(Boolean).join('\n');
+        if (!css) return null;
         return (
           <style
             data-lp-element-hidden-css="1"
-            dangerouslySetInnerHTML={{ __html: hiddenCss }}
+            dangerouslySetInnerHTML={{ __html: css }}
           />
         );
       })()}
