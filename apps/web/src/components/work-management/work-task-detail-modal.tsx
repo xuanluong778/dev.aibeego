@@ -26,6 +26,9 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { WorkTaskCustomFields } from './work-task-custom-fields';
+import { WorkTaskTimePanel } from './work-task-time-panel';
+import { useCurrentUser } from '@/hooks/use-auth';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import {
@@ -203,6 +206,11 @@ export function WorkTaskDetailDialog({
   const t = useT();
   const taskQ = useWorkTask(open ? taskId : null);
   const task = taskQ.data ?? (initialTask?.id === taskId ? initialTask : null) ?? null;
+  const currentUser = useCurrentUser();
+  const canReview = !!currentUser.data && (
+    ['OWNER', 'SUPER_ADMIN', 'HR', 'MANAGER'].includes(currentUser.data.role)
+    || (!!currentUser.data.employeeId && currentUser.data.employeeId === task?.assignerId)
+  );
   const updateTask = useUpdateWorkTask();
   const archiveTask = useArchiveWorkTask();
   const copyTask = useCopyWorkTask();
@@ -605,9 +613,11 @@ export function WorkTaskDetailDialog({
     <>
       <Dialog open={open} onOpenChange={requestClose}>
         <DialogContent
+          closeOnlyWithButton
           className={cn(
             'flex max-h-[94vh] w-[min(1040px,calc(100vw-1rem))] max-w-[1040px] flex-col gap-0 overflow-hidden p-0',
             'border-slate-200 bg-white sm:rounded-xl dark:border-slate-800 dark:bg-slate-950',
+            'text-slate-800 dark:text-slate-100 [&_.text-muted-foreground]:text-slate-600 dark:[&_.text-muted-foreground]:text-slate-300',
             // Hide stock dialog close — custom top-right controls
             '[&>button]:hidden',
           )}
@@ -818,10 +828,14 @@ export function WorkTaskDetailDialog({
               />
 
               <SelectedLabelChips labels={labels} />
+              <details className="rounded-xl border p-3 sm:ml-9">
+                <summary className="min-h-[44px] cursor-pointer text-sm font-medium">Theo dõi thời gian làm việc</summary>
+                <WorkTaskTimePanel key={task.id} taskId={task.id} open={open} />
+              </details>
 
               {customFieldsMsg && (
-                <p className="pl-9 text-xs text-slate-500">
-                  Trường tùy chỉnh: đang dùng nhãn/checklist hiện có. Đóng thông báo này khi xong.
+                <div className="space-y-2 sm:ml-9">
+                  <WorkTaskCustomFields key={task.id} task={task} />
                   <button
                     type="button"
                     className="ml-2 underline"
@@ -829,7 +843,7 @@ export function WorkTaskDetailDialog({
                   >
                     Ẩn
                   </button>
-                </p>
+                </div>
               )}
 
               {/* Checklist body */}
@@ -1215,6 +1229,7 @@ export function WorkTaskDetailDialog({
                       task.columnKey === 'NEEDS_FIX') && (
                       <Button
                         size="sm"
+                        disabled={submitReview.isPending || approve.isPending || requestFix.isPending}
                         onClick={() =>
                           submitReview.mutate(
                             { id: task.id, note: reviewNote || undefined },
@@ -1225,10 +1240,11 @@ export function WorkTaskDetailDialog({
                         Gửi duyệt
                       </Button>
                     )}
-                    {(task.canReview || task.columnKey === 'PENDING_REVIEW') && (
+                    {canReview && task.columnKey === 'PENDING_REVIEW' && (
                       <>
                         <Button
                           size="sm"
+                          disabled={submitReview.isPending || approve.isPending || requestFix.isPending}
                           onClick={() =>
                             approve.mutate(
                               { id: task.id, note: reviewNote || undefined },
@@ -1241,6 +1257,7 @@ export function WorkTaskDetailDialog({
                         <Button
                           size="sm"
                           variant="outline"
+                          disabled={submitReview.isPending || approve.isPending || requestFix.isPending}
                           onClick={() =>
                             requestFix.mutate(
                               { id: task.id, note: reviewNote || undefined },
@@ -1256,6 +1273,7 @@ export function WorkTaskDetailDialog({
                       Đóng
                     </Button>
                   </div>
+                  {(submitReview.error || approve.error || requestFix.error) && <p role="alert" className="text-sm text-destructive">{(submitReview.error || approve.error || requestFix.error)?.message}</p>}
                 </div>
               )}
             </div>

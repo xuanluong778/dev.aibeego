@@ -513,6 +513,8 @@ export class WorkInsightsService {
         status: 'RUNNING',
       },
     });
+    const alreadyRunning = running.find(log => log.taskId === taskId);
+    if (alreadyRunning) return alreadyRunning;
     for (const r of running) {
       const dur = this.liveDuration(r);
       await this.prisma.workTimeLog.update({
@@ -520,7 +522,13 @@ export class WorkInsightsService {
         data: { status: 'PAUSED', durationSeconds: dur, endedAt: new Date() },
       });
     }
-    const log = await this.prisma.workTimeLog.create({
+    const paused = await this.prisma.workTimeLog.findFirst({
+      where: { organizationId, taskId, employeeId: user.employeeId, status: 'PAUSED' },
+      orderBy: { createdAt: 'desc' },
+    });
+    const log = paused ? await this.prisma.workTimeLog.update({
+      where: { id: paused.id }, data: { status: 'RUNNING', startedAt: new Date(), endedAt: null },
+    }) : await this.prisma.workTimeLog.create({
       data: {
         organizationId,
         taskId,
@@ -606,8 +614,8 @@ export class WorkInsightsService {
   ) {
     if (!user.employeeId) throw new ForbiddenException('Tài khoản chưa gắn nhân viên');
     await this.assertTaskWrite(organizationId, user, taskId);
-    if (!dto.durationMinutes || dto.durationMinutes <= 0) {
-      throw new BadRequestException('durationMinutes phải > 0');
+    if (!Number.isFinite(dto.durationMinutes) || dto.durationMinutes < 1 || dto.durationMinutes > 1440) {
+      throw new BadRequestException('Thời gian làm việc phải từ 1 đến 1440 phút');
     }
     const startedAt = dto.startedAt ? new Date(dto.startedAt) : new Date();
     const durationSeconds = Math.round(dto.durationMinutes * 60);
@@ -704,6 +712,7 @@ export class WorkInsightsService {
               deadline: new Date(dateStr),
               priority: tpl.priority,
               labels: tpl.labels,
+              customFields: tpl.customFields as Prisma.InputJsonValue,
               estimatedMinutes: tpl.estimatedMinutes,
               recurrenceRule: null,
               isRecurrenceTemplate: false,
@@ -727,7 +736,7 @@ export class WorkInsightsService {
           created += 1;
         } catch (e) {
           // unique violation = already exists (no duplicate)
-          if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+          if (e && typeof e === 'object' && 'code' in e && e.code === 'P2002') {
             continue;
           }
           this.logger.warn(`recurrence skip ${key}: ${e instanceof Error ? e.message : e}`);
@@ -750,7 +759,7 @@ export class WorkInsightsService {
     }
   }
 
-  async sendDeadlineReminders() {
+  async sendDeadlineReminders(organizationId?: string) {
     const today = vnDateString();
     const d1 = (() => {
       const x = new Date(`${today}T00:00:00+07:00`);
@@ -759,6 +768,7 @@ export class WorkInsightsService {
     })();
     const tasks = await this.prisma.workTask.findMany({
       where: {
+        ...(organizationId ? { organizationId } : {}),
         deletedAt: null,
         isArchived: false,
         isRecurrenceTemplate: false,
@@ -801,10 +811,11 @@ export class WorkInsightsService {
     return { sent: tasks.length };
   }
 
-  async sendOverdueNotifications() {
+  async sendOverdueNotifications(organizationId?: string) {
     const today = vnDateString();
     const tasks = await this.prisma.workTask.findMany({
       where: {
+        ...(organizationId ? { organizationId } : {}),
         deletedAt: null,
         isArchived: false,
         isRecurrenceTemplate: false,

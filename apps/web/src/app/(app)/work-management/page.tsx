@@ -3,17 +3,13 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Archive,
   ChevronDown,
   ChevronRight,
-  Copy,
   GripVertical,
-  MoreHorizontal,
   Settings2,
   Pencil,
   Plus,
   Search,
-  Trash2,
   X,
 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
@@ -37,13 +33,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   useWorkProjects,
   useWorkProject,
@@ -71,6 +60,9 @@ import {
 import { WorkManagementSubNav } from '@/components/work-management/work-management-subnav';
 import { WorkProjectSettingsDialog } from '@/components/work-management/work-project-settings-dialog';
 import { WorkTaskBoardCard } from '@/components/work-management/work-task-board-card';
+import { WorkTaskActionsMenu } from '@/components/work-management/work-task-actions-menu';
+import { WorkKanbanColumnAdd } from '@/components/work-management/work-kanban-column-add';
+import { matchesWorkDeadline } from '@/lib/work-board-filters';
 
 const WORK_LAST_PROJECT_ID = 'work-management:lastProjectId';
 
@@ -101,6 +93,9 @@ export default function WorkManagementPage() {
 
 function WorkManagementBoard() {
   const t = useT();
+  const userQ = useCurrentUser();
+  const canCreateProject = hasPermission(userQ.data, 'work.project.write');
+  const canWriteTask = hasPermission(userQ.data, 'work.task.write');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -126,6 +121,13 @@ function WorkManagementBoard() {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all');
   const [deadlineFilter, setDeadlineFilter] = useState<string>('all');
+  const [quickAddColumnId, setQuickAddColumnId] = useState<string | null>(null);
+  const [quickAddTitle, setQuickAddTitle] = useState('');
+  const [projectCreateError, setProjectCreateError] = useState<string | null>(null);
+  const [taskFormError, setTaskFormError] = useState<string | null>(null);
+  const [taskActionError, setTaskActionError] = useState<string | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<WorkTask | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dropCol, setDropCol] = useState<string | null>(null);
   const [targetColumnId, setTargetColumnId] = useState<string | undefined>(undefined);
@@ -320,21 +322,7 @@ function WorkManagementBoard() {
     if (assigneeFilter !== 'all') {
       list = list.filter((t) => t.assignees.some((a) => a.id === assigneeFilter));
     }
-    if (deadlineFilter === 'overdue') {
-      const today = new Date().toISOString().slice(0, 10);
-      list = list.filter((t) => t.deadline && t.deadline < today);
-    } else if (deadlineFilter === 'this_week') {
-      const today = new Date();
-      const startOfWeek = new Date(today);
-      startOfWeek.setDate(today.getDate() - today.getDay() + 1);
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-      const start = startOfWeek.toISOString().slice(0, 10);
-      const end = endOfWeek.toISOString().slice(0, 10);
-      list = list.filter((t) => t.deadline && t.deadline >= start && t.deadline <= end);
-    } else if (deadlineFilter === 'has_deadline') {
-      list = list.filter((t) => !!t.deadline);
-    }
+    list = list.filter((task) => matchesWorkDeadline(task, deadlineFilter));
     return list;
   }, [projectQ.data?.tasks, query, priorityFilter, assigneeFilter, deadlineFilter]);
 
@@ -372,7 +360,39 @@ function WorkManagementBoard() {
     return map;
   }, [columns, projectQ.data?.tasks]);
 
+  function cancelQuickAdd() {
+    setQuickAddColumnId(null);
+    setQuickAddTitle('');
+  }
+
+  function submitQuickAdd(columnId: string) {
+    const title = quickAddTitle.trim();
+    if (!projectId || !title || createTask.isPending || !canWriteTask) return;
+    // Required project information must be entered in the complete form.
+    if (projectQ.data?.customFieldDefs?.some((field) => field.required)) {
+      openCreateTask(columnId);
+      setForm((current) => ({ ...current, title }));
+      cancelQuickAdd();
+      return;
+    }
+    createTask.mutate(
+      {
+        projectId,
+        columnId,
+        title,
+        priority: 'MEDIUM',
+      },
+      {
+        onSuccess: (created) => {
+          cancelQuickAdd();
+          openTaskDetail(created);
+        },
+      },
+    );
+  }
+
   function openCreateTask(columnId?: string) {
+    setTaskFormError(null);
     setEditTask(null);
     setTargetColumnId(columnId);
     setForm({
@@ -393,6 +413,7 @@ function WorkManagementBoard() {
   }
 
   function openEditTask(task: WorkTask) {
+    setTaskFormError(null);
     setEditTask(task);
     setForm({
       title: task.title,
@@ -412,7 +433,18 @@ function WorkManagementBoard() {
   }
 
   function saveTask() {
-    if (!projectId || !form.title.trim()) return;
+    if (!projectId || !form.title.trim() || createTask.isPending || updateTask.isPending) return;
+    if (form.startDate && form.deadline && form.deadline < form.startDate) {
+      setTaskFormError('Hạn hoàn thành phải bằng hoặc sau ngày bắt đầu. Vui lòng kiểm tra lại hai ngày.');
+      return;
+    }
+    const missingField = projectQ.data?.customFieldDefs?.find((field) => field.required
+      && (form.customFields[field.id] == null || String(form.customFields[field.id]).trim() === ''));
+    if (missingField) {
+      setTaskFormError(`Vui lòng nhập thông tin: ${missingField.name}.`);
+      return;
+    }
+    setTaskFormError(null);
     const labels = form.labels
       .split(',')
       .map((s) => s.trim())
@@ -447,7 +479,7 @@ function WorkManagementBoard() {
           checklist,
           customFields: form.customFields,
         },
-        { onSuccess: () => setTaskDialog(false) },
+        { onSuccess: () => setTaskDialog(false), onError: (error) => setTaskFormError(error.message) },
       );
     } else {
       createTask.mutate(
@@ -472,13 +504,14 @@ function WorkManagementBoard() {
             setTaskDialog(false);
             setTargetColumnId(undefined);
           },
+          onError: (error) => setTaskFormError(error.message),
         },
       );
     }
   }
 
   function onDrop(columnId: string) {
-    if (!draggingId) return;
+    if (!draggingId || !canWriteTask || projectQ.data?.isArchived) return;
     const fullList = allTasksByColumn[columnId] ?? [];
     moveTask.mutate({
       id: draggingId,
@@ -489,6 +522,24 @@ function WorkManagementBoard() {
     setDropCol(null);
   }
 
+  async function runTaskAction(action: () => Promise<unknown>) {
+    setTaskActionError(null);
+    try {
+      await action();
+    } catch (error) {
+      setTaskActionError(error instanceof Error ? error.message : 'Không thể thực hiện thao tác. Vui lòng thử lại.');
+    }
+  }
+
+  function moveTaskToColumn(task: WorkTask, columnId: string) {
+    if (!canWriteTask || projectQ.data?.isArchived || moveTask.isPending || task.columnId === columnId) return;
+    void runTaskAction(() => moveTask.mutateAsync({
+      id: task.id,
+      columnId,
+      sortOrder: (allTasksByColumn[columnId] ?? []).length,
+    }));
+  }
+
   if (projectsQ.isLoading) return <LoadingState message={t('work.loadingProjects')} />;
   if (projectsQ.isError) return <ErrorState onRetry={projectsQ.refetch} />;
 
@@ -496,10 +547,17 @@ function WorkManagementBoard() {
     <div className="space-y-4">
       <PageHeader
         title={t('work.title')}
-        description={t('work.description')}
+        description="Giao việc rõ ràng, theo dõi tiến độ và hoàn thành đúng hạn trong một nơi."
       />
 
       <WorkManagementSubNav />
+
+      {taskActionError && (
+        <div role="alert" className="flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <span>{taskActionError}</span>
+          <Button variant="ghost" size="sm" aria-label="Đóng thông báo" onClick={() => setTaskActionError(null)}><X className="h-4 w-4" /></Button>
+        </div>
+      )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
         <div className="space-y-1 min-w-[200px] flex-1">
@@ -531,7 +589,7 @@ function WorkManagementBoard() {
         <Button
           variant="outline"
           className="min-h-[44px]"
-          disabled={!projectQ.data}
+          disabled={!projectQ.data || !canCreateProject}
           onClick={() => setProjectSettingsOpen(true)}
         >
           <Settings2 className="h-4 w-4 mr-1" /> Cài đặt dự án
@@ -539,15 +597,17 @@ function WorkManagementBoard() {
         <Button
           variant="outline"
           className="min-h-[44px]"
+          disabled={!canCreateProject}
           onClick={() => {
             setProjectName('');
             setProjectDesc('');
+            setProjectCreateError(null);
             setProjectDialog(true);
           }}
         >
           <Plus className="h-4 w-4 mr-1" /> {t('work.createProject')}
         </Button>
-        <Button className="min-h-[44px]" disabled={!projectId} onClick={() => openCreateTask()}>
+        <Button className="min-h-[44px]" disabled={!projectId || !canWriteTask || projectQ.data?.isArchived} onClick={() => openCreateTask()}>
           <Plus className="h-4 w-4 mr-1" /> {t('work.createTaskTitle')}
         </Button>
       </div>
@@ -651,6 +711,10 @@ function WorkManagementBoard() {
       {!projectId && (
         <EmptyState title={t('work.noProjectSelected')} description={t('work.noProjectSelectedDesc')} />
       )}
+      {projectQ.data && <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground" role="status">
+        <span>Đang hiển thị {tasks.length}/{projectQ.data.tasks.length} công việc.</span>
+        <span className="md:hidden">Vuốt bảng sang ngang để xem các cột. Bấm vào việc để mở chi tiết.</span>
+      </div>}
 
       {projectId && projectQ.isLoading && <LoadingState />}
       {projectId && projectQ.isError && <ErrorState onRetry={projectQ.refetch} />}
@@ -663,7 +727,7 @@ function WorkManagementBoard() {
               <div
                 key={col.id}
                 className={cn(
-                  'flex-shrink-0 w-[min(85vw,280px)] sm:w-[300px] rounded-xl border bg-muted/30 flex flex-col max-h-[min(70vh,640px)]',
+                  'flex-shrink-0 w-[min(85vw,280px)] sm:w-[300px] rounded-xl border bg-muted/30 flex flex-col',
                   dropCol === col.id && 'ring-2 ring-primary',
                 )}
                 onDragOver={(e) => {
@@ -696,20 +760,25 @@ function WorkManagementBoard() {
                     </Button>
                     <Button
                       size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0"
-                      title="Tạo việc mới"
-                      onClick={() => openCreateTask(col.id)}
+                      variant="secondary"
+                      className="h-7 gap-1 px-2 text-xs font-semibold"
+                      title="Thêm công việc"
+                      disabled={!canWriteTask || createTask.isPending || projectQ.data?.isArchived}
+                      onClick={() => {
+                        setQuickAddColumnId(col.id);
+                        setQuickAddTitle('');
+                      }}
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-3.5 w-3.5" />
+                      <span className="hidden sm:inline">Thêm công việc</span>
                     </Button>
                   </div>
                 </div>
-                <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                <div className="max-h-[min(55vh,480px)] overflow-y-auto p-2 space-y-2">
                   {items.map((task, index) => (
                     <div
                       key={task.id}
-                      draggable
+                      draggable={canWriteTask}
                       onDragStart={(e) => {
                         setDraggingId(task.id);
                         e.dataTransfer.setData('text/plain', task.id);
@@ -751,64 +820,40 @@ function WorkManagementBoard() {
                           <WorkTaskBoardCard
                             task={task}
                             projectNameFallback={projectQ.data?.name}
+                            onOpen={() => openTaskDetail(task)}
+                            onComplete={columns.some(c => c.key === 'DONE') && task.columnKey !== 'DONE' && !task.completedAt && canWriteTask && !projectQ.data?.isArchived
+                              ? () => { const doneColumn = columns.find(c => c.key === 'DONE'); if (doneColumn) moveTaskToColumn(task, doneColumn.id); }
+                              : undefined}
+                            completionDisabled={moveTask.isPending}
                           />
                         </div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => openTaskDetail(task)}>
-                              Chi tiết
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => openEditTask(task)}>
-                              Sửa
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => copyTask.mutate(task.id)}>
-                              <Copy className="h-3.5 w-3.5 mr-2" /> Sao chép
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => archiveTask.mutate(task.id)}>
-                              <Archive className="h-3.5 w-3.5 mr-2" /> Lưu trữ
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="text-destructive"
-                              onClick={() => {
-                                if (window.confirm('Xóa mềm công việc này?')) {
-                                  deleteTask.mutate(task.id);
-                                }
-                              }}
-                            >
-                              <Trash2 className="h-3.5 w-3.5 mr-2" /> Xóa
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <div className="px-2 py-1 text-[10px] font-semibold text-muted-foreground">
-                              Chuyển trạng thái
-                            </div>
-                            {columns
-                              .filter((c) => c.id !== col.id)
-                              .map((targetCol) => (
-                                <DropdownMenuItem
-                                  key={targetCol.id}
-                                  onClick={() => {
-                                    const fullList = allTasksByColumn[targetCol.id] ?? [];
-                                    moveTask.mutate({
-                                      id: task.id,
-                                      columnId: targetCol.id,
-                                      sortOrder: fullList.length,
-                                    });
-                                  }}
-                                >
-                                  → {targetCol.name}
-                                </DropdownMenuItem>
-                              ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <WorkTaskActionsMenu
+                          task={task}
+                          columns={columns}
+                          disabled={!canWriteTask || !!projectQ.data?.isArchived || moveTask.isPending || copyTask.isPending || archiveTask.isPending || deleteTask.isPending}
+                          onEdit={() => openEditTask(task)}
+                          onMove={columnId => moveTaskToColumn(task, columnId)}
+                          onCopy={() => { void runTaskAction(() => copyTask.mutateAsync(task.id)); }}
+                          onArchive={() => { void runTaskAction(() => archiveTask.mutateAsync(task.id)); }}
+                          onDelete={() => { setDeleteError(null); setTaskToDelete(task); }}
+                        />
                       </div>
                     </div>
                   ))}
                 </div>
+                <WorkKanbanColumnAdd
+                  columnId={col.id}
+                  active={quickAddColumnId === col.id}
+                  title={quickAddColumnId === col.id ? quickAddTitle : ''}
+                  disabled={createTask.isPending || !canWriteTask || projectQ.data?.isArchived}
+                  onActivate={() => {
+                    setQuickAddColumnId(col.id);
+                    setQuickAddTitle('');
+                  }}
+                  onTitleChange={setQuickAddTitle}
+                  onCancel={cancelQuickAdd}
+                  onSubmit={() => submitQuickAdd(col.id)}
+                />
               </div>
             );
           })}
@@ -841,6 +886,23 @@ function WorkManagementBoard() {
           )}
         </div>
       )}
+
+      <Dialog open={!!taskToDelete} onOpenChange={open => { if (!open && !deleteTask.isPending) setTaskToDelete(null); }}>
+        <DialogContent className="max-w-sm" closeOnlyWithButton>
+          <DialogHeader><DialogTitle>Xóa công việc?</DialogTitle></DialogHeader>
+          <p className="break-words text-sm text-muted-foreground">Bạn có chắc muốn xóa công việc <strong className="text-foreground">“{taskToDelete?.title}”</strong>?</p>
+          {deleteError && <p role="alert" className="text-sm text-destructive">{deleteError}</p>}
+          <DialogFooter>
+            <Button variant="outline" disabled={deleteTask.isPending} onClick={() => setTaskToDelete(null)}>Hủy</Button>
+            <Button variant="destructive" disabled={!canWriteTask || !!projectQ.data?.isArchived || deleteTask.isPending} onClick={async () => {
+              if (!taskToDelete) return;
+              setDeleteError(null);
+              try { await deleteTask.mutateAsync(taskToDelete.id); setTaskToDelete(null); }
+              catch (error) { setDeleteError(error instanceof Error ? error.message : 'Không thể xóa công việc. Vui lòng thử lại.'); }
+            }}>{deleteTask.isPending ? 'Đang xóa…' : 'Xóa công việc'}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Rename column dialog */}
       <Dialog open={!!renameColumnId} onOpenChange={(v) => !v && setRenameColumnId(null)}>
@@ -883,6 +945,11 @@ function WorkManagementBoard() {
             <DialogTitle>{t('work.createProjectTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
+            {projectCreateError ? (
+              <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {projectCreateError}
+              </p>
+            ) : null}
             <div className="space-y-1">
               <Label>Tên dự án</Label>
               <Input value={projectName} onChange={(e) => setProjectName(e.target.value)} />
@@ -902,19 +969,26 @@ function WorkManagementBoard() {
             </Button>
             <Button
               disabled={!projectName.trim() || createProject.isPending}
-              onClick={() =>
+              onClick={() => {
+                setProjectCreateError(null);
                 createProject.mutate(
                   { name: projectName.trim(), description: projectDesc || undefined },
                   {
                     onSuccess: (p) => {
                       setProjectDialog(false);
+                      setProjectCreateError(null);
                       setProjectId(p.id);
                     },
+                    onError: (err) => {
+                      setProjectCreateError(
+                        err instanceof Error ? err.message : 'Không tạo được dự án. Vui lòng thử lại.',
+                      );
+                    },
                   },
-                )
-              }
+                );
+              }}
             >
-              Tạo
+              {createProject.isPending ? 'Đang tạo…' : 'Tạo'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -925,11 +999,16 @@ function WorkManagementBoard() {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto" closeOnlyWithButton>
           <DialogHeader>
             <DialogTitle>{editTask ? 'Sửa công việc' : 'Tạo công việc'}</DialogTitle>
+            <p className="text-sm text-muted-foreground">Nhập tên việc, chọn người thực hiện và hạn hoàn thành. Bạn có thể bổ sung thông tin sau.</p>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1">
-              <Label>Tiêu đề</Label>
+              <Label htmlFor="work-task-title">Tên công việc <span className="text-destructive">*</span></Label>
               <Input
+                id="work-task-title"
+                autoFocus
+                maxLength={300}
+                placeholder="Ví dụ: Chuẩn bị nội dung cho chương trình tháng 12"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
               />
@@ -970,9 +1049,11 @@ function WorkManagementBoard() {
                 />
               </div>
               <div className="space-y-1 sm:col-span-2">
-                <Label>Deadline</Label>
+                <Label htmlFor="work-task-deadline">Hạn hoàn thành</Label>
                 <Input
+                  id="work-task-deadline"
                   type="date"
+                  min={form.startDate || undefined}
                   value={form.deadline}
                   onChange={(e) => setForm({ ...form, deadline: e.target.value })}
                 />
@@ -1093,7 +1174,9 @@ function WorkManagementBoard() {
                 </div>
               </div>
             )}
-            <div className="space-y-1">
+            <details className="rounded-xl border p-3">
+              <summary className="min-h-[44px] cursor-pointer font-medium">Thông tin bổ sung: nhãn, tiến độ và việc cần làm</summary>
+            <div className="space-y-1 mt-3">
               <Label>Nhãn (phân tách bằng dấu phẩy)</Label>
               <Input
                 value={form.labels}
@@ -1112,14 +1195,17 @@ function WorkManagementBoard() {
               />
             </div>
             <div className="space-y-1">
-              <Label>Checklist (mỗi dòng 1 mục; `[x] ` = đã xong)</Label>
+              <Label>Danh sách việc cần làm (mỗi dòng một việc)</Label>
               <Textarea
                 rows={4}
                 value={form.checklistText}
                 onChange={(e) => setForm({ ...form, checklistText: e.target.value })}
                 placeholder={'Chuẩn bị slide\n[x] Gửi draft'}
               />
+              <p className="text-xs text-muted-foreground">Sau khi tạo, bạn có thể đánh dấu từng việc đã hoàn thành trong chi tiết công việc.</p>
             </div>
+            </details>
+            {taskFormError && <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">{taskFormError}</p>}
             {editTask && (
               <p className="text-xs text-muted-foreground">
                 Cập nhật lần cuối: {formatDateTime(editTask.updatedAt)}
@@ -1134,7 +1220,7 @@ function WorkManagementBoard() {
               disabled={!form.title.trim() || createTask.isPending || updateTask.isPending}
               onClick={saveTask}
             >
-              Lưu
+              {createTask.isPending || updateTask.isPending ? 'Đang lưu…' : editTask ? 'Lưu thay đổi' : 'Tạo công việc'}
             </Button>
           </DialogFooter>
         </DialogContent>

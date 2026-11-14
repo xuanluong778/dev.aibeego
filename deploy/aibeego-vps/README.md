@@ -44,3 +44,28 @@ docker restart marketingspa-web
 **QA recreate (not production):** `deploy/aibeego-vps/docker-compose.qa-recreate.yml` + `marketingaz-qa` project.
 
 Rollback: activate previous bundle dir + promote; see `bundles/manifest.json` and `ROLLBACK-WEB-973fd6e.md` in aibeego backups.
+
+## Work management: tạo dự án 500 trên VPS
+
+Triệu chứng: `POST /api/v1/work-management/projects` trả **500**, local OK.
+
+Nguyên nhân thường gặp: DB production thiếu cột `work_projects.custom_field_defs` (và có thể `work_tasks.custom_fields`) — code Prisma mới hơn migration đã chạy trên VPS.
+
+**Cách 1 — migrate chính thức (khuyến nghị):** trên server, trong repo đã pull bản mới:
+
+```bash
+cd "$REPO"
+pnpm db:migrate:deploy
+docker compose -f docker-compose.yml -f deploy/aibeego-vps/docker-compose.vps.yml up -d api web
+```
+
+Migration: `20261113100000_work_management_custom_fields`.
+
+**Cách 2 — SQL khẩn (nếu chưa deploy code migration):**
+
+```sql
+ALTER TABLE work_projects ADD COLUMN IF NOT EXISTS custom_field_defs JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE work_tasks ADD COLUMN IF NOT EXISTS custom_fields JSONB DEFAULT '{}'::jsonb;
+```
+
+Sau đó vẫn nên chạy `migrate deploy` để `_prisma_migrations` khớp.

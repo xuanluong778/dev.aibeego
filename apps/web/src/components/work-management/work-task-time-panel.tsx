@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useCurrentUser } from '@/hooks/use-auth';
 import { Clock, Pause, Play, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +22,8 @@ function formatDuration(seconds: number) {
 }
 
 export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: boolean }) {
+  const userQ = useCurrentUser();
+  const [now, setNow] = useState(Date.now);
   const logsQ = useTaskTimeLogs(open ? taskId : null);
   const start = useStartTaskTimer(taskId);
   const pause = usePauseTaskTimer(taskId);
@@ -30,14 +33,23 @@ export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: bool
   const [note, setNote] = useState('');
 
   const totalSeconds = useMemo(
-    () => (logsQ.data ?? []).reduce((s, l) => s + (l.durationSeconds || 0), 0),
-    [logsQ.data],
+    () => (logsQ.data ?? []).reduce((s, l) => s + (l.durationSeconds || 0)
+      + (l.status === 'RUNNING' && l.startedAt ? Math.max(0, Math.floor((now - Date.parse(l.startedAt)) / 1000)) : 0), 0),
+    [logsQ.data, now],
   );
 
   const running = useMemo(
-    () => (logsQ.data ?? []).find((l) => l.status === 'RUNNING'),
-    [logsQ.data],
+    () => (logsQ.data ?? []).find((l) => l.status === 'RUNNING' && l.employeeId === userQ.data?.employeeId),
+    [logsQ.data, userQ.data?.employeeId],
   );
+  const ownOpenTimer = (logsQ.data ?? []).some(l => l.employeeId === userQ.data?.employeeId && ['RUNNING', 'PAUSED'].includes(l.status));
+  const busy = start.isPending || pause.isPending || stop.isPending;
+  const validMinutes = Number.isFinite(Number(minutes)) && Number(minutes) >= 1 && Number(minutes) <= 1440;
+  useEffect(() => {
+    if (!open) return;
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, [open, taskId]);
 
   if (!open) return null;
 
@@ -55,18 +67,18 @@ export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: bool
           type="button"
           size="sm"
           className="min-h-[40px] gap-1"
-          disabled={!!running || start.isPending}
+          disabled={!!running || busy || logsQ.isLoading || !userQ.data?.employeeId}
           onClick={() => start.mutate()}
         >
           <Play className="h-3.5 w-3.5" />
-          Bắt đầu
+          {ownOpenTimer && !running ? 'Tiếp tục' : 'Bắt đầu'}
         </Button>
         <Button
           type="button"
           size="sm"
           variant="outline"
           className="min-h-[40px] gap-1"
-          disabled={!running || pause.isPending}
+          disabled={!running || busy}
           onClick={() => pause.mutate()}
         >
           <Pause className="h-3.5 w-3.5" />
@@ -78,12 +90,14 @@ export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: bool
           variant="secondary"
           className="min-h-[40px] gap-1"
           onClick={() => stop.mutate()}
-          disabled={stop.isPending}
+          disabled={!ownOpenTimer || busy}
         >
           <Square className="h-3.5 w-3.5" />
           Kết thúc
         </Button>
       </div>
+      {logsQ.isError && <p role="alert" className="text-sm text-destructive">Không tải được thời gian làm việc. <button type="button" className="underline" onClick={() => logsQ.refetch()}>Thử lại</button></p>}
+      {(start.error || pause.error || stop.error || manual.error) && <p role="alert" className="text-sm text-destructive">{(start.error || pause.error || stop.error || manual.error)?.message}</p>}
       {running && (
         <p className="text-xs text-emerald-700 dark:text-emerald-400">Đang ghi nhận thời gian…</p>
       )}
@@ -93,7 +107,7 @@ export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: bool
           <Input
             type="number"
             min={1}
-            max={600}
+            max={1440}
             className="h-10 w-24"
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
@@ -108,7 +122,7 @@ export function WorkTaskTimePanel({ taskId, open }: { taskId: string; open: bool
             type="button"
             size="sm"
             className="min-h-[40px]"
-            disabled={manual.isPending || Number(minutes) < 1}
+            disabled={manual.isPending || !validMinutes || !userQ.data?.employeeId}
             onClick={() =>
               manual.mutate({
                 durationMinutes: Number(minutes),

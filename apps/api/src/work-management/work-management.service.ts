@@ -2,7 +2,10 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
+  Logger,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { Prisma } from '@marketingspa/database';
 import { PrismaService } from '../prisma/prisma.service';
@@ -53,6 +56,8 @@ const taskInclude = {
 
 @Injectable()
 export class WorkManagementService {
+  private readonly logger = new Logger(WorkManagementService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly collab: WorkCollabService,
@@ -119,16 +124,60 @@ export class WorkManagementService {
   }
 
   async createProject(organizationId: string, user: AuthUser, dto: CreateWorkProjectDto) {
-    if (!isWorkOrgWideRole(user.role) && user.role !== 'MANAGER') {
-      // staff can create projects they own too (common product expectation)
+    if (!organizationId?.trim()) {
+      throw new BadRequestException('Thiếu organization — đăng nhập lại.');
     }
-    const project = await this.prisma.workProject.create({
+    const name = dto.name?.trim();
+    if (!name) throw new BadRequestException('Tên dự án không được để trống');
+
+    try {
+      return await this.createProjectRecord(organizationId, user, dto, name);
+    } catch (err) {
+      if (this.isMissingWorkCustomFieldColumn(err)) {
+        await this.patchWorkCustomFieldColumns();
+        try {
+          return await this.createProjectRecord(organizationId, user, dto, name);
+        } catch (retryErr) {
+          err = retryErr;
+        }
+      }
+      const code =
+        err && typeof err === 'object' && 'code' in err ? String((err as { code: unknown }).code) : '';
+      const msg = err instanceof Error ? err.message : String(err);
+      this.logger.error(`createProject failed org=${organizationId} code=${code} ${msg}`);
+      if (code === 'P2021' || /relation.*work_projects.*does not exist/i.test(msg)) {
+        throw new ServiceUnavailableException(
+          'Module Quản lý công việc chưa được cài trên database. Chạy migration work_management hoặc liên hệ quản trị.',
+        );
+      }
+      if (code === 'P2022' || /custom_field_defs/i.test(msg)) {
+        throw new ServiceUnavailableException(
+          'Database thiếu cột work_projects.custom_field_defs. Khởi động lại API (tự sửa) hoặc chạy pnpm db:migrate:deploy.',
+        );
+      }
+      throw new InternalServerErrorException(
+        process.env.NODE_ENV === 'production'
+          ? 'Không tạo được dự án. Vui lòng thử lại sau ít phút.'
+          : `Không tạo được dự án: ${msg}`,
+      );
+    }
+  }
+
+  private async createProjectRecord(
+    organizationId: string,
+    user: AuthUser,
+    dto: CreateWorkProjectDto,
+    name: string,
+  ) {
+    return this.prisma.workProject.create({
       data: {
         organizationId,
-        name: dto.name.trim(),
+        name,
         description: dto.description?.trim() || null,
         createdById: user.employeeId || null,
-        customFieldDefs: (dto.customFieldDefs ?? []) as unknown as Prisma.InputJsonValue,
+        ...(dto.customFieldDefs?.length
+          ? { customFieldDefs: dto.customFieldDefs as unknown as Prisma.InputJsonValue }
+          : {}),
         columns: {
           create: DEFAULT_WORK_COLUMNS.map((c) => ({
             key: c.key,
@@ -139,7 +188,28 @@ export class WorkManagementService {
       },
       include: { columns: { orderBy: { sortOrder: 'asc' } } },
     });
-    return project;
+  }
+
+  private isMissingWorkCustomFieldColumn(err: unknown): boolean {
+    const code =
+      err && typeof err === 'object' && 'code' in err ? String((err as { code: unknown }).code) : '';
+    const msg = err instanceof Error ? err.message : String(err);
+    return (
+      code === 'P2022' ||
+      /column.*custom_field/i.test(msg) ||
+      /column.*custom_fields/i.test(msg)
+    );
+  }
+
+  private async patchWorkCustomFieldColumns() {
+    await this.prisma.$executeRawUnsafe(`
+      ALTER TABLE "work_projects"
+        ADD COLUMN IF NOT EXISTS "custom_field_defs" JSONB DEFAULT '[]'::jsonb;
+    `);
+    await this.prisma.$executeRawUnsafe(`
+      ALTER TABLE "work_tasks"
+        ADD COLUMN IF NOT EXISTS "custom_fields" JSONB DEFAULT '{}'::jsonb;
+    `);
   }
 
   async updateProject(
@@ -148,6 +218,7 @@ export class WorkManagementService {
     projectId: string,
     dto: UpdateWorkProjectDto,
   ) {
+    if (dto.name !== undefined && !dto.name.trim()) throw new BadRequestException('Tên dự án không được để trống');
     await this.ensureProject(organizationId, projectId);
     if (!canManageAnyTask(user.role) && !isWorkOrgWideRole(user.role)) {
       // Staff may only rename unshared projects they created
@@ -180,6 +251,7 @@ export class WorkManagementService {
     columnId: string,
     name: string,
   ) {
+    if (!name.trim()) throw new BadRequestException('Tên cột không được để trống');
     if (!canManageAnyTask(user.role) && !isWorkOrgWideRole(user.role)) {
       throw new ForbiddenException('Chỉ quản lý dự án mới có thể đổi tên cột');
     }
@@ -239,6 +311,7 @@ export class WorkManagementService {
   }
 
   async createTask(organizationId: string, user: AuthUser, dto: CreateWorkTaskDto) {
+    this.validateTaskInput(dto);
     const project = await this.ensureProject(organizationId, dto.projectId);
     const columns = await this.prisma.workBoardColumn.findMany({
       where: { projectId: project.id },
@@ -345,6 +418,12 @@ export class WorkManagementService {
     });
     if (!existing) throw new NotFoundException('Không tìm thấy công việc');
 
+    this.validateTaskInput({
+      ...dto,
+      startDate: dto.startDate !== undefined ? dto.startDate : existing.startDate?.toISOString(),
+      deadline: dto.deadline !== undefined ? dto.deadline : existing.deadline?.toISOString(),
+    });
+
     assertCanWriteTask(
       user,
       {
@@ -362,48 +441,6 @@ export class WorkManagementService {
         ...(dto.assigneeIds ?? []),
         ...(dto.watcherIds ?? []),
       ]);
-    }
-
-    if (dto.assigneeIds) {
-      const prev = new Set(existing.assignees.map((a) => a.employeeId));
-      await this.prisma.workTaskAssignee.deleteMany({ where: { taskId } });
-      if (dto.assigneeIds.length) {
-        await this.prisma.workTaskAssignee.createMany({
-          data: dto.assigneeIds.map((employeeId) => ({ taskId, employeeId })),
-        });
-      }
-      const newly = dto.assigneeIds.filter((id) => !prev.has(id));
-      if (newly.length) {
-        await this.collab.notify(organizationId, newly, {
-          type: WORK_NOTIFICATION_TYPES.TASK_ASSIGNED,
-          title: `Được giao việc: ${existing.title}`,
-          body: 'Bạn được gán là người thực hiện',
-          actorId: user.employeeId,
-          taskId,
-          projectId: existing.projectId,
-        });
-      }
-    }
-    if (dto.watcherIds) {
-      await this.prisma.workTaskWatcher.deleteMany({ where: { taskId } });
-      if (dto.watcherIds.length) {
-        await this.prisma.workTaskWatcher.createMany({
-          data: dto.watcherIds.map((employeeId) => ({ taskId, employeeId })),
-        });
-      }
-    }
-    if (dto.checklist) {
-      await this.prisma.workChecklistItem.deleteMany({ where: { taskId } });
-      if (dto.checklist.length) {
-        await this.prisma.workChecklistItem.createMany({
-          data: dto.checklist.map((c, i) => ({
-            taskId,
-            title: c.title.trim(),
-            isDone: c.isDone ?? false,
-            sortOrder: c.sortOrder ?? i,
-          })),
-        });
-      }
     }
 
     if (dto.customFields !== undefined) {
@@ -426,6 +463,18 @@ export class WorkManagementService {
     const task = await this.prisma.workTask.update({
       where: { id: taskId },
       data: {
+        // Nested writes are atomic: a failed save never clears existing members/checklist.
+        ...(dto.assigneeIds !== undefined ? { assignees: {
+          deleteMany: {}, create: dto.assigneeIds.map(employeeId => ({ employeeId })),
+        } } : {}),
+        ...(dto.watcherIds !== undefined ? { watchers: {
+          deleteMany: {}, create: dto.watcherIds.map(employeeId => ({ employeeId })),
+        } } : {}),
+        ...(dto.checklist !== undefined ? { checklist: {
+          deleteMany: {}, create: dto.checklist.map((item, index) => ({
+            title: item.title.trim(), isDone: item.isDone ?? false, sortOrder: item.sortOrder ?? index,
+          })),
+        } } : {}),
         ...(dto.title !== undefined ? { title: dto.title.trim() } : {}),
         ...(dto.description !== undefined ? { description: dto.description?.trim() || null } : {}),
         ...(dto.assignerId !== undefined ? { assignerId: dto.assignerId } : {}),
@@ -446,6 +495,16 @@ export class WorkManagementService {
       include: taskInclude,
     });
 
+    const previous = new Set(existing.assignees.map(item => item.employeeId));
+    const newlyAssigned = (dto.assigneeIds ?? []).filter(id => !previous.has(id));
+    if (newlyAssigned.length) {
+      await this.collab.notify(organizationId, newlyAssigned, {
+        type: WORK_NOTIFICATION_TYPES.TASK_ASSIGNED,
+        title: `Được giao việc: ${task.title}`,
+        body: 'Bạn được gán là người thực hiện', actorId: user.employeeId,
+        taskId, projectId: task.projectId,
+      });
+    }
     return this.serializeTask(task);
   }
 
@@ -557,6 +616,7 @@ export class WorkManagementService {
       deadline: src.deadline,
       priority: src.priority,
       labels: src.labels,
+      customFields: src.customFields as Record<string, unknown>,
       progress: 0,
       checklist: src.checklist.map((c) => ({
         title: c.title,
@@ -602,25 +662,46 @@ export class WorkManagementService {
 
   // ── helpers ──────────────────────────────────────────────────────────────
 
+  private validateTaskInput(dto: {
+    title?: string; startDate?: string | null; deadline?: string | null;
+    assigneeIds?: string[]; watcherIds?: string[]; checklist?: { title: string }[];
+  }) {
+    if (dto.title !== undefined && !dto.title.trim()) throw new BadRequestException('Tên công việc không được để trống');
+    for (const value of [dto.startDate, dto.deadline]) {
+      if (value && (!Number.isFinite(Date.parse(value))
+        || (/^\d{4}-\d{2}-\d{2}$/.test(value) && new Date(value).toISOString().slice(0, 10) !== value))) {
+        throw new BadRequestException('Ngày công việc không hợp lệ');
+      }
+    }
+    if (dto.startDate && dto.deadline && Date.parse(dto.deadline) < Date.parse(dto.startDate)) {
+      throw new BadRequestException('Hạn hoàn thành phải bằng hoặc sau ngày bắt đầu');
+    }
+    for (const ids of [dto.assigneeIds, dto.watcherIds]) {
+      if (ids && new Set(ids).size !== ids.length) throw new BadRequestException('Danh sách nhân viên không được trùng lặp');
+    }
+    if (dto.checklist?.some(item => !item.title.trim())) throw new BadRequestException('Tên việc trong checklist không được để trống');
+  }
+
   private validateCustomFields(
     defs: Array<{ id: string; name: string; type: string; required?: boolean; options?: string[] }>,
     values: Record<string, unknown>,
   ) {
+    if (!values || typeof values !== 'object' || Array.isArray(values)) throw new BadRequestException('Thông tin bổ sung phải là một đối tượng hợp lệ');
     for (const def of defs) {
       const val = values[def.id];
-      if (def.required && (val === undefined || val === null || val === '')) {
+      if (def.required && (val === undefined || val === null || (typeof val === 'string' && !val.trim()))) {
         throw new BadRequestException(`Trường bắt buộc "${def.name}" chưa có dữ liệu`);
       }
       if (val === undefined || val === null || val === '') continue;
 
       if (def.type === 'number') {
         const num = Number(val);
-        if (isNaN(num)) {
+        if (!['number', 'string'].includes(typeof val) || !String(val).trim() || !Number.isFinite(num)) {
           throw new BadRequestException(`Trường "${def.name}" phải là số hợp lệ`);
         }
       } else if (def.type === 'date') {
         const d = new Date(String(val));
-        if (isNaN(d.getTime())) {
+        if (isNaN(d.getTime()) || !/^\d{4}-\d{2}-\d{2}$/.test(String(val)) || d.toISOString().slice(0, 10) !== val) {
           throw new BadRequestException(`Trường "${def.name}" phải là ngày hợp lệ (YYYY-MM-DD)`);
         }
       } else if (def.type === 'select') {

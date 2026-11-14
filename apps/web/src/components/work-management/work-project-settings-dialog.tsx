@@ -39,7 +39,7 @@ export function WorkProjectSettingsDialog({ project, open, onOpenChange, onArchi
   }, [project, open]);
 
   function addField() {
-    const id = `field_${Date.now()}`;
+    const id = `field_${crypto.randomUUID()}`;
     setFields((prev) => [...prev, { id, name: 'Trường mới', type: 'text' }]);
   }
 
@@ -54,6 +54,7 @@ export function WorkProjectSettingsDialog({ project, open, onOpenChange, onArchi
         customFieldDefs: fields.map((f) => ({
           ...f,
           name: f.name.trim() || 'Trường',
+          options: f.type === 'select' ? [...new Set((f.options ?? []).map(option => option.trim()).filter(Boolean))] : undefined,
         })),
       },
       {
@@ -111,7 +112,7 @@ export function WorkProjectSettingsDialog({ project, open, onOpenChange, onArchi
               <p className="text-xs text-muted-foreground">Chưa có trường tùy chỉnh. Thêm nếu cần ghi thêm thông tin trên từng việc.</p>
             )}
             {fields.map((f, i) => (
-              <div key={f.id} className="flex flex-wrap gap-2">
+              <div key={f.id} className="flex flex-wrap gap-2 rounded-lg border p-3">
                 <Input
                   className="h-9 flex-1 min-w-[120px]"
                   value={f.name}
@@ -136,6 +137,11 @@ export function WorkProjectSettingsDialog({ project, open, onOpenChange, onArchi
                   <option value="date">Ngày</option>
                   <option value="select">Chọn một</option>
                 </select>
+                {f.type === 'select' && <Input aria-label={`Lựa chọn cho ${f.name}`} placeholder="Các lựa chọn, ngăn cách bằng dấu phẩy"
+                  className="min-h-[44px] w-full" value={(f.options ?? []).join(', ')}
+                  onChange={event => setFields(previous => previous.map((field, index) => index === i ? { ...field, options: event.target.value.split(',').map(value => value.trim()) } : field))} />}
+                <label className="flex min-h-[44px] items-center gap-2 text-sm"><input type="checkbox" checked={!!f.required}
+                  onChange={event => setFields(previous => previous.map((field, index) => index === i ? { ...field, required: event.target.checked } : field))} />Bắt buộc nhập khi tạo việc</label>
                 <Button
                   type="button"
                   variant="ghost"
@@ -149,6 +155,7 @@ export function WorkProjectSettingsDialog({ project, open, onOpenChange, onArchi
             ))}
           </div>
         </div>
+        {update.error && <p role="alert" className="text-sm text-destructive">{update.error.message}</p>}
         <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Đóng

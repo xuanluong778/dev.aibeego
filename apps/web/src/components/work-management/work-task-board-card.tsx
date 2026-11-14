@@ -4,6 +4,7 @@ import {
   AlignLeft,
   CheckCircle2,
   CheckSquare,
+  Circle,
   Clock,
   MessageSquare,
 } from 'lucide-react';
@@ -17,6 +18,9 @@ type WorkTaskBoardCardProps = {
   /** Fallback when API payload has no projectName (cache cũ) */
   projectNameFallback?: string;
   className?: string;
+  onComplete?: () => void;
+  completionDisabled?: boolean;
+  onOpen?: () => void;
 };
 
 const metaIcon = 'h-3.5 w-3.5 shrink-0 text-white';
@@ -26,6 +30,9 @@ export function WorkTaskBoardCard({
   task,
   projectNameFallback,
   className,
+  onComplete,
+  completionDisabled,
+  onOpen,
 }: WorkTaskBoardCardProps) {
   const isDone = task.columnKey === 'DONE' || !!task.completedAt;
   const projectName =
@@ -35,6 +42,9 @@ export function WorkTaskBoardCard({
   const checklistDone = task.checklist.filter((c) => c.isDone).length;
   const commentCount = task.commentCount ?? 0;
   const hasDescription = !!(task.description || '').trim();
+  const showProjectName = projectName && projectName !== projectNameFallback;
+  const showMetaRow =
+    dateLabel || hasDescription || commentCount > 0 || checklistTotal > 0;
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -55,12 +65,13 @@ export function WorkTaskBoardCard({
         </div>
       )}
 
-      <TaskTitle isDone={isDone} title={task.title} />
+      <TaskTitle isDone={isDone} title={task.title} onComplete={onComplete} completionDisabled={completionDisabled} onOpen={onOpen} />
 
-      {projectName ? (
+      {showProjectName ? (
         <p className="text-[11px] font-medium text-white/85 line-clamp-1">{projectName}</p>
       ) : null}
 
+      {showMetaRow ? (
       <div className="flex flex-wrap items-center gap-2.5 text-[11px]">
         {dateLabel ? (
           <span
@@ -96,17 +107,33 @@ export function WorkTaskBoardCard({
           </span>
         ) : null}
       </div>
+      ) : null}
     </div>
   );
 }
 
-function TaskTitle({ isDone, title }: { isDone: boolean; title: string }) {
+function TaskTitle({ isDone, title, onComplete, completionDisabled, onOpen }: { isDone: boolean; title: string; onComplete?: () => void; completionDisabled?: boolean; onOpen?: () => void }) {
   return (
-    <p className="flex items-start gap-1.5 text-sm font-semibold leading-snug text-white">
+    <div className="flex items-start gap-1.5 text-sm font-semibold leading-snug text-white">
       {isDone ? (
         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" aria-hidden />
-      ) : null}
-      <span className={cn(isDone && 'text-white/75 line-through')}>{title}</span>
-    </p>
+      ) : onComplete ? (
+        <button
+          type="button"
+          aria-label={`Hoàn thành công việc: ${title}`}
+          title="Đánh dấu hoàn thành"
+          disabled={completionDisabled}
+          className="-m-2 mt-[-6px] flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/60 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:opacity-50"
+          onPointerDown={event => event.stopPropagation()}
+          onKeyDown={event => event.stopPropagation()}
+          onClick={event => { event.stopPropagation(); onComplete(); }}
+        ><Circle className="h-4 w-4" aria-hidden /></button>
+      ) : (
+        <Circle className="mt-0.5 h-4 w-4 shrink-0 text-white/50" aria-hidden />
+      )}
+      {onOpen ? (
+        <button type="button" className={cn('min-w-0 rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60', isDone && 'text-white/75 line-through')} aria-label={`Mở công việc: ${title}`} onClick={event => { event.stopPropagation(); onOpen(); }}>{title}</button>
+      ) : <span className={cn(isDone && 'text-white/75 line-through')}>{title}</span>}
+    </div>
   );
 }

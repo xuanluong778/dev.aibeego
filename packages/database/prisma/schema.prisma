@@ -5899,9 +5899,9 @@ model WorkAuditLog {
   actorId        String?  @map("actor_id")
   action         String   @db.VarChar(64)
   entityType     String   @map("entity_type") @db.VarChar(64)
-  entityId       String?
-  taskId         String?
-  projectId      String?
+  entityId       String?  @map("entity_id")
+  taskId         String?  @map("task_id")
+  projectId      String?  @map("project_id")
   summary        String?  @db.VarChar(500)
   metadata       Json?
   createdAt      DateTime @default(now()) @map("created_at")

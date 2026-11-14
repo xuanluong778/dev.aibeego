@@ -48,6 +48,7 @@ export function WorkManagementSubNav({ showHelp = true }: { showHelp?: boolean }
                   ? 'border-primary bg-primary text-primary-foreground shadow-sm'
                   : 'border-border bg-card hover:bg-muted',
               )}
+              aria-current={active ? 'page' : undefined}
             >
               <Icon className="h-4 w-4 shrink-0" aria-hidden />
               {label}

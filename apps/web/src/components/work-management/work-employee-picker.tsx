@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useId, useMemo, useState } from 'react';
 import { Check, Plus, Search, UserPlus, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -54,10 +54,12 @@ export function WorkEmployeePicker({
   initialEmployees = [],
 }: WorkEmployeePickerProps) {
   const user = useCurrentUser();
-  const canCreateEmployee = hasPermission(user, 'hrm.employee.write');
+  const canCreateEmployee = hasPermission(user.data, 'hrm.employee.write');
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const searchId = useId();
+  const [knownEmployees, setKnownEmployees] = useState<Record<string, EmployeeOption>>({});
   const [openAddDialog, setOpenAddDialog] = useState(false);
 
   // Quick inline add employee state
@@ -80,7 +82,7 @@ export function WorkEmployeePicker({
 
   // Map known employees from initialEmployees + fetched employees
   const employeeMap = useMemo(() => {
-    const map = new Map<string, EmployeeOption>();
+    const map = new Map<string, EmployeeOption>(Object.entries(knownEmployees));
     for (const emp of initialEmployees) {
       map.set(emp.id, emp);
     }
@@ -96,7 +98,7 @@ export function WorkEmployeePicker({
       });
     }
     return map;
-  }, [initialEmployees, employeesQ.data?.items]);
+  }, [initialEmployees, employeesQ.data?.items, knownEmployees]);
 
   const selectedIds = useMemo(() => {
     if (multiple) {
@@ -112,6 +114,8 @@ export function WorkEmployeePicker({
   }, [selectedIds, employeeMap]);
 
   function handleSelect(id: string) {
+    const employee = employeeMap.get(id);
+    if (employee) setKnownEmployees(previous => ({ ...previous, [id]: employee }));
     if (multiple) {
       const arr = Array.isArray(value) ? [...value] : [];
       if (arr.includes(id)) {
@@ -155,6 +159,7 @@ export function WorkEmployeePicker({
 
       // Add to current selection immediately
       if (created?.id) {
+        setKnownEmployees(previous => ({ ...previous, [created.id]: { id: created.id, name: created.name } }));
         if (multiple) {
           const arr = Array.isArray(value) ? [...value] : [];
           if (!arr.includes(created.id)) onChange([...arr, created.id]);
@@ -184,7 +189,7 @@ export function WorkEmployeePicker({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <Label className="text-xs font-medium text-muted-foreground">{label}</Label>
+        <Label htmlFor={searchId} className="text-sm font-medium">{label}</Label>
         {canCreateEmployee && (
           <button
             type="button"
@@ -233,19 +238,21 @@ export function WorkEmployeePicker({
         <div className="relative border-b">
           <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
           <Input
+            id={searchId}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
             placeholder={placeholder}
-            className="pl-8 h-8 text-xs border-0 focus-visible:ring-0 shadow-none"
+            className="pl-8 pr-11 min-h-[44px] text-sm border-0 shadow-none"
           />
           {search && (
             <button
               type="button"
-              onClick={() => setSearch('')}
-              className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-foreground"
+              onClick={() => { setSearch(''); setPage(1); }}
+              aria-label="Xóa từ khóa tìm nhân viên"
+              className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -257,7 +264,8 @@ export function WorkEmployeePicker({
             <p className="p-2 text-center text-muted-foreground">Đang tìm kiếm...</p>
           )}
 
-          {!employeesQ.isLoading && items.length === 0 && (
+          {employeesQ.isError && <p role="alert" className="p-3 text-sm text-destructive">Không tải được nhân viên. <button type="button" className="underline" onClick={() => employeesQ.refetch()}>Thử lại</button></p>}
+          {!employeesQ.isLoading && !employeesQ.isError && items.length === 0 && (
             <div className="p-3 text-center text-muted-foreground">
               <p>Không tìm thấy nhân viên phù hợp</p>
               {canCreateEmployee && (
@@ -285,8 +293,9 @@ export function WorkEmployeePicker({
                 key={emp.id}
                 type="button"
                 onClick={() => handleSelect(emp.id)}
+                aria-pressed={isSelected}
                 className={cn(
-                  'flex w-full items-center justify-between px-3 py-1.5 text-left hover:bg-muted/50 transition-colors',
+                  'flex min-h-[44px] w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-muted/50 transition-colors',
                   isSelected && 'bg-primary/10 font-medium',
                 )}
               >

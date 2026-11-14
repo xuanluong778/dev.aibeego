@@ -20,6 +20,20 @@ function isUniqueConflict(exception: unknown): boolean {
   return exception instanceof Error && prismaErrorCode(exception) === 'P2002';
 }
 
+/** Prisma: bảng/cột không tồn tại — thường do VPS chưa chạy migrate deploy. */
+function isPrismaSchemaMismatch(exception: unknown): boolean {
+  if (!(exception instanceof Error)) return false;
+  const code = prismaErrorCode(exception);
+  if (['P2021', 'P2022', 'P2010', 'P2011', 'P2012'].includes(code)) return true;
+  const msg = exception.message.toLowerCase();
+  return (
+    (msg.includes('column') && msg.includes('does not exist')) ||
+    (msg.includes('relation') && msg.includes('does not exist')) ||
+    msg.includes('custom_field_defs') ||
+    msg.includes('custom_fields')
+  );
+}
+
 function isInfrastructureError(exception: unknown): boolean {
   if (!(exception instanceof Error)) return false;
   const code = prismaErrorCode(exception);
@@ -93,6 +107,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = HttpStatus.CONFLICT;
       message = 'Địa chỉ trang đã được dùng. Hãy thử lại.';
       this.logger.warn(redactLogText(exception instanceof Error ? exception.message : String(exception)));
+    } else if (isPrismaSchemaMismatch(exception)) {
+      status = HttpStatus.SERVICE_UNAVAILABLE;
+      message =
+        'Cơ sở dữ liệu chưa đồng bộ với phiên bản ứng dụng (thiếu bảng/cột). Trên VPS chạy: pnpm db:migrate:deploy — hoặc migration 20261113100000_work_management_custom_fields.';
+      code = 'DB_SCHEMA_OUT_OF_DATE';
+      this.logger.error(
+        redactLogText(exception instanceof Error ? exception.message : String(exception)),
+        exception instanceof Error ? redactLogText(exception.stack) : undefined,
+      );
+      captureException(exception, 'GlobalExceptionFilter');
     } else if (isInfrastructureError(exception)) {
       status = HttpStatus.SERVICE_UNAVAILABLE;
       message = 'Không kết nối được dữ liệu. Vui lòng thử lại sau ít phút.';
